@@ -25,6 +25,12 @@
 namespace NS_ComputationalNode {
 
     class ComputationalMolecule {
+
+        friend class ComputationalMoleculeConstIterator;
+
+    public:
+        typedef std::map<IGeometricEntity::Id_t, double>::value_type Type;
+
     public:
         // Insert a dependency on cell node id with weight
         void insert(IGeometricEntity::Id_t id, double weight);

@@ -4,6 +4,7 @@ using namespace NS_ComputationalNode;
 
 namespace {
     void add(ComputationalMolecule & dest, ComputationalMolecule const & from) {
+        ComputationalMolecule::ConstIterator it(from.begin());
 
 
 
