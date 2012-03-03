@@ -14,7 +14,7 @@
 
 class Vertex : public IGeometricEntity {
 
-    class VertexManager;
+    friend class VertexManager;
 
 public:
     typedef std::unique_ptr<Vertex> Ptr;

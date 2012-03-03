@@ -1,5 +1,5 @@
 /*
- * Name  : IConstIterator
+ * Name  : IConstEntityIterator
  * Path  : 
  * Use   : Iterator to a const collection of objects
  * Author: Sven Schmidt
@@ -9,9 +9,9 @@
 
 
 template<typename T>
-class IConstIterator {
+class IConstEntityIterator {
 public:
-    ~IConstIterator() {}
+    ~IConstEntityIterator() {}
 
     // Advance iterator to next object
     virtual void operator++() const = 0;

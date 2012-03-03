@@ -115,7 +115,7 @@ pressure_vertex_derivative(IComputationalGridAccessor & cgrid, Cell::Ptr cell, V
 }
 
 bool
-pressure_flux_evaluator(IComputationalGridAccessor & cgrid, Cell::Ptr cell, Face::Ptr face)
+pressure_flux_evaluator_for_later(IComputationalGridAccessor & cgrid, Cell::Ptr cell, Face::Ptr face)
 {
     /* Compute flux through a cell face.
      * 
@@ -155,36 +155,111 @@ pressure_flux_evaluator(IComputationalGridAccessor & cgrid, Cell::Ptr cell, Face
     return true;
 }
 
-void
-pressure_computational_molecule(IComputationalGridAccessor & cgrid, Cell::Ptr cell)
+bool
+phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & cell, Face::Ptr & face)
+{
+    /* Compute flux through a cell face. The cell face may be a boundary face
+     * needing special treatment depending on whether Dirichlet or von Neumann
+     * boundary conditions have been prescribed.
+     * 
+     * Flux through an internal face is evaluated by the usual gradient approximation.
+     * Note that this is not 2nd order, not even is there is no cell skewness as we
+     * omit the cross-diffusion term (Comp. Fluid Dynamics, Versteeg, p. 319).
+     */
+
+    // Get flux molecules at face
+    FluxComputationalMolecule & flux_molecule = face->getComputationalMolecule("phi_flux");
+
+    // Flux through face already computed?
+    if (!flux_molecule_x.empty())
+        return true;
+
+    /* We need to know the cell the flux was calculated with. This is because
+     * once the neighboring cell accesses the flux, the need to invert the sign.
+     */
+    flux_molecule->setCell(cell);
+
+    if (face->isBoundaryFace()) {
+        BoundaryCondition const & bc = face->getBoundaryCondition();
+
+        // get cell node variable
+        ComputationalMolecule & cell_molecule = cell->getComputationalMolecule("phi");
+
+        boost::optional<double> value = bc.getBoundaryValue();
+        if (value) {
+            /* The boundary condition is of type Dirichlet. Compute the
+             * face flux using the half-cell approximation.
+             * Versteeg, p. 331
+             */
+            SourceTerm & face_source = flux_mulecule.getSourceTerm();
+
+            // distance from face midpoint to the cell centroid
+            double dist = Math::dist(cell, face);
+
+            // the boundary value contributes as a source term
+            face_source += face->area() / dist * value;
+
+            // contribution to the cell node
+            cell_molecule -= (face->area() / dist);
+        }
+        else {
+            // Face b.c. given as von Neumann
+            SourceTerm & face_source = flux_mulecule.getSourceTerm();
+
+            // the boundary flux contributes as a source term
+            face_source += gc.getFluxValue();
+        }
+        return true;
+    }
+
+    // internal face
+
+    // Compute distance to face midpoint to monitor accuracy
+
+
+    Vertex::Ptr cell_centroid = cell->centroid();
+
+    Cell::Ptr cell_nbr = cgrid.getOtherCell(face, cell);
+    Vertex::Ptr cell_nbr_centroid = cell_nbr->centroid();
+
+    // distance from face midpoint to the cell centroid
+    double dist = Math::dist(cell_centroid, cell_nbr_centroid);
+
+
+    // get cell node variable
+    ComputationalMolecule & cell_molecule = cell->getComputationalMolecule("phi");
+    cell_molecule -= (face->area() / dist);
+
+    ComputationalMolecule & cell_nbr_molecule = cell_nbr_->getComputationalMolecule("phi");
+    cell_nbr_molecule += (face->area() / dist);
+
+    return true;
+}
+
+bool
+phi_computational_molecule(IComputationalGridAccessor const & cgrid, Cell::Ptr const & cell)
 {
     /* Get the final computational molecule for cell 'cell'.
      * This is essentially a row in the linear equation.
      */
     FaceCollection fc(cell->faces());
 
-    ComputationalMolecule & cell_cm = start->getComputationalMolecule("Phi");
+    ComputationalMolecule & cell_cm = cell->getComputationalMolecule("phi");
     cell_cm->clear();
+
+    SourceTerm & cell_source = cell_cm.GetSource();
 
     for (FaceCollection::Iterator face_it(fc.begin()); face_it != fc.end(); ++face_it) {
         Face::Ptr const & face = *face_it;
 
-        // get the face fluxes
-        ComputationalMolecule const & flux_molecule_x = face->getComputationalMolecule("Phi_Flux_x");
-        ComputationalMolecule const & flux_molecule_y = face->getComputationalMolecule("Phi_Flux_y");
+        // get the face flux
+        ComputationalMolecule const & flux_molecule = face->getComputationalMolecule("phi_flux");
 
-        if (flux_molecule_x.empty())
+        if (flux_molecule.empty())
             throw std::exception("Empty face flux");
 
-        Vertex::Ptr const & start = face->startVertex();
-        Vertex::Ptr const & end = face->endVertex();
-
-        double dx = end.x() - start.x();
-        double dy = end.y() - start.y();
-
-        ComputationalMolecule cm = - 0.5 * dx * flux_molecule_x;
-        cm += (0.5 * dy * flux_molecule_y);
-        cell_cm += cm;
+        cell_cm += flux_molecule;
+        cell_source += flux_molecule.getSource();
     }
 }
 
@@ -195,17 +270,16 @@ typedef std::function<void (IComputationalGridAccessor &, Face::Ptr)> FluxCallBa
 int main(int argc, char* argv[])
 {
     Mesh mesh;
-    MeshBuilder mesh_builder(mesh);
-    SimpleMeshReader reader(mesh_builder);
-    reader.read_mesh();
+    MeshBuilder mesh_builder;
+    SimpleMeshReader reader(mesh_filename, mesh_builder);
+    mesh_builder.build();
+
+    mesh = mesh_builder.grid();
 
     ComputationalGrid cgrid(mesh);
-    cgrid.addVariable(PhiNodeVariable("p", CompMoleculeCallBack(pressure_computational_molecule)));
-    cgrid.gradientEvaluator(DerivativeEvaluator("Ux", FluxCallBack(pressure_gradient_evaluator)));
-    cgrid.gradientEvaluator(DerivativeEvaluator("Uy", FluxCallBack(pressure_gradient_evaluator)));
-    cgrid.fluxEvaluator(PressureFluxEvaluator("p", FluxCallBack(pressure_flux_evaluator)));
+    cgrid.nodeVariable(NodeVariable("phi", CompMoleculeCallBack(pressure_computational_molecule)));
+    cgrid.fluxEvaluator(FluxEvaluator("phi_flux", FluxCallBack(phi_flux_evaluator)));
 
     
     return 0;
 }
-
