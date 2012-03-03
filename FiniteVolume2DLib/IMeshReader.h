@@ -7,8 +7,10 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
 
-class IMeshReader {
+
+class DECL_SYMBOLS IMeshReader {
 public:
     ~IMeshReader() {}
 

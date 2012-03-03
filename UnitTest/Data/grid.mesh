@@ -1,0 +1,27 @@
+# Mesh data
+
+# Vertex data
+# Vertex index, vertex coordinates
+vertices
+
+0 0.123432 -0.3847
+1 1.123432 -0.3847
+2 2.123432 -0.3847
+3 3.123432 -0.3847
+4 4.123432 -0.3847
+5 5.123432 -0.3847
+
+
+# Face data
+# face index, vertex indices
+faces
+
+0 0 1 2
+1 0 2 3
+2 3 4 5
+3 1 4 5
+
+# Cell data
+# cell index, face indices
+
+0 0 1 2 3

@@ -9,19 +9,20 @@
 
 #include <string>
 
+#include "DeclSpec.h"
 #include "IMeshReader.h"
 
-class MeshBuilder;
+class IMeshBuilder;
 
 
-class ASCIIMeshReader : public IMeshReader {
+class DECL_SYMBOLS ASCIIMeshReader : public IMeshReader {
 public:
-    ASCIIMeshReader(std::string const & mesh_filename, MeshBuilder & builder);
+    ASCIIMeshReader(std::string const & mesh_filename, IMeshBuilder & builder);
 
     // FROM IMeshReader
     bool read() const;
 
 private:
     std::string mesh_filename_;
-    MeshBuilder & builder_;
+    IMeshBuilder & builder_;
 };

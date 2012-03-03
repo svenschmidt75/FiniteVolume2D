@@ -8,7 +8,10 @@
  */
 #pragma once
 
-class IMesh {
+#include "DeclSpec.h"
+
+
+class DECL_SYMBOLS IMesh {
 public:
     ~IMesh() {}
 };

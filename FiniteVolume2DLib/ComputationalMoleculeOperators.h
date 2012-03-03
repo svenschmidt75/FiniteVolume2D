@@ -15,7 +15,7 @@ namespace NS_ComputationalNode {
 
     class ComputationalMoleculeOperators {
     public:
-        static ComputationalMolecule operator+(ComputationalMolecule const & lhs, ComputationalMolecule const & rhs);
+//        static ComputationalMolecule operator+(ComputationalMolecule const & lhs, ComputationalMolecule const & rhs);
 
     };
 

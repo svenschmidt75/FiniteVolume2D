@@ -4,10 +4,12 @@
 #include <boost/filesystem.hpp>
 #include "boost/format.hpp"
 
+#include "Util.h"
+
 namespace FS = boost::filesystem;
 
 
-ASCIIMeshReader::ASCIIMeshReader(std::string const & mesh_filename, MeshBuilder & builder)
+ASCIIMeshReader::ASCIIMeshReader(std::string const & mesh_filename, IMeshBuilder & builder)
     : mesh_filename_(mesh_filename), builder_(builder) {}
 
 bool
