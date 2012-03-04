@@ -16,6 +16,12 @@ class ASCIIMeshReaderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(ASCIIMeshReaderTest);
     CPPUNIT_TEST(testMeshFileExists);
     CPPUNIT_TEST(testNumberOfVertices);
+    CPPUNIT_TEST(testVertex1);
+    CPPUNIT_TEST(testVertex2);
+    CPPUNIT_TEST(testNumberOfFaces);
+    CPPUNIT_TEST(testFace);
+    CPPUNIT_TEST(testNumberOfCells);
+    CPPUNIT_TEST(testCell);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -53,7 +59,7 @@ private:
             return boost::optional<Mesh::Ptr>();
         }
 
-    private:
+    public:
         typedef std::map<IGeometricEntity::Id_t, std::pair<double, double>> VertexMap_t;
         VertexMap_t vertices_;
 
@@ -71,11 +77,17 @@ public:
 protected:
     void testMeshFileExists();
     void testNumberOfVertices();
+    void testVertex1();
+    void testVertex2();
+    void testNumberOfFaces();
+    void testFace();
+    void testNumberOfCells();
+    void testCell();
 
 private:
     void initMesh();
 
 private:
     std::string mesh_filename_;
-    MockMeshBuilder mock_builder_;
+    static MockMeshBuilder mock_builder_;
 };

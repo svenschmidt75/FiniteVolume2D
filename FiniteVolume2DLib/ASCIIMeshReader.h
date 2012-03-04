@@ -11,9 +11,11 @@
 
 #include "DeclSpec.h"
 #include "IMeshReader.h"
+#include "IMeshReaderState.h"
 
 class IMeshBuilder;
 
+#pragma warning(disable:4251)
 
 class DECL_SYMBOLS ASCIIMeshReader : public IMeshReader {
 public:
@@ -25,4 +27,7 @@ public:
 private:
     std::string mesh_filename_;
     IMeshBuilder & builder_;
+    mutable IMeshReaderState::Ptr state_;
 };
+
+#pragma warning(default:4251)

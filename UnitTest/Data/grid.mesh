@@ -23,5 +23,6 @@ faces
 
 # Cell data
 # cell index, face indices
+cells
 
 0 0 1 2 3

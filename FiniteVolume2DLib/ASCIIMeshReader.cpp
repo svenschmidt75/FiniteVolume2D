@@ -1,22 +1,104 @@
 #include "ASCIIMeshReader.h"
 
+#include "ASCIIMeshReaderBaseState.h"
+#include "ASCIIMeshReaderVertexState.h"
+#include "ASCIIMeshReaderFaceState.h"
+#include "ASCIIMeshReaderCellState.h"
+#include "Util.h"
+
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
 #include "boost/format.hpp"
+#include <boost/iostreams/device/file.hpp>
+#include <boost/iostreams/stream.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/foreach.hpp>
 
-#include "Util.h"
+#include <istream>
 
 namespace FS = boost::filesystem;
 
 
 ASCIIMeshReader::ASCIIMeshReader(std::string const & mesh_filename, IMeshBuilder & builder)
-    : mesh_filename_(mesh_filename), builder_(builder) {}
+    : mesh_filename_(mesh_filename), builder_(builder) {
+
+    state_.reset();
+}
 
 bool
 ASCIIMeshReader::read() const {
     if (!FS::exists(mesh_filename_)) {
         boost::format format = boost::format("ASCIIMeshReader::read: Mesh file %1% not found!\n") % mesh_filename_;
         return Util::error(format.str());
+    }
+
+    /* 
+     * State 0: expect to read vertex keyword
+     * State 1: in vertex mode, expect to read face keyword
+     * State 2: in face mode, expect to read cell keyword
+     * State 3: in cell mode
+     */
+
+    boost::iostreams::stream<boost::iostreams::file_source> file(mesh_filename_);
+    std::string line;
+    boost::char_separator<char> sep(" ");
+
+    int line_number = 0;
+
+    state_ = ASCIIMeshReaderBaseState::create(builder_);
+
+    while (std::getline(file, line)) {
+        typedef boost::tokenizer<boost::char_separator<char>> TokenizerType;
+
+        line_number++;
+
+        boost::trim(line);
+        TokenizerType tokens(line, sep);
+
+        std::vector<std::string> token_arr(tokens.begin(), tokens.end());
+
+        if (!token_arr.empty()) {
+            std::string t = *(tokens.begin());
+
+            // Comment?
+            if (t[0] == '#')
+                continue;
+
+
+            if (t == "vertices") {
+                if (state_->inVertexMode() || state_->inFaceMode() || state_->inCellMode()) {
+                    boost::format format = boost::format("ASCIIMeshReader::read: Keyword 'vertices' unexpected in line %1%!\n") % line_number;
+                    return Util::error(format.str());
+                }
+                state_ = ASCIIMeshReaderVertexState::create(builder_);
+                continue;
+            }
+            else if (t == "faces") {
+                if (!state_->inVertexMode()) {
+                    boost::format format = boost::format("ASCIIMeshReader::read: Keyword 'faces' unexpected in line %1%!\n") % line_number;
+                    return Util::error(format.str());
+                }
+                state_ = ASCIIMeshReaderFaceState::create(builder_);
+                continue;
+            }
+            else if (t == "cells") {
+                if (!state_->inFaceMode()) {
+                    boost::format format = boost::format("ASCIIMeshReader::read: Keyword 'cells' unexpected in line %1%!\n") % line_number;
+                    return Util::error(format.str());
+                }
+                state_ = ASCIIMeshReaderCellState::create(builder_);
+                continue;
+            }
+
+            try {
+                if (!state_->process(token_arr, line_number))
+                    return false;
+            }
+            catch (boost::exception const &) {
+                boost::format format = boost::format("ASCIIMeshReader::read: Input error in line %1%!\n") % line_number;
+                return Util::error(format.str());
+            }
+        }
     }
 
     return true;
