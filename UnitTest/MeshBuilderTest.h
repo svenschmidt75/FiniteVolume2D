@@ -10,7 +10,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class MeshBuilderTest {
+class MeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(MeshBuilderTest);
     CPPUNIT_TEST(testMeshFileExists);
     CPPUNIT_TEST_SUITE_END();

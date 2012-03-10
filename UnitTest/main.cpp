@@ -6,8 +6,11 @@
 
 #include "GridConectivityTest.h"
 #include "ASCIIMeshReaderTest.h"
+#include "VertexManagerText.h"
+
 
 //CPPUNIT_TEST_SUITE_REGISTRATION(GridConectivityTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(VertexManagerText);
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
 
 
