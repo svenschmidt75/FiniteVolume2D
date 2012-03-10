@@ -18,8 +18,8 @@ class IMeshBuilder {
 public:
     ~IMeshBuilder() {}
 
-    virtual bool buildVertex(IGeometricEntity::Id_t vertex_id, double x, double y) = 0;
-    virtual bool buildFace(IGeometricEntity::Id_t face_id, std::vector<IGeometricEntity::Id_t> const & vertex_ids) = 0;
+    virtual bool buildVertex(IGeometricEntity::Id_t vertex_id, bool on_boundary, double x, double y) = 0;
+    virtual bool buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids) = 0;
     virtual bool buildCell(IGeometricEntity::Id_t cell_id, std::vector<IGeometricEntity::Id_t> const & face_ids) = 0;
 
     virtual boost::optional<Mesh::Ptr> getMesh() const = 0;

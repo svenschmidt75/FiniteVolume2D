@@ -11,15 +11,16 @@ ASCIIMeshReaderVertexState::ASCIIMeshReaderVertexState(IMeshBuilder & mesh_build
 
 bool
 ASCIIMeshReaderVertexState::process(std::vector<std::string> const & tokens, int line) {
-    if (tokens.size() != 3) {
+    if (tokens.size() != 4) {
         boost::format format = boost::format("ASCIIMeshReaderVertexState::process: Invalid vertex format in line %1%!\n") % line;
         return Util::error(format.str());
     }
 
     IGeometricEntity::Id_t id = boost::lexical_cast<IGeometricEntity::Id_t>(tokens[0]);
-    double x = boost::lexical_cast<double>(tokens[1]);
-    double y = boost::lexical_cast<double>(tokens[2]);
-    mesh_builder_.buildVertex(id, x, y);
+    bool on_boundary = boost::lexical_cast<bool>(tokens[1]);
+    double x = boost::lexical_cast<double>(tokens[2]);
+    double y = boost::lexical_cast<double>(tokens[3]);
+    mesh_builder_.buildVertex(id, on_boundary, x, y);
     return true;
 }
 

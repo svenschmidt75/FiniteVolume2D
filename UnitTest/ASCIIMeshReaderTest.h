@@ -27,21 +27,39 @@ class ASCIIMeshReaderTest : public CppUnit::TestFixture {
 private:
     class MockMeshBuilder : public IMeshBuilder {
     public:
+        struct VertexStr {
+            VertexStr() {}
+            VertexStr(bool on_boundary, double x, double y) : on_boundary_(on_boundary), x_(x), y_(y) {}
+
+            bool   on_boundary_;
+            double x_;
+            double y_;
+        };
+
+        struct FaceStr {
+            FaceStr() {}
+            FaceStr(bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids) : on_boundary_(on_boundary), vertex_ids_(vertex_ids) {}
+
+            bool                                on_boundary_;
+            std::vector<IGeometricEntity::Id_t> vertex_ids_;
+        };
+
+    public:
         bool
-        buildVertex(IGeometricEntity::Id_t vertex_id, double x, double y) {
+        buildVertex(IGeometricEntity::Id_t vertex_id, bool on_boundary, double x, double y) {
             VertexMap_t::const_iterator it = vertices_.find(vertex_id);
             if (it != vertices_.end())
                 CPPUNIT_FAIL("Duplicate vertex!");
-            vertices_[vertex_id] = std::make_pair(x, y);
+            vertices_[vertex_id] = VertexStr(on_boundary, x, y);
             return true;
         }
 
         bool
-        buildFace(IGeometricEntity::Id_t face_id, std::vector<IGeometricEntity::Id_t> const & vertex_ids) {
+        buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids) {
             FaceMap_t::const_iterator it = faces_.find(face_id);
             if (it != faces_.end())
                 CPPUNIT_FAIL("Duplicate face!");
-            faces_[face_id] = vertex_ids;
+            faces_[face_id] = FaceStr(on_boundary, vertex_ids);
             return true;
         }
 
@@ -60,10 +78,10 @@ private:
         }
 
     public:
-        typedef std::map<IGeometricEntity::Id_t, std::pair<double, double>> VertexMap_t;
+        typedef std::map<IGeometricEntity::Id_t, VertexStr> VertexMap_t;
         VertexMap_t vertices_;
 
-        typedef std::map<IGeometricEntity::Id_t, std::vector<IGeometricEntity::Id_t>> FaceMap_t;
+        typedef std::map<IGeometricEntity::Id_t, FaceStr> FaceMap_t;
         FaceMap_t faces_;
 
         typedef std::map<IGeometricEntity::Id_t, std::vector<IGeometricEntity::Id_t>> CellMap_t;

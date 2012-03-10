@@ -1,23 +1,81 @@
 
-class Mesh {
+EntityIterator<Cell> it = col.begin();
+
+Used T::Ptr, where T = Cell
+----------------------------------------------------------------
+
+MeshBuilder builder;
+MeshReader reader(builder);
+reader.read();
+Mesh::Ptr mesh = builder.getMesh();
+MeshConnectivity mesh_conectitity = mesh->connectivity();
+----------------------------------------------------------------
+
+in builder:
+
+Vertex::Ptr v = VertexMgr::create(on_boundary, x, y);
+mesh->addVertex(v);
+
+
+Mesh::addVertex:
+
+if (on_boundary)
+  addBoundaryVertex();
+else
+  addInternalVertex();
+
+
+addInternalVertex:
+
+Thread & t = internalVertexThread();
+t.addVertex();
+
+----------------------------------------------------------------
+
+VertexMgr, FaceMgr, CellMgr all similar
+
+- hold entities
+- create entities
+- remove entities?
+
+so why not generic?
+
+template<typename Entity>
+public EntityManager {
+public:
+    // create is different for all of them
+    // but the rest is the same
+    Entity::Ptr create();
+
+    EntityCollection<Entity::Ptr>::iterator begin();
+    EntityCollection<Entity::Ptr>::iterator end();
+
+private:
+    EntityCollection<Entity::Ptr> coll;
+};
+
+
+class VertexMgr : public EntityManager<Vertex> {
+public:
+    Vertex::Ptr create(MeshFileIndex id, bool on_boundary, double x, double y) {
+        Vertex::Ptr v = Vertex::create(id, on_boundary, x, y);
+        coll.insert(v);
+    }
 
 };
 
-class MeshBuilder {
 
-};
 
-class IMeshReader {
 
-};
+  
 
-class SimpleMeshReader : public IMeshReader {
 
-};
 
-class ECLMeshReader : public IMeshReader {
 
-};
+
+
+
+
 
 class ComputeManager {
     // To separate computational aspects from geometrical

@@ -7,9 +7,12 @@
  */
 #pragma once
 
+#include <boost/cstdint.hpp>
+
+
 class IGeometricEntity {
 public:
-    typedef size_t Id_t;
+    typedef boost::uint64_t Id_t;
 
 public:
     ~IGeometricEntity() {}

@@ -11,20 +11,21 @@ ASCIIMeshReaderFaceState::ASCIIMeshReaderFaceState(IMeshBuilder & mesh_builder) 
 
 bool
 ASCIIMeshReaderFaceState::process(std::vector<std::string> const & tokens, int line) {
-    if (tokens.size() < 4) {
+    if (tokens.size() < 5) {
         boost::format format = boost::format("ASCIIMeshReaderFaceState::process: Invalid face format in line %1%!\n") % line;
         return Util::error(format.str());
     }
 
     // Lambda function
     std::vector<IGeometricEntity::Id_t> ids;
-    std::for_each(tokens.begin() + 1, tokens.end(), [&ids](std::string const & t) {
+    std::for_each(tokens.begin() + 2, tokens.end(), [&ids](std::string const & t) {
         IGeometricEntity::Id_t id = boost::lexical_cast<IGeometricEntity::Id_t>(t);
         ids.push_back(id);
     });
 
     IGeometricEntity::Id_t face_id = boost::lexical_cast<IGeometricEntity::Id_t>(tokens[0]);
-    mesh_builder_.buildFace(face_id, ids);
+    bool on_boundary = boost::lexical_cast<bool>(tokens[1]);
+    mesh_builder_.buildFace(face_id, on_boundary, ids);
     return true;
 }
 

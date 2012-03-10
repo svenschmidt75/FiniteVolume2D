@@ -20,6 +20,7 @@ public:
     typedef std::unique_ptr<Vertex> Ptr;
 
 public:
+    bool onBoundary() const;
     double x() const;
     double y() const;
 

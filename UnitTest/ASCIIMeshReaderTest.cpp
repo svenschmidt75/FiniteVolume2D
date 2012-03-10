@@ -36,20 +36,20 @@ ASCIIMeshReaderTest::testNumberOfVertices() {
 
 void
 ASCIIMeshReaderTest::testVertex1() {
-//    MockMeshBuilder::VertexMap_t::mapped_type const & vertiex_ids = mock_builder_.vertices_[2];
-    auto const & vertex_ids = mock_builder_.vertices_[2];
+    MockMeshBuilder::VertexStr const & vertex_str = mock_builder_.vertices_[2];
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 2.123432, vertex_ids.first, 1E-10);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex y coordinate", -0.3847, vertex_ids.second, 1E-10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary vertex", true, vertex_str.on_boundary_);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 2.123432, vertex_str.x_, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex y coordinate", -0.3847, vertex_str.y_, 1E-10);
 }
 
 void
 ASCIIMeshReaderTest::testVertex2() {
-    //    MockMeshBuilder::VertexMap_t::mapped_type const & vertiex_ids = mock_builder_.vertices_[4];
-    auto const & vertex_ids = mock_builder_.vertices_[5];
+    MockMeshBuilder::VertexStr const & vertex_str = mock_builder_.vertices_[5];
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 5.123432, vertex_ids.first, 1E-10);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex y coordinate", -0.3847, vertex_ids.second, 1E-10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected boundary vertex", false, vertex_str.on_boundary_);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 5.123432, vertex_str.x_, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex y coordinate", -0.3847, vertex_str.y_, 1E-10);
 }
 
 void
@@ -60,12 +60,13 @@ ASCIIMeshReaderTest::testNumberOfFaces() {
 
 void
 ASCIIMeshReaderTest::testFace() {
-    auto const & face_ids = mock_builder_.faces_[1];
+    MockMeshBuilder::FaceStr const & face_str = mock_builder_.faces_[1];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", static_cast<size_t>(3), face_ids.size());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(0), face_ids[0]);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(2), face_ids[1]);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(3), face_ids[2]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", static_cast<size_t>(3), face_str.vertex_ids_.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary face", true, face_str.on_boundary_);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(0), face_str.vertex_ids_[0]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(2), face_str.vertex_ids_[1]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(3), face_str.vertex_ids_[2]);
 }
 
 void
