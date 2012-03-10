@@ -10,8 +10,12 @@
 
 #include "DeclSpec.h"
 
+#include "Vertex.h"
+
 
 class DECL_SYMBOLS IMesh {
 public:
     ~IMesh() {}
+
+    virtual void addVertex(Vertex::Ptr const & vertex, bool on_boundary) = 0;
 };
