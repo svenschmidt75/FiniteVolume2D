@@ -11,7 +11,7 @@ ASCIIMeshReaderFaceState::ASCIIMeshReaderFaceState(IMeshBuilder & mesh_builder) 
 
 bool
 ASCIIMeshReaderFaceState::process(std::vector<std::string> const & tokens, int line) {
-    if (tokens.size() < 5) {
+    if (tokens.size() < 4) {
         boost::format format = boost::format("ASCIIMeshReaderFaceState::process: Invalid face format in line %1%!\n") % line;
         return Util::error(format.str());
     }

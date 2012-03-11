@@ -1,0 +1,56 @@
+# Mesh test data
+# Tri mesh extending x=[-1,1], y=[-1,1]
+
+# Vertex data
+# Vertex
+# 1. vertex index
+# 2. 0: internal vertex, 1: boundary vertex
+# 3. and 4. vertex coordinates
+vertices
+
+0 1 -1  0
+1 1 -1  1
+2 1  0  1
+3 1  1  1
+4 1  1  0
+5 1  1 -1
+6 1  0 -1
+7 1 -1 -1
+8 0  0  0
+
+# Face data
+# 1. face index
+# 2. 0: internal face, 1: boundary face
+# 3... vertex indices
+faces
+
+0  0 8 0
+1  0 2 8
+2  0 4 8
+3  0 6 8
+4  1 0 1
+5  1 1 2
+6  1 2 3
+7  1 3 4
+8  1 4 5
+9  1 5 6
+10 1 6 7
+11 1 7 0
+12 0 1 8
+13 0 8 3
+14 0 8 5
+15 0 8 7
+
+
+# Cell data
+# cell index, face indices
+cells
+
+0  0  4 12
+1 12  5  1
+2  1  6 13
+3 13  7  2
+4  2  8  9
+5 14  9  3
+6  3 10 15
+7 15 11  0

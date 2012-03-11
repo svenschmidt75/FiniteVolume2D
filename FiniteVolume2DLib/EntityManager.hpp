@@ -9,11 +9,13 @@
 
 #include "EntityCollection.hpp"
 
+#include <map>
+
 
 template<typename Entity>
 class EntityManager {
 private:
-    typedef std::map<IGeometricEntity::Id_t, typename Entity::Ptr> MeshIdMapping_t;
+    typedef typename std::map<IGeometricEntity::Id_t, typename Entity::Ptr> MeshIdMapping_t;
 
 public:
     typedef typename EntityCollection<Entity>::iterator iterator;
@@ -36,6 +38,10 @@ protected:
     IGeometricEntity::Id_t getNewEntityIndex() {
         static IGeometricEntity::Id_t index = 0;
         return index++;
+    }
+
+    bool findEntity(IGeometricEntity::Id_t mesh_id) const {
+        return mesh_id_mapping_.find(mesh_id) != mesh_id_mapping_.end();
     }
 
 protected:

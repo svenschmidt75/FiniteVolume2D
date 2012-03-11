@@ -19,4 +19,5 @@ public:
 
     // Unique id of this entity
     virtual Id_t id() const = 0;
+    virtual Id_t meshId() const = 0;
 };

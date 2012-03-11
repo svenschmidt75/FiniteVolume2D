@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include <map>
+#include <vector>
 
 #include "IGeometricEntity.h"
 
@@ -20,12 +20,15 @@ class EntityCollection {
     friend class EntityManager;
 
 private:
-    typedef typename std::map<IGeometricEntity::Id_t, typename Entity::Ptr> EntityCollection_t;
-    typedef typename std::map<IGeometricEntity::Id_t, typename Entity::Ptr>::iterator iterator;
+    typedef typename std::vector<typename Entity::Ptr> EntityCollection_t;
+    typedef typename std::vector<typename Entity::Ptr>::iterator iterator;
+
+public:
+    typedef typename EntityCollection_t::size_type size_type;
 
 public:
     void insert(typename Entity::Ptr const & entity) {
-        data_[entity->id()] = entity;
+        data_.push_back(entity);
     }
 
     // non-const iterator
@@ -35,6 +38,24 @@ public:
 
     iterator end() {
         return data_.end();
+    }
+
+    size_type size() const {
+        return data_.size();
+    }
+
+    typename Entity::Ptr & getEntity(size_type index) {
+        if (index >= size())
+            throw std::out_of_range("EntityCollection::getEntity: Out of range!");
+
+        return data_[index];
+    }
+
+    typename Entity::Ptr const & getEntity(size_type index) const {
+        if (index >= size())
+            throw std::out_of_range("EntityCollection::getEntity: Out of range!");
+
+        return data_[index];
     }
 
 private:

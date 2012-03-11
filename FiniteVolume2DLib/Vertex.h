@@ -22,19 +22,22 @@ public:
 public:
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
+    IGeometricEntity::Id_t meshId() const;
 
     bool onBoundary() const;
     double x() const;
     double y() const;
 
 private:
-    Vertex(IGeometricEntity::Id_t vertex_id, double x, double y);
+    Vertex(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
 
     // only called by VertexManager
-    static Ptr create(IGeometricEntity::Id_t vertex_id, double x, double y);
+    static Ptr create(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
 
 private:
     IGeometricEntity::Id_t vertex_id_;
+    IGeometricEntity::Id_t mesh_id_;
+    bool on_boundary_;
     double x_;
     double y_;
 };

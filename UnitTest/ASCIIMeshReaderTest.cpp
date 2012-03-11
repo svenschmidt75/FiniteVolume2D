@@ -62,11 +62,10 @@ void
 ASCIIMeshReaderTest::testFace() {
     MockMeshBuilder::FaceStr const & face_str = mock_builder_.faces_[1];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", static_cast<size_t>(3), face_str.vertex_ids_.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", static_cast<size_t>(2), face_str.vertex_ids_.size());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary face", true, face_str.on_boundary_);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(0), face_str.vertex_ids_[0]);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(2), face_str.vertex_ids_[1]);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(3), face_str.vertex_ids_[2]);
 }
 
 void

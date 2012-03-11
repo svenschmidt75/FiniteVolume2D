@@ -22,14 +22,21 @@ public:
 
 public:
     // FROM IMesh
-    void addVertex(Vertex::Ptr const & vertex, bool on_boundary);
+    void addVertex(Vertex::Ptr const & vertex);
+    void addFace(Face::Ptr const & face);
 
     Thread<Vertex> & getBoundaryVertexThread();
     Thread<Vertex> & getInteriorVertexThread();
 
+    Thread<Face> & getBoundaryFaceThread();
+    Thread<Face> & getInteriorFaceThread();
+
 private:
     Thread<Vertex> interior_vertex_thread_;
     Thread<Vertex> boundary_vertex_thread_;
+
+    Thread<Face> interior_face_thread_;
+    Thread<Face> boundary_face_thread_;
 
     MeshConnectivity mesh_connectivity_;
 };

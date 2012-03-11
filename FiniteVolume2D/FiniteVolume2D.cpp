@@ -9,8 +9,30 @@ MeshReader reader(builder);
 reader.read();
 Mesh::Ptr mesh = builder.getMesh();
 MeshConnectivity mesh_conectitity = mesh->connectivity();
+
+Cell::Ptr cell_nbr = mesh_conectitity.getOtherCell(face, cell);
+EntityCollection<Vertex::Ptr> & vnbr = mesh_conectitity.getVertexNeighbors(vertex);
+EntityCollection<Face::Ptr> & faces = mesh_conectitity.getFaces(cell);
+
+
 ----------------------------------------------------------------
 
+Connectivity
+
+- neighbors of a node
+- faces attached to a node
+- cells attached to a node
+
+
+face->getVertices
+cell->getFaces()
+
+
+----------------------------------------------------
+
+EntityCollection<Vertex::Ptr> & vnbr = mesh_conectitity.getVertexNeighbors(vertex);
+
+std::map<EntityIndex, EntityCollection<Vertex::Ptr>>
 
 
 
