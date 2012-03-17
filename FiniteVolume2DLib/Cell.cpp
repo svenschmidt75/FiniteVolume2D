@@ -18,8 +18,7 @@ Cell::Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, Entit
 
         for (EntityCollection<Vertex>::size_type i = 0; i < vertices.size(); ++i) {
             Vertex::Ptr vert = vertices.getEntity(i);
-            if (!v.find(vert->id()))
-                v.insert(vert);
+            v.insertUnique(vert);
         }
     });
 }

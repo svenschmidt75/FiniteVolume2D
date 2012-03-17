@@ -11,17 +11,19 @@
 
 class VertexManager;
 class FaceManager;
+class CellManager;
 
 
 class EntityCreatorManager {
 public:
-    EntityCreatorManager(VertexManager & vertex_mgr, FaceManager & face_mgr);
+    EntityCreatorManager(VertexManager & vertex_mgr, FaceManager & face_mgr, CellManager & cell_mgr);
 
     VertexManager & getVertexManager();
     FaceManager   & getFaceManager();
-
+    CellManager   & getCellManager();
 
 private:
     VertexManager & vertex_mgr_;
     FaceManager   & face_mgr_;
+    CellManager   & cell_mgr_;
 };

@@ -10,8 +10,10 @@
 
 #include "Vertex.h"
 #include "Face.h"
+#include "Cell.h"
 #include "EntityCollection.hpp"
 #include "VertexConnectivity.h"
+#include "FaceConnectivity.h"
 
 #include <map>
 #include <boost/optional.hpp>
@@ -19,11 +21,12 @@
 
 class MeshConnectivity {
 public:
-//    Cell::Ptr                       getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const;
+    Cell::Ptr                                 getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const;
     void                                      insert(Face::Ptr const & face);
+    void                                      insert(Cell::Ptr const & cell);
     boost::optional<EntityCollection<Vertex>> getVertexNeighbors(Vertex::Ptr & vertex) const;
-//    EntityCollection<Face::Ptr> &   getFaces(Cell::Ptr & cell);
 
 private:
     VertexConnectivity vertex_connectivity_;
+    FaceConnectivity face_connectivity_;
 };

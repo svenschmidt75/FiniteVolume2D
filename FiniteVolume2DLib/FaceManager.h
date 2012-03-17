@@ -18,7 +18,7 @@
 
 class DECL_SYMBOLS FaceManager : public EntityManager<Face> {
 public:
-    Face::Ptr create(IGeometricEntity::Id_t face_id, bool on_boundary, EntityCollection<Vertex> const & vertices);
+    Face::Ptr create(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Vertex> const & vertices);
 };
 
 #pragma warning(default:4251)

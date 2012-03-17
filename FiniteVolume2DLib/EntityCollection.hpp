@@ -34,6 +34,11 @@ public:
         data_.push_back(entity);
     }
 
+    void insertUnique(typename Entity::Ptr const & entity) {
+        if (!find(entity->id()))
+            data_.push_back(entity);
+    }
+
     // const iterator
     const_iterator begin() const {
         return data_.begin();

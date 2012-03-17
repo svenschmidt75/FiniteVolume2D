@@ -1,13 +1,10 @@
 #include "MeshConnectivity.h"
 
 
-// Cell::Ptr
-// MeshConnectivity::getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const {
-// 
-// }
-// 
-
-// Use move semantics in EntityCollection<Vertex>???
+Cell::Ptr
+MeshConnectivity::getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const {
+    return face_connectivity_.getOtherCell(face, cell);
+}
 
 boost::optional<EntityCollection<Vertex>>
 MeshConnectivity::getVertexNeighbors(Vertex::Ptr & vertex) const {
@@ -19,8 +16,8 @@ MeshConnectivity::insert(Face::Ptr const & face) {
     vertex_connectivity_.insert(face);
 }
 
-
-// EntityCollection<Face::Ptr> &
-// MeshConnectivity::getFaces(Cell::Ptr & cell) {
-// 
-// }
+void
+MeshConnectivity::insert(Cell::Ptr const & cell) {
+    vertex_connectivity_.insert(cell);
+    face_connectivity_.insert(cell);
+}

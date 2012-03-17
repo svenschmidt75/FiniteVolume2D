@@ -8,6 +8,12 @@ namespace FS = boost::filesystem;
 // Static class data members
 MeshConnectivityTest::MockMeshBuilder MeshConnectivityTest::mock_builder_;
 
+/*
+ * VertexConnectivity
+ * FaceConnectivity
+ * getOtherCell
+ * 
+*/
 
 void
 MeshConnectivityTest::setUp() {

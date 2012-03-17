@@ -18,7 +18,7 @@
 
 class DECL_SYMBOLS VertexManager : public EntityManager<Vertex> {
 public:
-    Vertex::Ptr create(IGeometricEntity::Id_t vertex_id, bool on_boundary, double x, double y);
+    Vertex::Ptr create(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
 };
 
 #pragma warning(default:4251)

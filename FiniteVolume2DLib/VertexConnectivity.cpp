@@ -16,11 +16,11 @@ VertexConnectivity::insert(Face::Ptr const & face) {
         Vertex::Ptr v1 = vertices.getEntity(next);
 
         // insert vertex-vertex connection
-        vertex_neighbors_[v0->id()].insert(v1);
-        vertex_neighbors_[v1->id()].insert(v0);
+        vertex_neighbors_[v0->id()].insertUnique(v1);
+        vertex_neighbors_[v1->id()].insertUnique(v0);
 
         // insert vertex-face connection
-        vertex_faces_[v0->id()].insert(face);
+        vertex_faces_[v0->id()].insertUnique(face);
     }
 }
 

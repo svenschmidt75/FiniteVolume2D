@@ -4,14 +4,14 @@
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/ui/text/TestRunner.h>
 
-#include "GridConectivityTest.h"
 #include "ASCIIMeshReaderTest.h"
 #include "VertexManagerText.h"
+#include "MeshConectivityTest.h"
 
 
-//CPPUNIT_TEST_SUITE_REGISTRATION(GridConectivityTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(VertexManagerText);
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(MeshConectivityTest);
 
 
 int main(int argc, char **argv) {
