@@ -25,3 +25,14 @@ MeshConnectivityTest::testMeshFileExists() {
     bool exists = FS::exists(mesh_filename_);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Mesh file not found!", true, exists);
 }
+
+void
+MeshConnectivityTest::initMesh() {
+    static bool init = false;
+    if (!init)
+    {
+        init = true;
+        ASCIIMeshReader reader(mesh_filename_, mock_builder_);
+        CPPUNIT_ASSERT_MESSAGE("Failed to read mesh file!", reader.read());
+    }
+}

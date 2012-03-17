@@ -9,6 +9,8 @@
 
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include "IGeometricEntity.h"
 
 
@@ -22,6 +24,7 @@ class EntityCollection {
 private:
     typedef typename std::vector<typename Entity::Ptr> EntityCollection_t;
     typedef typename std::vector<typename Entity::Ptr>::iterator iterator;
+    typedef typename std::vector<typename Entity::Ptr>::const_iterator const_iterator;
 
 public:
     typedef typename EntityCollection_t::size_type size_type;
@@ -29,6 +32,15 @@ public:
 public:
     void insert(typename Entity::Ptr const & entity) {
         data_.push_back(entity);
+    }
+
+    // const iterator
+    const_iterator begin() const {
+        return data_.begin();
+    }
+
+    const_iterator end() const {
+        return data_.end();
     }
 
     // non-const iterator
@@ -56,6 +68,17 @@ public:
             throw std::out_of_range("EntityCollection::getEntity: Out of range!");
 
         return data_[index];
+    }
+
+    typename boost::optional<typename Entity::Ptr const> find(IGeometricEntity::Id_t id) const {
+        const_iterator it = std::find_if(data_.begin(), data_.end(), [id](typename Entity::Ptr const & entity){
+            return entity->id() == id;
+        });
+
+        if (it != data_.end())
+            return *it;
+
+        return boost::optional<Entity::Ptr const>();
     }
 
 private:
