@@ -12,7 +12,7 @@ ASCIIMeshReaderCellState::ASCIIMeshReaderCellState(IMeshBuilder & mesh_builder) 
 
 bool
 ASCIIMeshReaderCellState::process(std::vector<std::string> const & tokens, int line) {
-    if (tokens.size() < 5) {
+    if (tokens.size() < 4) {
         boost::format format = boost::format("ASCIIMeshReaderCellState::process: Invalid cell format in line %1%!\n") % line;
         return Util::error(format.str());
     }

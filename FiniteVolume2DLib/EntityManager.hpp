@@ -30,7 +30,7 @@ public:
     }
 
     typename Entity::Ptr
-    getVertex(IGeometricEntity::Id_t mesh_id) {
+    getEntity(IGeometricEntity::Id_t mesh_id) {
         return mesh_id_mapping_[mesh_id];
     }
 

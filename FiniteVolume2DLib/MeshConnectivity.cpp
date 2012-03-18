@@ -7,7 +7,7 @@ MeshConnectivity::getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const {
 }
 
 boost::optional<EntityCollection<Vertex>>
-MeshConnectivity::getVertexNeighbors(Vertex::Ptr & vertex) const {
+MeshConnectivity::getVertexNeighbors(Vertex::Ptr const & vertex) const {
     return vertex_connectivity_.getVertexNeighbors(vertex);
 }
 

@@ -21,6 +21,14 @@ public:
         data_.push_back(entity);
     }
 
+    typename EntityCollection_t::size_type size() const {
+        return data_.size();
+    }
+
+    typename Entity::Ptr const getEntityAt(typename EntityCollection_t::size_type index) const {
+        return data_[index];
+    }
+
 private:
     EntityCollection_t data_;
 };

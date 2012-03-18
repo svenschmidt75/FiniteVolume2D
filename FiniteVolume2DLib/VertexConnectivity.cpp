@@ -31,7 +31,7 @@ VertexConnectivity::insert(Cell::Ptr const & cell) {
     EntityCollection<Vertex> const & vertices = cell->getVertices();
 
     for (size_type i = 0; i < vertices.size(); ++i) {
-        Vertex::Ptr v0 = vertices.getEntity(i);
+        Vertex::Ptr const & v0 = vertices.getEntity(i);
 
         // insert vertex-cell connection
         vertex_cells_[v0->id()].insert(cell);
@@ -39,7 +39,7 @@ VertexConnectivity::insert(Cell::Ptr const & cell) {
 }
 
 boost::optional<EntityCollection<Vertex>>
-VertexConnectivity::getVertexNeighbors(Vertex::Ptr & vertex) const {
+VertexConnectivity::getVertexNeighbors(Vertex::Ptr const & vertex) const {
     VertexNeighbor_t::const_iterator it = vertex_neighbors_.find(vertex->id());
     if (it == vertex_neighbors_.end())
         return boost::optional<EntityCollection<Vertex>>();

@@ -21,7 +21,7 @@ class VertexConnectivity {
 public:
     void                                      insert(Face::Ptr const & face);
     void                                      insert(Cell::Ptr const & cell);
-    boost::optional<EntityCollection<Vertex>> getVertexNeighbors(Vertex::Ptr & vertex) const;
+    boost::optional<EntityCollection<Vertex>> getVertexNeighbors(Vertex::Ptr const & vertex) const;
 
 private:
     // the neighboring vertices

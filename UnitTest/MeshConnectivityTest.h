@@ -18,6 +18,11 @@
 class MeshConnectivityTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(MeshConnectivityTest);
     CPPUNIT_TEST(testMeshFileExists);
+    CPPUNIT_TEST(testNumberOfVerices);
+    CPPUNIT_TEST(testNumberOfFaces);
+    CPPUNIT_TEST(testNumberOfCells);
+    CPPUNIT_TEST(testBoundaryVertexNeighbors);
+    CPPUNIT_TEST(testInternalVertexNeighbors);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -27,9 +32,15 @@ private:
      * EntityManager. Hence, this embedded mesh builder.
      */
     class MeshBuilderMock : public IMeshBuilder {
+
+        friend class MeshConnectivityTest;
+
     public:
         MeshBuilderMock() {
-            EntityCreatorManager::Ptr emgr = EntityCreatorManager::create(VertexManager::create(), FaceManager::create(), CellManager::create());
+            vertex_mgr_ = VertexManager::create();
+            face_mgr_ = FaceManager::create();
+            cell_mgr_ = CellManager::create();
+            EntityCreatorManager::Ptr emgr = EntityCreatorManager::create(vertex_mgr_, face_mgr_, cell_mgr_);
             mesh_builder_ = std::shared_ptr<MeshBuilder>(new MeshBuilder(emgr));
         }
 
@@ -50,6 +61,9 @@ private:
         }
 
     private:
+        VertexManager::Ptr vertex_mgr_;
+        FaceManager::Ptr face_mgr_;
+        CellManager::Ptr cell_mgr_;
         MeshBuilder::Ptr mesh_builder_;
     };
 
@@ -59,6 +73,11 @@ public:
 
 protected:
     void testMeshFileExists();
+    void testNumberOfVerices();
+    void testNumberOfFaces();
+    void testNumberOfCells();
+    void testBoundaryVertexNeighbors();
+    void testInternalVertexNeighbors();
 
 private:
     void initMeshConnectivityTest();
@@ -66,7 +85,7 @@ private:
 private:
     typedef Mesh::Ptr MeshPtr;
 private:
-    std::string mesh_filename_;
+    std::string            mesh_filename_;
     static MeshBuilderMock mesh_builder_;
-    static MeshPtr mesh_;
+    static MeshPtr         mesh_;
 };

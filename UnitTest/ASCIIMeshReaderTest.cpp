@@ -62,7 +62,7 @@ void
 ASCIIMeshReaderTest::testFace() {
     MockMeshBuilder::FaceStr const & face_str = mock_builder_.faces_[1];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", static_cast<size_t>(2), face_str.vertex_ids_.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 2u, face_str.vertex_ids_.size());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary face", true, face_str.on_boundary_);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(0), face_str.vertex_ids_[0]);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(2), face_str.vertex_ids_[1]);
@@ -78,7 +78,7 @@ void
 ASCIIMeshReaderTest::testCell() {
     auto const & cell_ids = mock_builder_.cells_[0];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of faces", static_cast<size_t>(4), cell_ids.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of faces", 4u, cell_ids.size());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell face id", static_cast<IGeometricEntity::Id_t>(0), cell_ids[0]);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell face id", static_cast<IGeometricEntity::Id_t>(1), cell_ids[1]);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell face id", static_cast<IGeometricEntity::Id_t>(2), cell_ids[2]);
