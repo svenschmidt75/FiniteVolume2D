@@ -5,8 +5,10 @@
 #include <boost/format.hpp>
 
 
+FaceManager::FaceManager() {}
+
 Face::Ptr
-FaceManager::create(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Vertex> const & vertices) {
+FaceManager::createFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Vertex> const & vertices) {
     if (findEntity(mesh_id)) {
         boost::format format = boost::format("FaceManager::create: Face with mesh id %1% already created!\n") % mesh_id;
         Util::error(format.str());
@@ -23,4 +25,9 @@ FaceManager::create(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityColl
     mesh_id_mapping_[mesh_id] = face;
 
     return face;
+}
+
+FaceManager::Ptr
+FaceManager::create() {
+    return Ptr(new FaceManager);
 }

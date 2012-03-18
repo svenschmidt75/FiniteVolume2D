@@ -7,11 +7,11 @@
  */
 #pragma once
 
+#include "IGeometricEntity.h"
+
 #include <vector>
 
 #include <boost/optional.hpp>
-
-#include "IGeometricEntity.h"
 
 
 template<typename Entity>

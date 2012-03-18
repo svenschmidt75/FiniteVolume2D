@@ -5,8 +5,10 @@
 #include <boost/format.hpp>
 
 
+VertexManager::VertexManager() {}
+
 Vertex::Ptr
-VertexManager::create(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y) {
+VertexManager::createVertex(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y) {
     if (findEntity(mesh_id)) {
         boost::format format = boost::format("VertexManager::create: Vertex with mesh id %1% already created!\n") % mesh_id;
         Util::error(format.str());
@@ -23,4 +25,9 @@ VertexManager::create(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x
     mesh_id_mapping_[mesh_id] = vertex;
 
     return vertex;
+}
+
+VertexManager::Ptr
+VertexManager::create() {
+    return Ptr(new VertexManager);
 }

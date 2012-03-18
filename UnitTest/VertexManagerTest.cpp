@@ -13,5 +13,4 @@ VertexManagerText::tearDown() {
 
 void
 VertexManagerText::testTest() {
-    VertexManager vm;
 }

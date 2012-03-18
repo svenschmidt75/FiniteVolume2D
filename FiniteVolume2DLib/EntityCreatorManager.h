@@ -9,21 +9,35 @@
  */
 #pragma once
 
-class VertexManager;
-class FaceManager;
-class CellManager;
+#include "DeclSpec.h"
+
+#include "VertexManager.h"
+#include "FaceManager.h"
+#include "CellManager.h"
 
 
-class EntityCreatorManager {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS EntityCreatorManager {
 public:
-    EntityCreatorManager(VertexManager & vertex_mgr, FaceManager & face_mgr, CellManager & cell_mgr);
+    typedef std::shared_ptr<EntityCreatorManager> Ptr;
 
-    VertexManager & getVertexManager();
-    FaceManager   & getFaceManager();
-    CellManager   & getCellManager();
+public:
+    VertexManager::Ptr & getVertexManager();
+    FaceManager::Ptr &   getFaceManager();
+    CellManager::Ptr &   getCellManager();
+
+    static EntityCreatorManager::Ptr create(VertexManager::Ptr & vertex_mgr, FaceManager::Ptr & face_mgr, CellManager::Ptr & cell_mgr);
 
 private:
-    VertexManager & vertex_mgr_;
-    FaceManager   & face_mgr_;
-    CellManager   & cell_mgr_;
+    EntityCreatorManager();
+    EntityCreatorManager(VertexManager::Ptr & vertex_mgr, FaceManager::Ptr & face_mgr, CellManager::Ptr & cell_mgr);
+
+private:
+    VertexManager::Ptr vertex_mgr_;
+    FaceManager::Ptr   face_mgr_;
+    CellManager::Ptr   cell_mgr_;
 };
+
+#pragma warning(default:4251)

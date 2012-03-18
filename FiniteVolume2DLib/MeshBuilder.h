@@ -7,15 +7,22 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "IMeshBuilder.h"
 #include "Mesh.h"
+#include "EntityCreatorManager.h"
 
-class EntityCreatorManager;
+
+#pragma warning(disable:4251)
 
 
-class MeshBuilder : public IMeshBuilder {
+class DECL_SYMBOLS MeshBuilder : public IMeshBuilder {
 public:
-    MeshBuilder(EntityCreatorManager & entity_mgr);
+    typedef std::shared_ptr<MeshBuilder> Ptr;
+
+public:
+    MeshBuilder(EntityCreatorManager::Ptr & entity_mgr);
 
     // FROM IMeshBuilder
     bool buildVertex(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
@@ -27,5 +34,7 @@ public:
 private:
     Mesh::Ptr mesh_;
 
-    EntityCreatorManager & entity_mgr_;
+    EntityCreatorManager::Ptr entity_mgr_;
 };
+
+#pragma warning(default:4251)

@@ -18,7 +18,15 @@
 
 class DECL_SYMBOLS CellManager : public EntityManager<Cell> {
 public:
-    Cell::Ptr create(IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
+    typedef std::shared_ptr<CellManager> Ptr;
+
+public:
+    Cell::Ptr createCell(IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
+
+    static Ptr create();
+
+private:
+    CellManager();
 };
 
 #pragma warning(default:4251)

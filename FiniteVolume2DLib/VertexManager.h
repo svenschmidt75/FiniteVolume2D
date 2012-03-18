@@ -18,7 +18,15 @@
 
 class DECL_SYMBOLS VertexManager : public EntityManager<Vertex> {
 public:
-    Vertex::Ptr create(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    typedef std::shared_ptr<VertexManager> Ptr;
+
+public:
+    Vertex::Ptr createVertex(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+
+    static Ptr create();
+
+private:
+    VertexManager();
 };
 
 #pragma warning(default:4251)

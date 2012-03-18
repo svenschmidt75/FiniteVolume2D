@@ -1,25 +1,22 @@
 #include "MeshConnectivityTest.h"
 
+#include "FiniteVolume2DLib/ASCIIMeshReader.h"
+
 #include <boost/filesystem.hpp>
 
 namespace FS = boost::filesystem;
 
 
 // Static class data members
-MeshConnectivityTest::MockMeshBuilder MeshConnectivityTest::mock_builder_;
+MeshConnectivityTest::MeshBuilderMock MeshConnectivityTest::mesh_builder_;
+MeshConnectivityTest::MeshPtr MeshConnectivityTest::mesh_;
 
-/*
- * VertexConnectivity
- * FaceConnectivity
- * getOtherCell
- * 
-*/
 
 void
 MeshConnectivityTest::setUp() {
     mesh_filename_ = "Data\\grid.mesh";
 
-    initMesh();
+    initMeshConnectivityTest();
 }
 
 void
@@ -33,12 +30,16 @@ MeshConnectivityTest::testMeshFileExists() {
 }
 
 void
-MeshConnectivityTest::initMesh() {
+MeshConnectivityTest::initMeshConnectivityTest() {
     static bool init = false;
     if (!init)
     {
         init = true;
-        ASCIIMeshReader reader(mesh_filename_, mock_builder_);
+        ASCIIMeshReader reader(mesh_filename_, mesh_builder_);
         CPPUNIT_ASSERT_MESSAGE("Failed to read mesh file!", reader.read());
+        boost::optional<Mesh::Ptr> mesh = mesh_builder_.getMesh();
+        if (mesh)
+            mesh_ = *mesh;
+        CPPUNIT_ASSERT_MESSAGE("Failed to build mesh!", mesh);
     }
 }

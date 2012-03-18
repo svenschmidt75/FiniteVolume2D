@@ -15,7 +15,9 @@
 
 class IMeshBuilder;
 
+
 #pragma warning(disable:4251)
+
 
 class DECL_SYMBOLS ASCIIMeshReader : public IMeshReader {
 public:

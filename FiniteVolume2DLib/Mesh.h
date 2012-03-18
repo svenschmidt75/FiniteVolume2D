@@ -9,6 +9,7 @@
 
 #include "IMesh.h"
 
+#include "DeclSpec.h"
 #include "Vertex.h"
 #include "Thread.hpp"
 #include "MeshConnectivity.h"
@@ -16,7 +17,10 @@
 #include <boost/shared_ptr.hpp>
 
 
-class Mesh : public IMesh {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS Mesh : public IMesh {
 public:
     typedef boost::shared_ptr<Mesh> Ptr;
 
@@ -40,3 +44,5 @@ private:
 
     MeshConnectivity mesh_connectivity_;
 };
+
+#pragma warning(default:4251)

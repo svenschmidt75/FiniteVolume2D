@@ -9,12 +9,13 @@
 
 #include "IGeometricEntity.h"
 #include "Mesh.h"
+#include "DeclSpec.h"
 
 #include <boost/optional.hpp>
 #include <vector>
 
 
-class IMeshBuilder {
+class DECL_SYMBOLS IMeshBuilder {
 public:
     ~IMeshBuilder() {}
 

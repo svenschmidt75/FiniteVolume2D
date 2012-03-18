@@ -18,7 +18,15 @@
 
 class DECL_SYMBOLS FaceManager : public EntityManager<Face> {
 public:
-    Face::Ptr create(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Vertex> const & vertices);
+    typedef std::shared_ptr<FaceManager> Ptr;
+
+public:
+    Face::Ptr createFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Vertex> const & vertices);
+
+    static Ptr create();
+
+private:
+    FaceManager();
 };
 
 #pragma warning(default:4251)
