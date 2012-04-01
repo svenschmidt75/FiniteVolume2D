@@ -17,8 +17,17 @@ FaceConnectivity::insert(Cell::Ptr const & cell) {
     }
 }
 
+boost::optional<EntityCollection<Cell>>
+FaceConnectivity::getCellsAttachedToFace(Face::Ptr const & face) const {
+    const_iterator it = face_cells_.find(face->id());
+    if (it == face_cells_.end())
+        return boost::optional<EntityCollection<Cell>>();
+
+    return boost::optional<EntityCollection<Cell>>(it->second);
+}
+
 Cell::Ptr
-FaceConnectivity::getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const {
+FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const {
     const_iterator it = face_cells_.find(face->id());
     if (it == face_cells_.end()) {
         // face not found
@@ -51,6 +60,9 @@ FaceConnectivity::getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const {
         Util::error(format.str());
         return NULL;
     }
+
+    if (cells.size() == 1)
+        return NULL;
 
     if (cells.getEntity(0) == cell)
         return cells.getEntity(1);

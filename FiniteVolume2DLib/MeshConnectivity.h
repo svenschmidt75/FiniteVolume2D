@@ -6,6 +6,12 @@
  *         - faces attached to a vertex
  *         - cells attached to a vertex
  *         - cells attached to a face
+ *         
+ *         Each entity knows about the "smaller" entities it is
+ *         made up of. For example, a cell knows about the faces
+ *         it is made up of etc, but a face does not know which
+ *         cells are attached to it, i.e. this object answers
+ *         questions from bottom up.
  * Author: Sven Schmidt
  * Date  : 03/10/2012
  */
@@ -26,12 +32,15 @@
 class MeshConnectivity : public IMeshConnectivity {
 public:
     // FROM IMeshConnectivity
-    Cell::Ptr                                 getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const;
     void                                      insert(Face::Ptr const & face);
     void                                      insert(Cell::Ptr const & cell);
     boost::optional<EntityCollection<Vertex>> getVertexNeighbors(Vertex::Ptr const & vertex) const;
+    boost::optional<EntityCollection<Face>>   getFacesAttachedToVertex(Vertex::Ptr const & vertex) const;
+    boost::optional<EntityCollection<Cell>>   getCellsAttachedToVertex(Vertex::Ptr const & vertex) const;
+    boost::optional<EntityCollection<Cell>>   getCellsAttachedToFace(Face::Ptr const & face) const;
+    Cell::Ptr                                 getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const;
 
 private:
     VertexConnectivity vertex_connectivity_;
-    FaceConnectivity face_connectivity_;
+    FaceConnectivity   face_connectivity_;
 };

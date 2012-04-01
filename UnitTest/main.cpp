@@ -5,11 +5,9 @@
 #include <cppunit/ui/text/TestRunner.h>
 
 #include "ASCIIMeshReaderTest.h"
-#include "VertexManagerText.h"
 #include "MeshConnectivityTest.h"
 
 
-CPPUNIT_TEST_SUITE_REGISTRATION(VertexManagerText);
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshConnectivityTest);
 

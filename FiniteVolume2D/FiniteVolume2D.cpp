@@ -1,27 +1,23 @@
+----------------------------------------------------
+
+Why the MeshConnectivity object?
+
+Each entity like face and cell knows about the "smaller" entities
+it is made up of. A face is made up of vertices, a cell is made up
+of faces etc. So, the direction top-down is covered like this.
+However, the direction bottom-up must be handled separately. A
+vertex cannot know which faces and cells it is attached to. These
+questions answers the Mesh Connectivity object, i.e. it covers the
+path bottom-up.
+
+----------------------------------------------------
 
 EntityIterator<Cell> it = col.begin();
 
 Used T::Ptr, where T = Cell
 ----------------------------------------------------------------
 
-MeshBuilder builder;
-MeshReader reader(builder);
-reader.read();
-Mesh::Ptr mesh = builder.getMesh();
-MeshConnectivity mesh_conectitity = mesh->connectivity();
-
-Cell::Ptr cell_nbr = mesh_conectitity.getOtherCell(face, cell);
-EntityCollection<Vertex::Ptr> & vnbr = mesh_conectitity.getVertexNeighbors(vertex);
-EntityCollection<Face::Ptr> & faces = mesh_conectitity.getFaces(cell);
-
-
-----------------------------------------------------------------
-
 Connectivity
-
-- neighbors of a node
-- faces attached to a node
-- cells attached to a node
 
 
 face->getVertices
@@ -29,10 +25,6 @@ cell->getFaces()
 
 
 ----------------------------------------------------
-
-EntityCollection<Vertex::Ptr> & vnbr = mesh_conectitity.getVertexNeighbors(vertex);
-
-std::map<EntityIndex, EntityCollection<Vertex::Ptr>>
 
 
 

@@ -46,3 +46,21 @@ VertexConnectivity::getVertexNeighbors(Vertex::Ptr const & vertex) const {
 
     return boost::optional<EntityCollection<Vertex>>(it->second);
 }
+
+boost::optional<EntityCollection<Face>>
+VertexConnectivity::getFacesAttachedToVertex(Vertex::Ptr const & vertex) const {
+    VertexFace_t::const_iterator it = vertex_faces_.find(vertex->id());
+    if (it == vertex_faces_.end())
+        return boost::optional<EntityCollection<Face>>();
+
+    return boost::optional<EntityCollection<Face>>(it->second);
+}
+
+boost::optional<EntityCollection<Cell>>
+VertexConnectivity::getCellsAttachedToVertex(Vertex::Ptr const & vertex) const {
+    VertexCell_t::const_iterator it = vertex_cells_.find(vertex->id());
+    if (it == vertex_cells_.end())
+        return boost::optional<EntityCollection<Cell>>();
+
+    return boost::optional<EntityCollection<Cell>>(it->second);
+}

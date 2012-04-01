@@ -69,6 +69,8 @@ MeshConnectivityTest::testBoundaryVertexNeighbors() {
 
     EntityCollection<Vertex> const & vertex_nbr = *vertex_nbr_opt;
 
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 3u, vertex_nbr.size());
+
     // vertices 8, 5, 7
     CPPUNIT_ASSERT_MESSAGE("Vertex 5 expected", vertex_nbr.find(5));
     CPPUNIT_ASSERT_MESSAGE("Vertex 7 expected", vertex_nbr.find(7));
@@ -84,11 +86,13 @@ MeshConnectivityTest::testInternalVertexNeighbors() {
     // get mesh connectivity object
     IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
 
-    // get vertex neighbors of 6th vertex
+    // get vertex neighbors of 8th vertex
     boost::optional<EntityCollection<Vertex>> vertex_nbr_opt = mesh_connectivity.getVertexNeighbors(v);
     CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", vertex_nbr_opt);
 
     EntityCollection<Vertex> const & vertex_nbr = *vertex_nbr_opt;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8u, vertex_nbr.size());
 
     // all other vertices
     CPPUNIT_ASSERT_MESSAGE("Vertex 0 expected", vertex_nbr.find(0));
@@ -99,6 +103,186 @@ MeshConnectivityTest::testInternalVertexNeighbors() {
     CPPUNIT_ASSERT_MESSAGE("Vertex 5 expected", vertex_nbr.find(5));
     CPPUNIT_ASSERT_MESSAGE("Vertex 6 expected", vertex_nbr.find(6));
     CPPUNIT_ASSERT_MESSAGE("Vertex 7 expected", vertex_nbr.find(7));
+}
+
+void
+MeshConnectivityTest::testInternalVertexFaceNeighbors() {
+    // get 8th vertex
+    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    // get attached faces to 8th vertex
+    boost::optional<EntityCollection<Face>> face_nbrs_opt = mesh_connectivity.getFacesAttachedToVertex(v);
+    CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", face_nbrs_opt);
+
+    EntityCollection<Face> const & face_nbrs = *face_nbrs_opt;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8u, face_nbrs.size());
+
+    // all faces attached to vertex 8
+    CPPUNIT_ASSERT_MESSAGE("Face 0 expected", face_nbrs.find(0));
+    CPPUNIT_ASSERT_MESSAGE("Face 1 expected", face_nbrs.find(1));
+    CPPUNIT_ASSERT_MESSAGE("Face 2 expected", face_nbrs.find(2));
+    CPPUNIT_ASSERT_MESSAGE("Face 3 expected", face_nbrs.find(3));
+    CPPUNIT_ASSERT_MESSAGE("Face 12 expected", face_nbrs.find(12));
+    CPPUNIT_ASSERT_MESSAGE("Face 13 expected", face_nbrs.find(13));
+    CPPUNIT_ASSERT_MESSAGE("Face 14 expected", face_nbrs.find(14));
+    CPPUNIT_ASSERT_MESSAGE("Face 15 expected", face_nbrs.find(15));
+}
+
+void
+MeshConnectivityTest::testBoundaryVertexFaceNeighbors() {
+    // get 7th vertex
+    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(7);
+    CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    // get attached faces to 7th vertex
+    boost::optional<EntityCollection<Face>> face_nbrs_opt = mesh_connectivity.getFacesAttachedToVertex(v);
+    CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", face_nbrs_opt);
+
+    EntityCollection<Face> const & face_nbrs = *face_nbrs_opt;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 3u, face_nbrs.size());
+
+    // all faces attached to vertex 7
+    CPPUNIT_ASSERT_MESSAGE("Face 10 expected", face_nbrs.find(10));
+    CPPUNIT_ASSERT_MESSAGE("Face 15 expected", face_nbrs.find(15));
+    CPPUNIT_ASSERT_MESSAGE("Face 11 expected", face_nbrs.find(11));
+}
+
+void
+MeshConnectivityTest::testInternalVertexCellNeighbors() {
+    // get 8th vertex
+    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    // get attached cells to 8th vertex
+    boost::optional<EntityCollection<Cell>> cell_nbrs_opt = mesh_connectivity.getCellsAttachedToVertex(v);
+    CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", cell_nbrs_opt);
+
+    EntityCollection<Cell> const & cell_nbrs = *cell_nbrs_opt;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8u, cell_nbrs.size());
+
+    // all cells attached to vertex 8
+    CPPUNIT_ASSERT_MESSAGE("Cell 0 expected", cell_nbrs.find(0));
+    CPPUNIT_ASSERT_MESSAGE("Cell 1 expected", cell_nbrs.find(1));
+    CPPUNIT_ASSERT_MESSAGE("Cell 2 expected", cell_nbrs.find(2));
+    CPPUNIT_ASSERT_MESSAGE("Cell 3 expected", cell_nbrs.find(3));
+    CPPUNIT_ASSERT_MESSAGE("Cell 4 expected", cell_nbrs.find(4));
+    CPPUNIT_ASSERT_MESSAGE("Cell 5 expected", cell_nbrs.find(5));
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 expected", cell_nbrs.find(6));
+    CPPUNIT_ASSERT_MESSAGE("Cell 7 expected", cell_nbrs.find(7));
+}
+
+
+void
+MeshConnectivityTest::testBoundaryVertexCellNeighbors() {
+    // get 3th vertex
+    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(3);
+    CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    // get attached cells to 3th vertex
+    boost::optional<EntityCollection<Cell>> cell_nbrs_opt = mesh_connectivity.getCellsAttachedToVertex(v);
+    CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", cell_nbrs_opt);
+
+    EntityCollection<Cell> const & cell_nbrs = *cell_nbrs_opt;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 2u, cell_nbrs.size());
+
+    // all cells attached to vertex 3
+    CPPUNIT_ASSERT_MESSAGE("Cell 2 expected", cell_nbrs.find(2));
+    CPPUNIT_ASSERT_MESSAGE("Cell 3 expected", cell_nbrs.find(3));
+}
+
+void
+MeshConnectivityTest::testInteriorFaceGetAttachedCells() {
+    // get 2nd face
+    Face::Ptr const & f = mesh_builder_.face_mgr_->getEntity(2);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    // get attached cells to 2nd face
+    boost::optional<EntityCollection<Cell>> cells_opt = mesh_connectivity.getCellsAttachedToFace(f);
+    CPPUNIT_ASSERT_MESSAGE("Attached cell error", cells_opt);
+
+    EntityCollection<Cell> const & cells = *cells_opt;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell neighbor size error", 2u, cells.size());
+
+    // all cells attached to face 2
+    CPPUNIT_ASSERT_MESSAGE("Cell 3 expected", cells.find(3));
+    CPPUNIT_ASSERT_MESSAGE("Cell 4 expected", cells.find(4));
+}
+
+void
+MeshConnectivityTest::testBoundaryFaceGetAttachedCells() {
+    // get 9th face
+    Face::Ptr const & f = mesh_builder_.face_mgr_->getEntity(9);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    // get attached cell to 9th face
+    boost::optional<EntityCollection<Cell>> cells_opt = mesh_connectivity.getCellsAttachedToFace(f);
+    CPPUNIT_ASSERT_MESSAGE("Attached cell error", cells_opt);
+
+    EntityCollection<Cell> const & cells = *cells_opt;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell neighbor size error", 1u, cells.size());
+
+    // cell attached to face 9
+    CPPUNIT_ASSERT_MESSAGE("Cell 5 expected", cells.find(5));
+}
+
+void
+MeshConnectivityTest::testInteriorGetOtherCell() {
+    // get 3rd face
+    Face::Ptr const & f = mesh_builder_.face_mgr_->getEntity(3);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+
+    // get 6th cell
+    Cell::Ptr const & c = mesh_builder_.cell_mgr_->getEntity(6);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    Cell::Ptr other_cell = mesh_connectivity.getOtherCell(f, c);
+    CPPUNIT_ASSERT_MESSAGE("Cell 5 expected", other_cell != NULL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell 5 expected", static_cast<IGeometricEntity::Id_t>(5), other_cell->id());
+}
+
+void
+MeshConnectivityTest::testBoundaryGetOtherCell() {
+    // get 11th face
+    Face::Ptr const & f = mesh_builder_.face_mgr_->getEntity(11);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+
+    // get 7th cell
+    Cell::Ptr const & c = mesh_builder_.cell_mgr_->getEntity(7);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    Cell::Ptr other_cell = mesh_connectivity.getOtherCell(f, c);
+    CPPUNIT_ASSERT_MESSAGE("No cell expected", other_cell == NULL);
 }
 
 void

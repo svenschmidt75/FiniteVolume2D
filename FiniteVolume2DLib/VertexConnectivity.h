@@ -22,6 +22,8 @@ public:
     void                                      insert(Face::Ptr const & face);
     void                                      insert(Cell::Ptr const & cell);
     boost::optional<EntityCollection<Vertex>> getVertexNeighbors(Vertex::Ptr const & vertex) const;
+    boost::optional<EntityCollection<Face>>   getFacesAttachedToVertex(Vertex::Ptr const & vertex) const;
+    boost::optional<EntityCollection<Cell>>   getCellsAttachedToVertex(Vertex::Ptr const & vertex) const;
 
 private:
     // the neighboring vertices

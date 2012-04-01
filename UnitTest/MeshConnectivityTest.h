@@ -23,6 +23,14 @@ class MeshConnectivityTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(testNumberOfCells);
     CPPUNIT_TEST(testBoundaryVertexNeighbors);
     CPPUNIT_TEST(testInternalVertexNeighbors);
+    CPPUNIT_TEST(testInternalVertexFaceNeighbors);
+    CPPUNIT_TEST(testBoundaryVertexFaceNeighbors);
+    CPPUNIT_TEST(testInternalVertexCellNeighbors);
+    CPPUNIT_TEST(testBoundaryVertexCellNeighbors);
+    CPPUNIT_TEST(testInteriorFaceGetAttachedCells);
+    CPPUNIT_TEST(testBoundaryFaceGetAttachedCells);
+    CPPUNIT_TEST(testInteriorGetOtherCell);
+    CPPUNIT_TEST(testBoundaryGetOtherCell);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -62,9 +70,9 @@ private:
 
     private:
         VertexManager::Ptr vertex_mgr_;
-        FaceManager::Ptr face_mgr_;
-        CellManager::Ptr cell_mgr_;
-        MeshBuilder::Ptr mesh_builder_;
+        FaceManager::Ptr   face_mgr_;
+        CellManager::Ptr   cell_mgr_;
+        MeshBuilder::Ptr   mesh_builder_;
     };
 
 public:
@@ -78,6 +86,15 @@ protected:
     void testNumberOfCells();
     void testBoundaryVertexNeighbors();
     void testInternalVertexNeighbors();
+    void testInternalVertexFaceNeighbors();
+    void testBoundaryVertexFaceNeighbors();
+    void testInternalVertexCellNeighbors();
+    void testBoundaryVertexCellNeighbors();
+    void testInteriorFaceGetAttachedCells();
+    void testBoundaryFaceGetAttachedCells();
+    void testInteriorGetOtherCell();
+    void testBoundaryGetOtherCell();
+    void testGetOtherCell();
 
 private:
     void initMeshConnectivityTest();

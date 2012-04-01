@@ -2,13 +2,28 @@
 
 
 Cell::Ptr
-MeshConnectivity::getOtherCell(Face::Ptr & face, Cell::Ptr & cell) const {
+MeshConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const {
     return face_connectivity_.getOtherCell(face, cell);
 }
 
 boost::optional<EntityCollection<Vertex>>
 MeshConnectivity::getVertexNeighbors(Vertex::Ptr const & vertex) const {
     return vertex_connectivity_.getVertexNeighbors(vertex);
+}
+
+boost::optional<EntityCollection<Face>>
+MeshConnectivity::getFacesAttachedToVertex(Vertex::Ptr const & vertex) const {
+    return vertex_connectivity_.getFacesAttachedToVertex(vertex);
+}
+
+boost::optional<EntityCollection<Cell>>
+MeshConnectivity::getCellsAttachedToVertex(Vertex::Ptr const & vertex) const {
+    return vertex_connectivity_.getCellsAttachedToVertex(vertex);
+}
+
+boost::optional<EntityCollection<Cell>>
+MeshConnectivity::getCellsAttachedToFace(Face::Ptr const & face) const {
+    return face_connectivity_.getCellsAttachedToFace(face);
 }
 
 void
