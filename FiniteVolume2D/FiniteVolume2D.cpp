@@ -26,11 +26,29 @@ cell->getFaces()
 
 ----------------------------------------------------
 
+Vector class, for face normal
+
+Vector
+Face::normal() const {
+  // 
+  Vector n(v1.vector(), v0.normal());
+  return n;
+}
 
 
+----------------------------------------------------
 
+Change:
 
+VertexManager -> NodeManager
 
+Vertex -> Node
+
+A Node contains a vertex!
+
+Vertices are free, nodes managed!
+
+----------------------------------------------------
 
 
 class ComputeManager {

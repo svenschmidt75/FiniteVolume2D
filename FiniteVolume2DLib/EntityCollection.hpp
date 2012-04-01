@@ -35,7 +35,7 @@ public:
     }
 
     void insertUnique(typename Entity::Ptr const & entity) {
-        if (!find(entity->id()))
+        if (!find(entity->meshId()))
             data_.push_back(entity);
     }
 
@@ -77,7 +77,7 @@ public:
 
     typename boost::optional<typename Entity::Ptr const> find(IGeometricEntity::Id_t id) const {
         const_iterator it = std::find_if(data_.begin(), data_.end(), [id](typename Entity::Ptr const & entity){
-            return entity->id() == id;
+            return entity->meshId() == id;
         });
 
         if (it != data_.end())

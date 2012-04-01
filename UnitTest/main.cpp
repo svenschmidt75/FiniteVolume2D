@@ -6,10 +6,12 @@
 
 #include "ASCIIMeshReaderTest.h"
 #include "MeshConnectivityTest.h"
+#include "EntityTest.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshConnectivityTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(EntityTest);
 
 
 int main(int argc, char **argv) {

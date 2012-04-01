@@ -1,5 +1,7 @@
 #include "Vertex.h"
 
+#include "Vector.h"
+
 
 Vertex::Vertex(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y)
     : vertex_id_(vertex_id), mesh_id_(mesh_id), on_boundary_(on_boundary), x_(x), y_(y) {}
@@ -27,6 +29,11 @@ Vertex::x() const {
 double
 Vertex::y() const {
     return y_;
+}
+
+Vector
+Vertex::vector() const {
+    return Vector(x_, y_);
 }
 
 Vertex::Ptr

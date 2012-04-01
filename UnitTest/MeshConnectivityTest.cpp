@@ -9,7 +9,7 @@ namespace FS = boost::filesystem;
 
 
 // Static class data members
-MeshConnectivityTest::MeshBuilderMock MeshConnectivityTest::mesh_builder_;
+MeshBuilderMock               MeshConnectivityTest::mesh_builder_;
 MeshConnectivityTest::MeshPtr MeshConnectivityTest::mesh_;
 
 
@@ -17,7 +17,7 @@ void
 MeshConnectivityTest::setUp() {
     mesh_filename_ = "Data\\mesh_connectivity.mesh";
 
-    initMeshConnectivityTest();
+    initMesh();
 }
 
 void
@@ -286,7 +286,7 @@ MeshConnectivityTest::testBoundaryGetOtherCell() {
 }
 
 void
-MeshConnectivityTest::initMeshConnectivityTest() {
+MeshConnectivityTest::initMesh() {
     static bool init = false;
     if (!init)
     {

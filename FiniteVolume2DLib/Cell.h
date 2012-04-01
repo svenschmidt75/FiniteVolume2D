@@ -9,13 +9,18 @@
 
 #include <memory>
 
+#include "DeclSpec.h"
+
 #include "IGeometricEntity.h"
 #include "EntityCollection.hpp"
 #include "Vertex.h"
 #include "Face.h"
 
 
-class Cell : public IGeometricEntity {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS Cell : public IGeometricEntity {
 
     friend class CellManager;
 
@@ -29,6 +34,8 @@ public:
 
     EntityCollection<Vertex> const & getVertices() const;
     EntityCollection<Face> const &   getFaces() const;
+    double                           volume() const;
+    Vertex                           centroid() const;
 
 private:
     Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
@@ -42,3 +49,5 @@ private:
     EntityCollection<Vertex> vertices_;
     EntityCollection<Face> faces_;
 };
+
+#pragma warning(default:4251)

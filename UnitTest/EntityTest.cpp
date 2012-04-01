@@ -1,0 +1,141 @@
+#include "EntityTest.h"
+
+#include "FiniteVolume2DLib/FaceManager.h"
+#include "FiniteVolume2DLib/VertexManager.h"
+#include "FiniteVolume2DLib/ASCIIMeshReader.h"
+#include "FiniteVolume2DLib/Face.h"
+#include "FiniteVolume2DLib/EntityCollection.hpp"
+
+
+// Static class data members
+MeshBuilderMock   EntityTest::mesh_builder_;
+EntityTest::MeshPtr EntityTest::mesh_;
+
+
+void
+EntityTest::setUp() {
+    mesh_filename_ = "Data\\mesh_connectivity.mesh";
+
+    initMesh();
+}
+
+void
+EntityTest::tearDown() {
+}
+
+void
+EntityTest::testInternalGetFaceVertices() {
+    // get 14th face
+    Face::Ptr const & f = mesh_builder_.face_mgr_->getEntity(14);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+
+    // get attached vertices to 14th face
+    EntityCollection<Vertex> const & vertices = f->getVertices();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2u, vertices.size());
+
+    // all vertices attached to face 14
+    CPPUNIT_ASSERT_MESSAGE("Vertex 8 expected", vertices.find(8));
+    CPPUNIT_ASSERT_MESSAGE("Vertex 5 expected", vertices.find(5));
+}
+
+
+void
+EntityTest::testBoundaryGetFaceVertices() {
+    // get 4th face
+    Face::Ptr const & f = mesh_builder_.face_mgr_->getEntity(4);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+
+    // get attached vertices to 4th face
+    EntityCollection<Vertex> const & vertices = f->getVertices();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2u, vertices.size());
+
+    // all vertices attached to face 4
+    CPPUNIT_ASSERT_MESSAGE("Vertex 0 expected", vertices.find(0));
+    CPPUNIT_ASSERT_MESSAGE("Vertex 1 expected", vertices.find(1));
+}
+
+void
+EntityTest::testGetCellFaces() {
+    // get 4th cell
+    Cell::Ptr const & c = mesh_builder_.cell_mgr_->getEntity(4);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
+
+    // get attached faces to 4th cell
+    EntityCollection<Face> const & faces = c->getFaces();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell face size error", 3u, faces.size());
+
+    // all faces attached to cell 4
+    CPPUNIT_ASSERT_MESSAGE("Face 2 expected", faces.find(2));
+    CPPUNIT_ASSERT_MESSAGE("Face 8 expected", faces.find(8));
+    CPPUNIT_ASSERT_MESSAGE("Face 14 expected", faces.find(14));
+}
+
+void
+EntityTest::testGetCellVertices() {
+    // get 4th cell
+    Cell::Ptr const & c = mesh_builder_.cell_mgr_->getEntity(4);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
+
+    // get attached vertices to 4th cell
+    EntityCollection<Vertex> const & vertices = c->getVertices();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell vertex size error", 3u, vertices.size());
+
+    // all vertices attached to cell 4
+    CPPUNIT_ASSERT_MESSAGE("Vertex 4 expected", vertices.find(4));
+    CPPUNIT_ASSERT_MESSAGE("Vertex 5 expected", vertices.find(5));
+    CPPUNIT_ASSERT_MESSAGE("Vertex 8 expected", vertices.find(8));
+}
+
+void
+EntityTest::testFaceArea() {
+    // get 13th face
+    Face::Ptr f = mesh_builder_.face_mgr_->getEntity(13);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face area mismatch", sqrt(2.0), f->area(), 1E-10);
+
+    f = mesh_builder_.face_mgr_->getEntity(1);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face area mismatch", 1.0, f->area(), 1E-10);
+}
+
+void
+EntityTest::testCellVolume() {
+    // get 6th cell
+    Cell::Ptr c = mesh_builder_.cell_mgr_->getEntity(6);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell area mismatch", 0.5, c->volume(), 1E-10);
+
+    c = mesh_builder_.cell_mgr_->getEntity(2);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell area mismatch", 0.5, c->volume(), 1E-10);
+}
+
+void
+EntityTest::testFaceCentroid() {
+
+}
+
+void
+EntityTest::testCellCentroid() {
+
+}
+
+void
+EntityTest::testFaceNormal() {
+
+}
+
+void
+EntityTest::initMesh() {
+    static bool init = false;
+    if (!init)
+    {
+        init = true;
+        ASCIIMeshReader reader(mesh_filename_, mesh_builder_);
+        CPPUNIT_ASSERT_MESSAGE("Failed to read mesh file!", reader.read());
+        boost::optional<Mesh::Ptr> mesh = mesh_builder_.getMesh();
+        if (mesh)
+            mesh_ = *mesh;
+        CPPUNIT_ASSERT_MESSAGE("Failed to build mesh!", mesh);
+    }
+}

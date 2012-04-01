@@ -7,10 +7,12 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include <boost/cstdint.hpp>
 
 
-class IGeometricEntity {
+class DECL_SYMBOLS IGeometricEntity {
 public:
     typedef boost::uint64_t Id_t;
 

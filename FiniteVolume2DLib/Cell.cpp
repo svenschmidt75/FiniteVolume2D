@@ -43,6 +43,34 @@ Cell::getFaces() const {
     return faces_;
 }
 
+double
+Cell::volume() const {
+    /* Geometric Tools for Computer Graphics,
+     * Schneider and Eberly
+     * p. 818, eq. (13.4)
+     */
+    typedef EntityCollection<Vertex>::size_type size_type;
+
+    size_type n = vertices_.size();
+
+    double delta = 0.0;
+
+    for (size_type i = 0; i < n; ++i) {
+        size_type next = (i + 1) % n;
+
+        Vertex::Ptr const & v0 = vertices_.getEntity(i);
+        Vertex::Ptr const & v1 = vertices_.getEntity(next);
+
+        delta += (v0->x() * v1->y() - v1->x() * v0->y());
+    }
+    return 0.5 * delta;
+}
+
+Vertex
+Cell::centroid() const {
+
+}
+
 Cell::Ptr
 Cell::create(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces) {
     Cell::Ptr cell = Cell::Ptr(new Cell(cell_id, mesh_id, faces));
