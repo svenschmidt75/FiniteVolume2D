@@ -1,7 +1,7 @@
 /*
- * Name  : ASCIIMeshReaderVertexState
+ * Name  : ASCIIMeshReaderNodeState
  * Path  : IMeshReaderState
- * Use   : Represents the base state. Read vertex data.
+ * Use   : Represents the base state. Read node data.
  * Author: Sven Schmidt
  * Date  : 03/04/2012
  */
@@ -12,12 +12,12 @@
 class IMeshBuilder;
 
 
-class ASCIIMeshReaderVertexState : public IMeshReaderState {
+class ASCIIMeshReaderNodeState : public IMeshReaderState {
 public:
     // FROM IMeshReaderState
     bool process(std::vector<std::string> const & tokens, int line);
 
-    bool inVertexMode() const;
+    bool inNodeMode() const;
     bool inFaceMode() const;
     bool inCellMode() const;
 
@@ -25,7 +25,7 @@ public:
     static Ptr create(IMeshBuilder & mesh_builder);
 
 private:
-    ASCIIMeshReaderVertexState(IMeshBuilder & mesh_builder);
+    ASCIIMeshReaderNodeState(IMeshBuilder & mesh_builder);
 
 private:
     IMeshBuilder & mesh_builder_;

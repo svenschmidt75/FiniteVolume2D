@@ -10,7 +10,7 @@
 
 #include "DeclSpec.h"
 
-#include "Vertex.h"
+#include "Node.h"
 #include "Face.h"
 #include "Cell.h"
 
@@ -19,7 +19,7 @@ class DECL_SYMBOLS IMesh {
 public:
     ~IMesh() {}
 
-    virtual void addVertex(Vertex::Ptr const & vertex) = 0;
+    virtual void addNode(Node::Ptr const & node) = 0;
     virtual void addFace(Face::Ptr const & face) = 0;
     virtual void addCell(Cell::Ptr const & cell) = 0;
 };

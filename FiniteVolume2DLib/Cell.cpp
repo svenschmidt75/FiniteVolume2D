@@ -9,15 +9,15 @@ Cell::Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, Entit
 
     // this is necessary since the compiler expects the references passed to the lambda expression
     // in the current scope. VS2010 compiler bug? See http://connect.microsoft.com/VisualStudio/feedback/details/560907/capturing-variables-in-nested-lambdas
-    EntityCollection<Vertex> & v = vertices_;
+    EntityCollection<Node> & v = nodes_;
 
-    // extract vertices
+    // extract nodes
     std::for_each(faces.begin(), faces.end(), [&v](Face::Ptr const & face) {
-        // Extract and check all vertices before inserting into v
-        EntityCollection<Vertex> const & vertices = face->getVertices();
+        // Extract and check all nodes before inserting into v
+        EntityCollection<Node> const & nodes = face->getNodes();
 
-        for (EntityCollection<Vertex>::size_type i = 0; i < vertices.size(); ++i) {
-            Vertex::Ptr const & vert = vertices.getEntity(i);
+        for (EntityCollection<Node>::size_type i = 0; i < nodes.size(); ++i) {
+            Node::Ptr const & vert = nodes.getEntity(i);
             v.insertUnique(vert);
         }
     });
@@ -33,9 +33,9 @@ Cell::meshId() const {
     return mesh_id_;
 }
 
-EntityCollection<Vertex> const &
-Cell::getVertices() const {
-    return vertices_;
+EntityCollection<Node> const &
+Cell::getNodes() const {
+    return nodes_;
 }
 
 EntityCollection<Face> const &
@@ -49,27 +49,28 @@ Cell::volume() const {
      * Schneider and Eberly
      * p. 818, eq. (13.4)
      */
-    typedef EntityCollection<Vertex>::size_type size_type;
+    typedef EntityCollection<Node>::size_type size_type;
 
-    size_type n = vertices_.size();
+    size_type n = nodes_.size();
 
     double delta = 0.0;
 
     for (size_type i = 0; i < n; ++i) {
         size_type next = (i + 1) % n;
 
-        Vertex::Ptr const & v0 = vertices_.getEntity(i);
-        Vertex::Ptr const & v1 = vertices_.getEntity(next);
+        Node::Ptr const & v0 = nodes_.getEntity(i);
+        Node::Ptr const & v1 = nodes_.getEntity(next);
 
         delta += (v0->x() * v1->y() - v1->x() * v0->y());
     }
     return 0.5 * delta;
 }
 
-Vertex
-Cell::centroid() const {
-
-}
+// Node
+// Cell::centroid() const {
+// //     GeometricHelper::cellCentroid(*this);
+// 
+// }
 
 Cell::Ptr
 Cell::create(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces) {

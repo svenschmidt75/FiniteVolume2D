@@ -18,12 +18,12 @@ class Vector;
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS Vertex : public IGeometricEntity {
+class DECL_SYMBOLS Node : public IGeometricEntity {
 
-    friend class VertexManager;
+    friend class NodeManager;
 
 public:
-    typedef std::shared_ptr<Vertex> Ptr;
+    typedef std::shared_ptr<Node> Ptr;
 
 public:
     // FROM IGeometricEntity
@@ -36,13 +36,13 @@ public:
     Vector vector() const;
 
 private:
-    Vertex(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    Node(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
 
     // only called by VertexManager
     static Ptr create(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
 
 private:
-    IGeometricEntity::Id_t vertex_id_;
+    IGeometricEntity::Id_t node_id_;
     IGeometricEntity::Id_t mesh_id_;
     bool                   on_boundary_;
     double                 x_;

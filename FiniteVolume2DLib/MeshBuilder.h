@@ -25,7 +25,7 @@ public:
     MeshBuilder(EntityCreatorManager::Ptr & entity_mgr);
 
     // FROM IMeshBuilder
-    bool buildVertex(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    bool buildNode(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
     bool buildFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids);
     bool buildCell(IGeometricEntity::Id_t mesh_id, std::vector<IGeometricEntity::Id_t> const & face_ids);
 

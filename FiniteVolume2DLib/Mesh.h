@@ -10,7 +10,7 @@
 #include "IMesh.h"
 
 #include "DeclSpec.h"
-#include "Vertex.h"
+#include "Node.h"
 #include "Thread.hpp"
 #include "MeshConnectivity.h"
 
@@ -24,15 +24,15 @@ public:
 
 public:
     // FROM IMesh
-    void addVertex(Vertex::Ptr const & vertex);
+    void addNode(Node::Ptr const & node);
     void addFace(Face::Ptr const & face);
     void addCell(Cell::Ptr const & cell);
 
     IMeshConnectivity const & getMeshConnectivity() const;
 
 
-    Thread<Vertex> & getBoundaryVertexThread();
-    Thread<Vertex> & getInteriorVertexThread();
+    Thread<Node> & getBoundaryVertexThread();
+    Thread<Node> & getInteriorVertexThread();
 
     Thread<Face> & getBoundaryFaceThread();
     Thread<Face> & getInteriorFaceThread();
@@ -45,8 +45,8 @@ private:
     Mesh();
 
 private:
-    Thread<Vertex> interior_vertex_thread_;
-    Thread<Vertex> boundary_vertex_thread_;
+    Thread<Node> interior_node_thread_;
+    Thread<Node> boundary_node_thread_;
 
     Thread<Face> interior_face_thread_;
     Thread<Face> boundary_face_thread_;

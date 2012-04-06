@@ -5,7 +5,7 @@
  * This makes their methods available in the UnitTest
  * project, i.e. the code is exported in the dll.
  */
-template class Thread<Vertex>;
+template class Thread<Node>;
 template class Thread<Face>;
 template class Thread<Cell>;
 
@@ -13,14 +13,14 @@ template class Thread<Cell>;
 Mesh::Mesh() {}
 
 void
-Mesh::addVertex(Vertex::Ptr const & vertex) {
-    if (vertex->onBoundary()) {
-        Thread<Vertex> & thread = getBoundaryVertexThread();
-        thread.insert(vertex);
+Mesh::addNode(Node::Ptr const & node) {
+    if (node->onBoundary()) {
+        Thread<Node> & thread = getBoundaryVertexThread();
+        thread.insert(node);
     }
     else {
-        Thread<Vertex> & thread = getInteriorVertexThread();
-        thread.insert(vertex);
+        Thread<Node> & thread = getInteriorVertexThread();
+        thread.insert(node);
     }
 }
 
@@ -51,14 +51,14 @@ Mesh::getMeshConnectivity() const {
     return mesh_connectivity_;
 }
 
-Thread<Vertex> &
+Thread<Node> &
 Mesh::getBoundaryVertexThread() {
-    return boundary_vertex_thread_;
+    return boundary_node_thread_;
 }
 
-Thread<Vertex> &
+Thread<Node> &
 Mesh::getInteriorVertexThread() {
-    return interior_vertex_thread_;
+    return interior_node_thread_;
 }
 
 Thread<Face> &

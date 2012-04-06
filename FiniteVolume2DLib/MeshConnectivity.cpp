@@ -6,19 +6,19 @@ MeshConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
     return face_connectivity_.getOtherCell(face, cell);
 }
 
-boost::optional<EntityCollection<Vertex>>
-MeshConnectivity::getVertexNeighbors(Vertex::Ptr const & vertex) const {
-    return vertex_connectivity_.getVertexNeighbors(vertex);
+boost::optional<EntityCollection<Node>>
+MeshConnectivity::getNodeNeighbors(Node::Ptr const & node) const {
+    return node_connectivity_.getNodeNeighbors(node);
 }
 
 boost::optional<EntityCollection<Face>>
-MeshConnectivity::getFacesAttachedToVertex(Vertex::Ptr const & vertex) const {
-    return vertex_connectivity_.getFacesAttachedToVertex(vertex);
+MeshConnectivity::getFacesAttachedToNode(Node::Ptr const & node) const {
+    return node_connectivity_.getFacesAttachedToNode(node);
 }
 
 boost::optional<EntityCollection<Cell>>
-MeshConnectivity::getCellsAttachedToVertex(Vertex::Ptr const & vertex) const {
-    return vertex_connectivity_.getCellsAttachedToVertex(vertex);
+MeshConnectivity::getCellsAttachedToNode(Node::Ptr const & node) const {
+    return node_connectivity_.getCellsAttachedToNode(node);
 }
 
 boost::optional<EntityCollection<Cell>>
@@ -28,11 +28,11 @@ MeshConnectivity::getCellsAttachedToFace(Face::Ptr const & face) const {
 
 void
 MeshConnectivity::insert(Face::Ptr const & face) {
-    vertex_connectivity_.insert(face);
+    node_connectivity_.insert(face);
 }
 
 void
 MeshConnectivity::insert(Cell::Ptr const & cell) {
-    vertex_connectivity_.insert(cell);
+    node_connectivity_.insert(cell);
     face_connectivity_.insert(cell);
 }

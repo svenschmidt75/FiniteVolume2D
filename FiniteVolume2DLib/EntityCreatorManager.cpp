@@ -1,11 +1,11 @@
 #include "EntityCreatorManager.h"
 
-EntityCreatorManager::EntityCreatorManager(VertexManager::Ptr & vertex_mgr, FaceManager::Ptr & face_mgr, CellManager::Ptr & cell_mgr)
-    : vertex_mgr_(vertex_mgr), face_mgr_(face_mgr), cell_mgr_(cell_mgr) {}
+EntityCreatorManager::EntityCreatorManager(NodeManager::Ptr & node_mgr, FaceManager::Ptr & face_mgr, CellManager::Ptr & cell_mgr)
+    : node_mgr_(node_mgr), face_mgr_(face_mgr), cell_mgr_(cell_mgr) {}
 
-VertexManager::Ptr &
-EntityCreatorManager::getVertexManager() {
-    return vertex_mgr_;
+NodeManager::Ptr &
+EntityCreatorManager::getNodeManager() {
+    return node_mgr_;
 }
 
 FaceManager::Ptr &
@@ -19,6 +19,6 @@ EntityCreatorManager::getCellManager() {
 }
 
 EntityCreatorManager::Ptr
-EntityCreatorManager::create(VertexManager::Ptr & vertex_mgr, FaceManager::Ptr & face_mgr, CellManager::Ptr & cell_mgr) {
-    return Ptr(new EntityCreatorManager(vertex_mgr, face_mgr, cell_mgr));
+EntityCreatorManager::create(NodeManager::Ptr & node_mgr, FaceManager::Ptr & face_mgr, CellManager::Ptr & cell_mgr) {
+    return Ptr(new EntityCreatorManager(node_mgr, face_mgr, cell_mgr));
 }

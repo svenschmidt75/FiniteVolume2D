@@ -27,9 +27,9 @@ class ASCIIMeshReaderTest : public CppUnit::TestFixture {
 private:
     class MockMeshBuilder : public IMeshBuilder {
     public:
-        struct VertexStr {
-            VertexStr() {}
-            VertexStr(bool on_boundary, double x, double y) : on_boundary_(on_boundary), x_(x), y_(y) {}
+        struct NodeStr {
+            NodeStr() {}
+            NodeStr(bool on_boundary, double x, double y) : on_boundary_(on_boundary), x_(x), y_(y) {}
 
             bool   on_boundary_;
             double x_;
@@ -46,20 +46,20 @@ private:
 
     public:
         bool
-        buildVertex(IGeometricEntity::Id_t vertex_id, bool on_boundary, double x, double y) {
-            VertexMap_t::const_iterator it = vertices_.find(vertex_id);
-            if (it != vertices_.end())
-                CPPUNIT_FAIL("Duplicate vertex!");
-            vertices_[vertex_id] = VertexStr(on_boundary, x, y);
+        buildNode(IGeometricEntity::Id_t node_id, bool on_boundary, double x, double y) {
+            NodeMap_t::const_iterator it = nodes_.find(node_id);
+            if (it != nodes_.end())
+                CPPUNIT_FAIL("Duplicate node!");
+            nodes_[node_id] = NodeStr(on_boundary, x, y);
             return true;
         }
 
         bool
-        buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids) {
+        buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & node_ids) {
             FaceMap_t::const_iterator it = faces_.find(face_id);
             if (it != faces_.end())
                 CPPUNIT_FAIL("Duplicate face!");
-            faces_[face_id] = FaceStr(on_boundary, vertex_ids);
+            faces_[face_id] = FaceStr(on_boundary, node_ids);
             return true;
         }
 
@@ -78,8 +78,8 @@ private:
         }
 
     public:
-        typedef std::map<IGeometricEntity::Id_t, VertexStr> VertexMap_t;
-        VertexMap_t vertices_;
+        typedef std::map<IGeometricEntity::Id_t, NodeStr> NodeMap_t;
+        NodeMap_t nodes_;
 
         typedef std::map<IGeometricEntity::Id_t, FaceStr> FaceMap_t;
         FaceMap_t faces_;
@@ -106,6 +106,6 @@ private:
     void initMesh();
 
 private:
-    std::string mesh_filename_;
+    std::string            mesh_filename_;
     static MockMeshBuilder mock_builder_;
 };

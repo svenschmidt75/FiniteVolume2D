@@ -1,7 +1,7 @@
 #include "EntityTest.h"
 
 #include "FiniteVolume2DLib/FaceManager.h"
-#include "FiniteVolume2DLib/VertexManager.h"
+#include "FiniteVolume2DLib/NodeManager.h"
 #include "FiniteVolume2DLib/ASCIIMeshReader.h"
 #include "FiniteVolume2DLib/Face.h"
 #include "FiniteVolume2DLib/EntityCollection.hpp"
@@ -30,7 +30,7 @@ EntityTest::testInternalGetFaceVertices() {
     CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
 
     // get attached vertices to 14th face
-    EntityCollection<Vertex> const & vertices = f->getVertices();
+    EntityCollection<Node> const & vertices = f->getNodes();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2u, vertices.size());
 
     // all vertices attached to face 14
@@ -46,7 +46,7 @@ EntityTest::testBoundaryGetFaceVertices() {
     CPPUNIT_ASSERT_MESSAGE("Face not found", f != NULL);
 
     // get attached vertices to 4th face
-    EntityCollection<Vertex> const & vertices = f->getVertices();
+    EntityCollection<Node> const & vertices = f->getNodes();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2u, vertices.size());
 
     // all vertices attached to face 4
@@ -77,7 +77,7 @@ EntityTest::testGetCellVertices() {
     CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
 
     // get attached vertices to 4th cell
-    EntityCollection<Vertex> const & vertices = c->getVertices();
+    EntityCollection<Node> const & vertices = c->getNodes();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell vertex size error", 3u, vertices.size());
 
     // all vertices attached to cell 4

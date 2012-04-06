@@ -13,7 +13,7 @@
 
 #include "IGeometricEntity.h"
 #include "EntityCollection.hpp"
-#include "Vertex.h"
+#include "Node.h"
 
 class Vector;
 
@@ -33,23 +33,23 @@ public:
     IGeometricEntity::Id_t id() const;
     IGeometricEntity::Id_t meshId() const;
 
-    bool                             onBoundary() const;
-    EntityCollection<Vertex> const & getVertices() const;
-    double                           area() const;
-    Vector                           normal() const;
-    Vertex                           centroid() const;
+    bool                           onBoundary() const;
+    EntityCollection<Node> const & getNodes() const;
+    double                         area() const;
+    Vector                         normal() const;
+//     Node                           centroid() const;
 
 private:
-    Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Vertex> const & vertices);
+    Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & vertices);
 
     // only called by FaceManager
-    static Ptr create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Vertex> const & vertices);
+    static Ptr create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & nodes);
 
 private:
-    IGeometricEntity::Id_t   face_id_;
-    IGeometricEntity::Id_t   mesh_id_;
-    bool                     on_boundary_;
-    EntityCollection<Vertex> vertices_;
+    IGeometricEntity::Id_t face_id_;
+    IGeometricEntity::Id_t mesh_id_;
+    bool                   on_boundary_;
+    EntityCollection<Node> nodes_;
 };
 
 #pragma warning(default:4251)

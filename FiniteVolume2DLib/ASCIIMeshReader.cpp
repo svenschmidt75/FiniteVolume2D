@@ -1,7 +1,7 @@
 #include "ASCIIMeshReader.h"
 
 #include "ASCIIMeshReaderBaseState.h"
-#include "ASCIIMeshReaderVertexState.h"
+#include "ASCIIMeshReaderNodeState.h"
 #include "ASCIIMeshReaderFaceState.h"
 #include "ASCIIMeshReaderCellState.h"
 #include "Util.h"
@@ -66,15 +66,15 @@ ASCIIMeshReader::read() const {
 
 
             if (t == "vertices") {
-                if (state_->inVertexMode() || state_->inFaceMode() || state_->inCellMode()) {
+                if (state_->inNodeMode() || state_->inFaceMode() || state_->inCellMode()) {
                     boost::format format = boost::format("ASCIIMeshReader::read: Keyword 'vertices' unexpected in line %1%!\n") % line_number;
                     return Util::error(format.str());
                 }
-                state_ = ASCIIMeshReaderVertexState::create(builder_);
+                state_ = ASCIIMeshReaderNodeState::create(builder_);
                 continue;
             }
             else if (t == "faces") {
-                if (!state_->inVertexMode()) {
+                if (!state_->inNodeMode()) {
                     boost::format format = boost::format("ASCIIMeshReader::read: Keyword 'faces' unexpected in line %1%!\n") % line_number;
                     return Util::error(format.str());
                 }

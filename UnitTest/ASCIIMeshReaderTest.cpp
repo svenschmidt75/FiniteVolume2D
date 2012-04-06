@@ -30,13 +30,13 @@ ASCIIMeshReaderTest::testMeshFileExists() {
 
 void
 ASCIIMeshReaderTest::testNumberOfVertices() {
-    int expect = mock_builder_.vertices_.size();
+    int expect = mock_builder_.nodes_.size();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 6, expect);
 }
 
 void
 ASCIIMeshReaderTest::testVertex1() {
-    MockMeshBuilder::VertexStr const & vertex_str = mock_builder_.vertices_[2];
+    MockMeshBuilder::NodeStr const & vertex_str = mock_builder_.nodes_[2];
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary vertex", true, vertex_str.on_boundary_);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 2.123432, vertex_str.x_, 1E-10);
@@ -45,7 +45,7 @@ ASCIIMeshReaderTest::testVertex1() {
 
 void
 ASCIIMeshReaderTest::testVertex2() {
-    MockMeshBuilder::VertexStr const & vertex_str = mock_builder_.vertices_[5];
+    MockMeshBuilder::NodeStr const & vertex_str = mock_builder_.nodes_[5];
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected boundary vertex", false, vertex_str.on_boundary_);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 5.123432, vertex_str.x_, 1E-10);

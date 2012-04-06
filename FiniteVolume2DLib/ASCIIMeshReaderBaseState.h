@@ -17,7 +17,7 @@ public:
     // FROM IMeshReaderState
     bool process(std::vector<std::string> const & tokens, int line);
 
-    bool inVertexMode() const;
+    bool inNodeMode() const;
     bool inFaceMode() const;
     bool inCellMode() const;
 

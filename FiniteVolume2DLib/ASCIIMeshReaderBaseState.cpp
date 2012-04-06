@@ -14,7 +14,7 @@ ASCIIMeshReaderBaseState::process(std::vector<std::string> const & tokens, int l
 }
 
 bool
-ASCIIMeshReaderBaseState::inVertexMode() const {
+ASCIIMeshReaderBaseState::inNodeMode() const {
     return false;
 }
 

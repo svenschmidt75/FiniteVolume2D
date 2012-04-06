@@ -22,7 +22,7 @@ public:
 
     virtual bool process(std::vector<std::string> const & tokens, int line) = 0;
 
-    virtual bool inVertexMode() const = 0;
+    virtual bool inNodeMode() const = 0;
     virtual bool inFaceMode() const = 0;
     virtual bool inCellMode() const = 0;
 };

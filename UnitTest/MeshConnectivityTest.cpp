@@ -32,10 +32,10 @@ MeshConnectivityTest::testMeshFileExists() {
 
 void
 MeshConnectivityTest::testNumberOfVerices() {
-    Thread<Vertex> const & bvertex_thread = mesh_->getBoundaryVertexThread();
+    Thread<Node> const & bvertex_thread = mesh_->getBoundaryVertexThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary vertices", 8u, bvertex_thread.size());
 
-    Thread<Vertex> const & ivertex_thread = mesh_->getInteriorVertexThread();
+    Thread<Node> const & ivertex_thread = mesh_->getInteriorVertexThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal vertices", 1u, ivertex_thread.size());
 }
 
@@ -57,17 +57,17 @@ MeshConnectivityTest::testNumberOfCells() {
 void
 MeshConnectivityTest::testBoundaryVertexNeighbors() {
     // get 6th vertex
-    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(6);
+    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(6);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
     IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
 
     // get vertex neighbors of 6th vertex
-    boost::optional<EntityCollection<Vertex>> vertex_nbr_opt = mesh_connectivity.getVertexNeighbors(v);
+    boost::optional<EntityCollection<Node>> vertex_nbr_opt = mesh_connectivity.getNodeNeighbors(v);
     CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", vertex_nbr_opt);
 
-    EntityCollection<Vertex> const & vertex_nbr = *vertex_nbr_opt;
+    EntityCollection<Node> const & vertex_nbr = *vertex_nbr_opt;
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 3u, vertex_nbr.size());
 
@@ -80,17 +80,17 @@ MeshConnectivityTest::testBoundaryVertexNeighbors() {
 void
 MeshConnectivityTest::testInternalVertexNeighbors() {
     // get 8th vertex
-    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
     IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
 
     // get vertex neighbors of 8th vertex
-    boost::optional<EntityCollection<Vertex>> vertex_nbr_opt = mesh_connectivity.getVertexNeighbors(v);
+    boost::optional<EntityCollection<Node>> vertex_nbr_opt = mesh_connectivity.getNodeNeighbors(v);
     CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", vertex_nbr_opt);
 
-    EntityCollection<Vertex> const & vertex_nbr = *vertex_nbr_opt;
+    EntityCollection<Node> const & vertex_nbr = *vertex_nbr_opt;
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8u, vertex_nbr.size());
 
@@ -108,14 +108,14 @@ MeshConnectivityTest::testInternalVertexNeighbors() {
 void
 MeshConnectivityTest::testInternalVertexFaceNeighbors() {
     // get 8th vertex
-    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
     IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
 
     // get attached faces to 8th vertex
-    boost::optional<EntityCollection<Face>> face_nbrs_opt = mesh_connectivity.getFacesAttachedToVertex(v);
+    boost::optional<EntityCollection<Face>> face_nbrs_opt = mesh_connectivity.getFacesAttachedToNode(v);
     CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", face_nbrs_opt);
 
     EntityCollection<Face> const & face_nbrs = *face_nbrs_opt;
@@ -136,14 +136,14 @@ MeshConnectivityTest::testInternalVertexFaceNeighbors() {
 void
 MeshConnectivityTest::testBoundaryVertexFaceNeighbors() {
     // get 7th vertex
-    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(7);
+    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(7);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
     IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
 
     // get attached faces to 7th vertex
-    boost::optional<EntityCollection<Face>> face_nbrs_opt = mesh_connectivity.getFacesAttachedToVertex(v);
+    boost::optional<EntityCollection<Face>> face_nbrs_opt = mesh_connectivity.getFacesAttachedToNode(v);
     CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", face_nbrs_opt);
 
     EntityCollection<Face> const & face_nbrs = *face_nbrs_opt;
@@ -159,14 +159,14 @@ MeshConnectivityTest::testBoundaryVertexFaceNeighbors() {
 void
 MeshConnectivityTest::testInternalVertexCellNeighbors() {
     // get 8th vertex
-    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
     IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
 
     // get attached cells to 8th vertex
-    boost::optional<EntityCollection<Cell>> cell_nbrs_opt = mesh_connectivity.getCellsAttachedToVertex(v);
+    boost::optional<EntityCollection<Cell>> cell_nbrs_opt = mesh_connectivity.getCellsAttachedToNode(v);
     CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", cell_nbrs_opt);
 
     EntityCollection<Cell> const & cell_nbrs = *cell_nbrs_opt;
@@ -188,14 +188,14 @@ MeshConnectivityTest::testInternalVertexCellNeighbors() {
 void
 MeshConnectivityTest::testBoundaryVertexCellNeighbors() {
     // get 3th vertex
-    Vertex::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(3);
+    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(3);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
     IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
 
     // get attached cells to 3th vertex
-    boost::optional<EntityCollection<Cell>> cell_nbrs_opt = mesh_connectivity.getCellsAttachedToVertex(v);
+    boost::optional<EntityCollection<Cell>> cell_nbrs_opt = mesh_connectivity.getCellsAttachedToNode(v);
     CPPUNIT_ASSERT_MESSAGE("Vertex neighbor error", cell_nbrs_opt);
 
     EntityCollection<Cell> const & cell_nbrs = *cell_nbrs_opt;

@@ -15,13 +15,13 @@
 #include "ComputationalMolecule.h"
 
 
-class IComputationalVertex : public Vertex {
+class IComputationalVertex : public Node {
 public:
 
 
 private:
     // The vertex this object represents.
-    Vertex::Ptr vertex_;
+    Node::Ptr vertex_;
 
     // Dependency on computational nodes
     ComputationalMolecule cm_;

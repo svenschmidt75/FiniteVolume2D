@@ -13,7 +13,7 @@
 
 #include "IGeometricEntity.h"
 #include "EntityCollection.hpp"
-#include "Vertex.h"
+#include "Node.h"
 #include "Face.h"
 
 
@@ -32,10 +32,10 @@ public:
     IGeometricEntity::Id_t id() const;
     IGeometricEntity::Id_t meshId() const;
 
-    EntityCollection<Vertex> const & getVertices() const;
-    EntityCollection<Face> const &   getFaces() const;
-    double                           volume() const;
-    Vertex                           centroid() const;
+    EntityCollection<Node> const & getNodes() const;
+    EntityCollection<Face> const & getFaces() const;
+    double                         volume() const;
+//    Node                           centroid() const;
 
 private:
     Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
@@ -46,7 +46,7 @@ private:
 private:
     IGeometricEntity::Id_t cell_id_;
     IGeometricEntity::Id_t mesh_id_;
-    EntityCollection<Vertex> vertices_;
+    EntityCollection<Node> nodes_;
     EntityCollection<Face> faces_;
 };
 

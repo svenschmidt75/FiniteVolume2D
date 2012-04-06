@@ -2,9 +2,9 @@
  * Name  : MeshConnectivity
  * Path  : 
  * Use   : Contains mesh connectivity, like
- *         - neighbor vertices of a vertex
- *         - faces attached to a vertex
- *         - cells attached to a vertex
+ *         - neighbor nodes of a node
+ *         - faces attached to a node
+ *         - cells attached to a node
  *         - cells attached to a face
  *         
  *         Each entity knows about the "smaller" entities it is
@@ -18,11 +18,11 @@
 #pragma once
 
 #include "IMeshConnectivity.h"
-#include "Vertex.h"
+#include "Node.h"
 #include "Face.h"
 #include "Cell.h"
 #include "EntityCollection.hpp"
-#include "VertexConnectivity.h"
+#include "NodeConnectivity.h"
 #include "FaceConnectivity.h"
 
 #include <map>
@@ -32,15 +32,15 @@
 class MeshConnectivity : public IMeshConnectivity {
 public:
     // FROM IMeshConnectivity
-    void                                      insert(Face::Ptr const & face);
-    void                                      insert(Cell::Ptr const & cell);
-    boost::optional<EntityCollection<Vertex>> getVertexNeighbors(Vertex::Ptr const & vertex) const;
-    boost::optional<EntityCollection<Face>>   getFacesAttachedToVertex(Vertex::Ptr const & vertex) const;
-    boost::optional<EntityCollection<Cell>>   getCellsAttachedToVertex(Vertex::Ptr const & vertex) const;
-    boost::optional<EntityCollection<Cell>>   getCellsAttachedToFace(Face::Ptr const & face) const;
-    Cell::Ptr                                 getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const;
+    void                                    insert(Face::Ptr const & face);
+    void                                    insert(Cell::Ptr const & cell);
+    boost::optional<EntityCollection<Node>> getNodeNeighbors(Node::Ptr const & node) const;
+    boost::optional<EntityCollection<Face>> getFacesAttachedToNode(Node::Ptr const & node) const;
+    boost::optional<EntityCollection<Cell>> getCellsAttachedToNode(Node::Ptr const & node) const;
+    boost::optional<EntityCollection<Cell>> getCellsAttachedToFace(Face::Ptr const & face) const;
+    Cell::Ptr                               getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const;
 
 private:
-    VertexConnectivity vertex_connectivity_;
-    FaceConnectivity   face_connectivity_;
+    NodeConnectivity node_connectivity_;
+    FaceConnectivity face_connectivity_;
 };

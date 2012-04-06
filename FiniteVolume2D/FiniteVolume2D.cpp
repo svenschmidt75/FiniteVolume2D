@@ -40,9 +40,9 @@ Face::normal() const {
 
 Change:
 
-VertexManager -> NodeManager
+NodeManager -> NodeManager
 
-Vertex -> Node
+Node -> Node
 
 A Node contains a vertex!
 
@@ -95,7 +95,7 @@ public:
 
 
 void
-pressure_vertex_derivative(IComputationalGridAccessor & cgrid, Cell::Ptr cell, Vertex::Ptr vertex) {
+pressure_vertex_derivative(IComputationalGridAccessor & cgrid, Cell::Ptr cell, Node::Ptr vertex) {
     /* Compute the pressure derivative at face vertices.
      * 
      * We collect all cells that share the vertex. Then
@@ -131,7 +131,7 @@ pressure_vertex_derivative(IComputationalGridAccessor & cgrid, Cell::Ptr cell, V
         Cell::ptr current_cell = cc.getCellAt(cell_index);
         Cell::ptr next_cell = cc.getCellAt(next_cell_index);
 
-        Vertex cell_centroid = current_cell->centroid();
+        Node cell_centroid = current_cell->centroid();
 
         double y = cell_centroid.y();
 
@@ -249,10 +249,10 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
     // Compute distance to face midpoint to monitor accuracy
 
 
-    Vertex::Ptr cell_centroid = cell->centroid();
+    Node::Ptr cell_centroid = cell->centroid();
 
     Cell::Ptr cell_nbr = cgrid.getOtherCell(face, cell);
-    Vertex::Ptr cell_nbr_centroid = cell_nbr->centroid();
+    Node::Ptr cell_nbr_centroid = cell_nbr->centroid();
 
     // distance from face midpoint to the cell centroid
     double dist = Math::dist(cell_centroid, cell_nbr_centroid);

@@ -30,7 +30,7 @@ ASCIIMeshReaderFaceState::process(std::vector<std::string> const & tokens, int l
 }
 
 bool
-ASCIIMeshReaderFaceState::inVertexMode() const {
+ASCIIMeshReaderFaceState::inNodeMode() const {
     return false;
 }
 
