@@ -1,7 +1,8 @@
 /*
  * Name  : Vertex
  * Path  : IGeometricEntity
- * Use   : Represents a 2d vertex.
+ * Use   : Represents a 2d node, i.e. a controlled (managed)
+ *         2d vertex.
  * Author: Sven Schmidt
  * Date  : 01/29/2012
  */
@@ -12,6 +13,7 @@
 #include "DeclSpec.h"
 
 #include "IGeometricEntity.h"
+#include "Vertex.h"
 
 class Vector;
 
@@ -36,17 +38,16 @@ public:
     Vector vector() const;
 
 private:
-    Node(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    Node(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
 
     // only called by VertexManager
-    static Ptr create(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    static Ptr create(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
 
 private:
     IGeometricEntity::Id_t node_id_;
     IGeometricEntity::Id_t mesh_id_;
     bool                   on_boundary_;
-    double                 x_;
-    double                 y_;
+    Vertex                 vertex_;
 };
 
 #pragma warning(default:4251)

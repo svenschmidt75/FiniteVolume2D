@@ -12,41 +12,6 @@ path bottom-up.
 
 ----------------------------------------------------
 
-EntityIterator<Cell> it = col.begin();
-
-Used T::Ptr, where T = Cell
-----------------------------------------------------------------
-
-Connectivity
-
-
-face->getVertices
-cell->getFaces()
-
-
-----------------------------------------------------
-
-Vector class, for face normal
-
-Vector
-Face::normal() const {
-  // 
-  Vector n(v1.vector(), v0.normal());
-  return n;
-}
-
-
-----------------------------------------------------
-
-Change:
-
-NodeManager -> NodeManager
-
-Node -> Node
-
-A Node contains a vertex!
-
-Vertices are free, nodes managed!
 
 ----------------------------------------------------
 

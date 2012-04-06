@@ -16,6 +16,7 @@
 #include "Node.h"
 
 class Vector;
+class Vertex;
 
 
 #pragma warning(disable:4251)
@@ -37,7 +38,7 @@ public:
     EntityCollection<Node> const & getNodes() const;
     double                         area() const;
     Vector                         normal() const;
-//     Node                           centroid() const;
+    Vertex                         centroid() const;
 
 private:
     Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & vertices);

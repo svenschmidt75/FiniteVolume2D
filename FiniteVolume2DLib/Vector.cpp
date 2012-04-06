@@ -3,19 +3,27 @@
 #include <cmath>
 
 
-Vector::Vector(double x, double y) : x_(x), y_(y) {}
+Vector::Vector(double x, double y) : vertex_(Vertex(x, y)) {}
+
+Vector
+Vector::operator-() const {
+    return Vector(-vertex_.x(), -vertex_.y());
+}
 
 double
 Vector::x() const {
-    return x_;
+    return vertex_.x();
 }
 
 double
 Vector::y() const {
-    return y_;
+    return vertex_.y();
 }
 
 double
 Vector::norm() const {
-    return std::sqrt(x_ * x_ + y_ * y_);
+    double x = vertex_.x();
+    double y = vertex_.y();
+
+    return std::sqrt(x * x + y * y);
 }

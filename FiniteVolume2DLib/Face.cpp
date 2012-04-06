@@ -53,19 +53,24 @@ Face::normal() const {
     return n;
 }
 
-// Node
-// Face::centroid() const {
-//     Node::Ptr const & v0 = nodes_.getEntity(0);
-//     Node::Ptr const & v1 = nodes_.getEntity(1);
-// 
-//     /* Convention:
-//      * Normal and direction vector of
-//      * nodes v0 -> v1 yield a r.h.c.s.
-//      */
-//     double dx = v1->x() - v0->x();
-//     double dy = v1->y() - v0->y();
-// 
-// }
+Vertex
+Face::centroid() const {
+    Node::Ptr const & v0 = nodes_.getEntity(0);
+    Node::Ptr const & v1 = nodes_.getEntity(1);
+
+    /* Convention:
+     * Normal and direction vector of
+     * nodes v0 -> v1 yield a r.h.c.s.
+     */
+    double dx = v1->x() - v0->x();
+    double dy = v1->y() - v0->y();
+
+    // the centroid of a line segment is
+    // its mid-point
+    double x = v0->x() + 0.5 * dx;
+    double y = v0->y() + 0.5 * dy;
+    return Vertex(x, y);
+}
 
 Face::Ptr
 Face::create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & nodes) {

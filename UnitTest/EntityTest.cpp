@@ -5,6 +5,7 @@
 #include "FiniteVolume2DLib/ASCIIMeshReader.h"
 #include "FiniteVolume2DLib/Face.h"
 #include "FiniteVolume2DLib/EntityCollection.hpp"
+#include "FiniteVolume2DLib/Vector.h"
 
 
 // Static class data members
@@ -112,17 +113,74 @@ EntityTest::testCellVolume() {
 
 void
 EntityTest::testFaceCentroid() {
+    // get 14th face
+    Face::Ptr const & f14 = mesh_builder_.face_mgr_->getEntity(14);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f14 != NULL);
 
+    Vertex face_centroid = f14->centroid();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face centroid x mismatch", 0.5, face_centroid.x(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face centroid y mismatch", -0.5, face_centroid.y(), 1E-10);
+
+
+    // get 3rd face
+    Face::Ptr const & f3 = mesh_builder_.face_mgr_->getEntity(3);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f3 != NULL);
+
+    face_centroid = f3->centroid();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face centroid x mismatch", 0.0, face_centroid.x(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face centroid y mismatch", -0.5, face_centroid.y(), 1E-10);
 }
 
 void
 EntityTest::testCellCentroid() {
+    // get 3rd cell
+    Cell::Ptr c3 = mesh_builder_.cell_mgr_->getEntity(3);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c3 != NULL);
 
+    Vertex cell_centroid = c3->centroid();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid x mismatch", 2.0 / 3.0, cell_centroid.x(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid y mismatch", 1.0 / 3.0, cell_centroid.y(), 1E-10);
+
+
+    // get 6th cell
+    Cell::Ptr c6 = mesh_builder_.cell_mgr_->getEntity(6);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c6 != NULL);
+
+    cell_centroid = c6->centroid();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid x mismatch", -1.0 / 3.0, cell_centroid.x(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid y mismatch", -2.0 / 3.0, cell_centroid.y(), 1E-10);
 }
 
 void
 EntityTest::testFaceNormal() {
+    /* The face normal is different for both attaching cells.
+     * Thus, the face normal depends on the cell it is requested
+     * for.
+     */
 
+    // get 0thd cell
+    Cell::Ptr c0 = mesh_builder_.cell_mgr_->getEntity(0);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c0 != NULL);
+
+    // get 12th face
+    Face::Ptr const & f12 = mesh_builder_.face_mgr_->getEntity(12);
+    CPPUNIT_ASSERT_MESSAGE("Face not found", f12 != NULL);
+
+    Vector face_normal_c0 = c0->faceNormal(f12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid x mismatch", 1.0, face_normal_c0.x(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid y mismatch", 1.0, face_normal_c0.y(), 1E-10);
+
+
+    // get mesh connectivity object
+    IMeshConnectivity const & mesh_connectivity = mesh_->getMeshConnectivity();
+
+    // 1st cell
+    Cell::Ptr c1 = mesh_connectivity.getOtherCell(f12, c0);
+    CPPUNIT_ASSERT_MESSAGE("Cell not found", c1 != NULL);
+
+    Vector face_normal_c1 = c1->faceNormal(f12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid x mismatch", -face_normal_c0.x(), face_normal_c1.x(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Cell centroid y mismatch", -face_normal_c0.y(), face_normal_c1.y(), 1E-10);
 }
 
 void

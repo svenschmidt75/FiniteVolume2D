@@ -55,7 +55,7 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
         }
     }
 
-    if (!cells.find(cell->id())) {
+    if (!cells.find(cell->meshId())) {
         boost::format format = boost::format("FaceConnectivity::getOtherCell: Face %1% does not reference cell %2%!\n") % face->meshId() % cell->meshId();
         Util::error(format.str());
         return NULL;

@@ -4,7 +4,7 @@
 
 
 Node::Node(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y)
-    : node_id_(node_id), mesh_id_(mesh_id), on_boundary_(on_boundary), x_(x), y_(y) {}
+    : node_id_(node_id), mesh_id_(mesh_id), on_boundary_(on_boundary), vertex_(Vertex(x, y)) {}
 
 IGeometricEntity::Id_t
 Node::id() const {
@@ -23,17 +23,17 @@ Node::onBoundary() const {
 
 double
 Node::x() const {
-    return x_;
+    return vertex_.x();
 }
 
 double
 Node::y() const {
-    return y_;
+    return vertex_.y();
 }
 
 Vector
 Node::vector() const {
-    return Vector(x_, y_);
+    return Vector(vertex_.x(), vertex_.y());
 }
 
 Node::Ptr

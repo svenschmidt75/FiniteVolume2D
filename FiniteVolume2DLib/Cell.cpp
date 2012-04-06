@@ -1,5 +1,8 @@
 #include "Cell.h"
 
+#include "Vector.h"
+#include "Math.h"
+
 #include <algorithm>
 
 
@@ -66,11 +69,34 @@ Cell::volume() const {
     return 0.5 * delta;
 }
 
-// Node
-// Cell::centroid() const {
-// //     GeometricHelper::cellCentroid(*this);
-// 
-// }
+Vertex
+Cell::centroid() const {
+    // a cell is a triangle
+    double x = (nodes_[0]->x() + nodes_[1]->x() + nodes_[2]->x()) / 3.0;
+    double y = (nodes_[0]->y() + nodes_[1]->y() + nodes_[2]->y()) / 3.0;
+    return Vertex(x, y);
+}
+
+Vector
+Cell::faceNormal(Face::Ptr const & face) const {
+    /* A face is not owned by a cell. If two cells share a
+     * face, the face normal has the opposite direction for
+     * each cell.
+     */
+
+    Vector face_normal = face->normal();
+    Vertex face_centroid = face->centroid();
+    Vertex cell_centroid = centroid();
+
+    // vector from cell to face centroid
+    Vector cell_face_centroid = Vector(-cell_centroid.x() + face_centroid.x(), -cell_centroid.y() + face_centroid.y());
+
+    // ensure both vector have same direction
+    if (Math::dot(cell_face_centroid, face_normal) < 0)
+        face_normal = -face_normal;
+
+    return face_normal;
+}
 
 Cell::Ptr
 Cell::create(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces) {

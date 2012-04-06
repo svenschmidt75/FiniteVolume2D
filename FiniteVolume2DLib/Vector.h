@@ -7,16 +7,22 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
 
-class Vector {
+#include "Vertex.h"
+
+
+class DECL_SYMBOLS Vector {
 public:
     Vector(double x, double y);
+
+    // unary minus
+    Vector operator-() const;
 
     double x() const;
     double y() const;
     double norm() const;
 
 private:
-    double x_;
-    double y_;
+    Vertex vertex_;
 };

@@ -68,7 +68,21 @@ public:
         return data_[index];
     }
 
+    typename Entity::Ptr & operator[](size_type index) {
+        if (index >= size())
+            throw std::out_of_range("EntityCollection::getEntity: Out of range!");
+
+        return data_[index];
+    }
+
     typename Entity::Ptr const & getEntity(size_type index) const {
+        if (index >= size())
+            throw std::out_of_range("EntityCollection::getEntity: Out of range!");
+
+        return data_[index];
+    }
+
+    typename Entity::Ptr const & operator[](size_type index) const {
         if (index >= size())
             throw std::out_of_range("EntityCollection::getEntity: Out of range!");
 

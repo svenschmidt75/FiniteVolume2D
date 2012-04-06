@@ -35,7 +35,9 @@ public:
     EntityCollection<Node> const & getNodes() const;
     EntityCollection<Face> const & getFaces() const;
     double                         volume() const;
-//    Node                           centroid() const;
+    Vertex                         centroid() const;
+
+    Vector                         faceNormal(Face::Ptr const & face) const;
 
 private:
     Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
