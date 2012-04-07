@@ -1,7 +1,6 @@
 #include "MeshConnectivityTest.h"
 
 #include "FiniteVolume2DLib/ASCIIMeshReader.h"
-#include "FiniteVolume2DLib/Thread.hpp"
 
 #include <boost/filesystem.hpp>
 

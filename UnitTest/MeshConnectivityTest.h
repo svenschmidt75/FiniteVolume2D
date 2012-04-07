@@ -7,10 +7,6 @@
  */
 #pragma once
 
-#include "FiniteVolume2DLib/MeshBuilder.h"
-#include "FiniteVolume2DLib/FaceManager.h"
-#include "FiniteVolume2DLib/CellManager.h"
-#include "FiniteVolume2DLib/EntityCreatorManager.h"
 #include "MeshBuilderMock.h"
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -33,9 +29,6 @@ class MeshConnectivityTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(testInteriorGetOtherCell);
     CPPUNIT_TEST(testBoundaryGetOtherCell);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-
 
 public:
     void setUp();

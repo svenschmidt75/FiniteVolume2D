@@ -99,11 +99,13 @@
     <ClCompile Include="ASCIIMeshReaderTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MeshBoundaryConditionReaderTest.cpp" />
     <ClCompile Include="MeshConnectivityTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ASCIIMeshReaderTest.h" />
     <ClInclude Include="EntityTest.h" />
+    <ClInclude Include="MeshBoundaryConditionReaderTest.h" />
     <ClInclude Include="MeshBuilderMock.h" />
     <ClInclude Include="MeshConnectivityTest.h" />
   </ItemGroup>

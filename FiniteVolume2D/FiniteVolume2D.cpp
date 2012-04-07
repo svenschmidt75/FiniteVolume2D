@@ -12,6 +12,20 @@ path bottom-up.
 
 ----------------------------------------------------
 
+- read boundary condition for faces, store in extra object
+- ComputationalMeshBuilder(mesh)
+- CompNode, CompFace, CompCell
+- BoundaryCondition
+  - check that for each boundary face, either d or n b.c. has been
+    specified
+
+- SourceTerm
+- (Flux)CompMolecule
+- NodeVariable
+
+- monitor skewness
+- monitor aspect ratio
+
 
 ----------------------------------------------------
 
@@ -204,7 +218,7 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
             SourceTerm & face_source = flux_mulecule.getSourceTerm();
 
             // the boundary flux contributes as a source term
-            face_source += gc.getFluxValue();
+            face_source += bc.getFluxValue();
         }
         return true;
     }

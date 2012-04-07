@@ -7,11 +7,13 @@
 #include "ASCIIMeshReaderTest.h"
 #include "MeshConnectivityTest.h"
 #include "EntityTest.h"
+#include "MeshBoundaryConditionReaderTest.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshConnectivityTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(EntityTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(MeshBoundaryConditionReaderTest);
 
 
 int main(int argc, char **argv) {
