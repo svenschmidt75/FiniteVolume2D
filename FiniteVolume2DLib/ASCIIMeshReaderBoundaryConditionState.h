@@ -1,9 +1,9 @@
 /*
- * Name  : ASCIIMeshReaderNodeState
+ * Name  : ASCIIMeshReaderBoundaryConditionState
  * Path  : IMeshReaderState
- * Use   : Represents the base state. Read node data.
+ * Use   : Reads boundary condition from mesh file.
  * Author: Sven Schmidt
- * Date  : 03/04/2012
+ * Date  : 04/07/2012
  */
 #pragma once
 
@@ -12,7 +12,7 @@
 class IMeshBuilder;
 
 
-class ASCIIMeshReaderNodeState : public IMeshReaderState {
+class ASCIIMeshReaderBoundaryConditionState : public IMeshReaderState {
 public:
     // FROM IMeshReaderState
     bool process(std::vector<std::string> const & tokens, int line);
@@ -26,7 +26,7 @@ public:
     static Ptr create(IMeshBuilder & mesh_builder);
 
 private:
-    ASCIIMeshReaderNodeState(IMeshBuilder & mesh_builder);
+    ASCIIMeshReaderBoundaryConditionState(IMeshBuilder & mesh_builder);
 
 private:
     IMeshBuilder & mesh_builder_;

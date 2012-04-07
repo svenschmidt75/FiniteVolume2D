@@ -8,8 +8,7 @@ namespace FS = boost::filesystem;
 
 
 // Static class data members
-MeshBuilderMock                          MeshBoundaryConditionReaderTest::mesh_builder_;
-MeshBoundaryConditionReaderTest::MeshPtr MeshBoundaryConditionReaderTest::mesh_;
+MeshBoundaryConditionReaderTest::MockMeshBuilder MeshBoundaryConditionReaderTest::mock_builder_;
 
 
 void
@@ -30,16 +29,36 @@ MeshBoundaryConditionReaderTest::testMeshFileExists() {
 }
 
 void
+MeshBoundaryConditionReaderTest::testNumberOfDirichletBoundaryConditions() {
+    unsigned int dcnt = 0;
+
+    std::for_each(mock_builder_.bcs_.begin(), mock_builder_.bcs_.end(), [&dcnt](MockMeshBuilder::BCMap_t::value_type const & in) {
+        if (in.second.bc_type_ == BoundaryCondition::DIRICHLET)
+            dcnt++;
+    });
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of Dirichlet boundary conditions", 5u, dcnt);
+}
+
+void
+MeshBoundaryConditionReaderTest::testNumberOfNeumannBoundaryConditions() {
+    unsigned int dcnt = 0;
+
+    std::for_each(mock_builder_.bcs_.begin(), mock_builder_.bcs_.end(), [&dcnt](MockMeshBuilder::BCMap_t::value_type const & in) {
+        if (in.second.bc_type_ == BoundaryCondition::NEUMANN)
+            dcnt++;
+    });
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of von Neumann boundary conditions", 3u, dcnt);
+}
+
+void
 MeshBoundaryConditionReaderTest::initMesh() {
     static bool init = false;
     if (!init)
     {
         init = true;
-        ASCIIMeshReader reader(mesh_filename_, mesh_builder_);
+        ASCIIMeshReader reader(mesh_filename_, mock_builder_);
         CPPUNIT_ASSERT_MESSAGE("Failed to read mesh file!", reader.read());
-        boost::optional<Mesh::Ptr> mesh = mesh_builder_.getMesh();
-        if (mesh)
-            mesh_ = *mesh;
-        CPPUNIT_ASSERT_MESSAGE("Failed to build mesh!", mesh);
     }
 }

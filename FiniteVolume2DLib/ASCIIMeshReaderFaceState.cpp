@@ -44,6 +44,11 @@ ASCIIMeshReaderFaceState::inCellMode() const {
     return false;
 }
 
+bool
+ASCIIMeshReaderFaceState::inBoundaryConditionModeMode() const {
+    return false;
+}
+
 IMeshReaderState::Ptr
 ASCIIMeshReaderFaceState::create(IMeshBuilder & mesh_builder) {
     return Ptr(new ASCIIMeshReaderFaceState(mesh_builder));

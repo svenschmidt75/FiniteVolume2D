@@ -13,9 +13,11 @@
   <ItemGroup>
     <ClInclude Include="ASCIIMeshReader.h" />
     <ClInclude Include="ASCIIMeshReaderBaseState.h" />
+    <ClInclude Include="ASCIIMeshReaderBoundaryConditionState.h" />
     <ClInclude Include="ASCIIMeshReaderCellState.h" />
     <ClInclude Include="ASCIIMeshReaderFaceState.h" />
     <ClInclude Include="ASCIIMeshReaderNodeState.h" />
+    <ClInclude Include="BoundaryCondition.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellManager.h" />
     <ClInclude Include="ComputationalMolecule.h" />
@@ -51,9 +53,11 @@
   <ItemGroup>
     <ClCompile Include="ASCIIMeshReader.cpp" />
     <ClCompile Include="ASCIIMeshReaderBaseState.cpp" />
+    <ClCompile Include="ASCIIMeshReaderBoundaryConditionState.cpp" />
     <ClCompile Include="ASCIIMeshReaderCellState.cpp" />
     <ClCompile Include="ASCIIMeshReaderFaceState.cpp" />
     <ClCompile Include="ASCIIMeshReaderNodeState.cpp" />
+    <ClCompile Include="BoundaryCondition.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellManager.cpp" />
     <ClCompile Include="ComputationalMolecule.cpp" />

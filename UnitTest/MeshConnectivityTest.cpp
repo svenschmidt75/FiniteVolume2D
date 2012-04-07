@@ -56,7 +56,7 @@ MeshConnectivityTest::testNumberOfCells() {
 void
 MeshConnectivityTest::testBoundaryVertexNeighbors() {
     // get 6th vertex
-    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(6);
+    Node::Ptr const & v = mesh_builder_.node_mgr_->getEntity(6);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
@@ -79,7 +79,7 @@ MeshConnectivityTest::testBoundaryVertexNeighbors() {
 void
 MeshConnectivityTest::testInternalVertexNeighbors() {
     // get 8th vertex
-    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    Node::Ptr const & v = mesh_builder_.node_mgr_->getEntity(8);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
@@ -107,7 +107,7 @@ MeshConnectivityTest::testInternalVertexNeighbors() {
 void
 MeshConnectivityTest::testInternalVertexFaceNeighbors() {
     // get 8th vertex
-    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    Node::Ptr const & v = mesh_builder_.node_mgr_->getEntity(8);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
@@ -135,7 +135,7 @@ MeshConnectivityTest::testInternalVertexFaceNeighbors() {
 void
 MeshConnectivityTest::testBoundaryVertexFaceNeighbors() {
     // get 7th vertex
-    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(7);
+    Node::Ptr const & v = mesh_builder_.node_mgr_->getEntity(7);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
@@ -158,7 +158,7 @@ MeshConnectivityTest::testBoundaryVertexFaceNeighbors() {
 void
 MeshConnectivityTest::testInternalVertexCellNeighbors() {
     // get 8th vertex
-    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(8);
+    Node::Ptr const & v = mesh_builder_.node_mgr_->getEntity(8);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
@@ -187,7 +187,7 @@ MeshConnectivityTest::testInternalVertexCellNeighbors() {
 void
 MeshConnectivityTest::testBoundaryVertexCellNeighbors() {
     // get 3th vertex
-    Node::Ptr const & v = mesh_builder_.vertex_mgr_->getEntity(3);
+    Node::Ptr const & v = mesh_builder_.node_mgr_->getEntity(3);
     CPPUNIT_ASSERT_MESSAGE("Vertex not found", v != NULL);
 
     // get mesh connectivity object
@@ -264,7 +264,7 @@ MeshConnectivityTest::testInteriorGetOtherCell() {
 
     Cell::Ptr other_cell = mesh_connectivity.getOtherCell(f, c);
     CPPUNIT_ASSERT_MESSAGE("Cell 5 expected", other_cell != NULL);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell 5 expected", static_cast<IGeometricEntity::Id_t>(5), other_cell->id());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell 5 expected", static_cast<IGeometricEntity::Id_t>(5), other_cell->meshId());
 }
 
 void

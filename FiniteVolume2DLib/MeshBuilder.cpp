@@ -6,12 +6,13 @@
 #include "Face.h"
 #include "EntityCreatorManager.h"
 #include "Util.h"
+#include "BoundaryCondition.h"
 
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
 
 
-MeshBuilder::MeshBuilder(EntityCreatorManager::Ptr & entity_mgr) : entity_mgr_(entity_mgr), mesh_(Mesh::create()) {}
+MeshBuilder::MeshBuilder(EntityCreatorManager::Ptr & entity_mgr, BoundaryCondition & bc) : entity_mgr_(entity_mgr), bc_(bc), mesh_(Mesh::create()) {}
 
 bool
 MeshBuilder::buildNode(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y) {
@@ -65,6 +66,11 @@ MeshBuilder::buildCell(IGeometricEntity::Id_t mesh_id, std::vector<IGeometricEnt
         return false;
     mesh_->addCell(c);
     return true;
+}
+
+bool
+MeshBuilder::buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryCondition::Type bc_type, double bc_value) {
+    return bc_.add(face_id, bc_type, bc_value);
 }
 
 boost::optional<Mesh::Ptr>

@@ -25,4 +25,5 @@ public:
     virtual bool inNodeMode() const = 0;
     virtual bool inFaceMode() const = 0;
     virtual bool inCellMode() const = 0;
+    virtual bool inBoundaryConditionModeMode() const = 0;
 };

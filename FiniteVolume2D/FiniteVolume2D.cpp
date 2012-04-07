@@ -26,6 +26,11 @@ path bottom-up.
 - monitor skewness
 - monitor aspect ratio
 
+----------------------------------------------------
+
+Read data directly in state, if something found that
+is not recognized, return to general state.
+Deal with errors there?
 
 ----------------------------------------------------
 

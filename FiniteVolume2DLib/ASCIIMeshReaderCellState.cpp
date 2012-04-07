@@ -1,5 +1,4 @@
 #include "ASCIIMeshReaderCellState.h"
-#include "ASCIIMeshReaderFaceState.h"
 
 #include "Util.h"
 #include "IMeshBuilder.h"
@@ -42,6 +41,11 @@ ASCIIMeshReaderCellState::inFaceMode() const {
 bool
 ASCIIMeshReaderCellState::inCellMode() const {
     return true;
+}
+
+bool
+ASCIIMeshReaderCellState::inBoundaryConditionModeMode() const {
+    return false;
 }
 
 IMeshReaderState::Ptr

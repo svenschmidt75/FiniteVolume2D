@@ -28,6 +28,11 @@ ASCIIMeshReaderBaseState::inCellMode() const {
     return false;
 }
 
+bool
+ASCIIMeshReaderBaseState::inBoundaryConditionModeMode() const {
+    return false;
+}
+
 IMeshReaderState::Ptr
 ASCIIMeshReaderBaseState::create(IMeshBuilder & mesh_builder) {
     return Ptr(new ASCIIMeshReaderBaseState(mesh_builder));

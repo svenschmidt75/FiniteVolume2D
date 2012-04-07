@@ -20,6 +20,7 @@ public:
     bool inNodeMode() const;
     bool inFaceMode() const;
     bool inCellMode() const;
+    bool inBoundaryConditionModeMode() const;
 
 
     static Ptr create(IMeshBuilder & mesh_builder);

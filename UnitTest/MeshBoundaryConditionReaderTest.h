@@ -15,6 +15,8 @@
 class MeshBoundaryConditionReaderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(MeshBoundaryConditionReaderTest);
     CPPUNIT_TEST(testMeshFileExists);
+    CPPUNIT_TEST(testNumberOfDirichletBoundaryConditions);
+    CPPUNIT_TEST(testNumberOfNeumannBoundaryConditions);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -23,6 +25,51 @@ public:
 
 protected:
     void testMeshFileExists();
+    void testNumberOfDirichletBoundaryConditions();
+    void testNumberOfNeumannBoundaryConditions();
+
+private:
+    class MockMeshBuilder : public IMeshBuilder {
+    public:
+        struct BCStr {
+            BCStr() {}
+            BCStr(BoundaryCondition::Type bc_type, double bc_value) : bc_type_(bc_type), bc_value_(bc_value) {}
+
+            BoundaryCondition::Type bc_type_;
+            double                  bc_value_;
+        };
+
+    public:
+        bool
+        buildNode(IGeometricEntity::Id_t node_id, bool on_boundary, double x, double y) {
+            return true;
+        }
+
+        bool
+        buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & node_ids) {
+            return true;
+        }
+
+        bool
+        buildCell(IGeometricEntity::Id_t cell_id, std::vector<IGeometricEntity::Id_t> const & face_ids) {
+            return true;
+        }
+
+        bool
+        buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryCondition::Type bc_type, double bc_value) {
+            bcs_[face_id] = BCStr(bc_type, bc_value);
+            return true;
+        }
+
+        boost::optional<Mesh::Ptr>
+        getMesh() const {
+            return boost::optional<Mesh::Ptr>();
+        }
+
+    public:
+        typedef std::map<IGeometricEntity::Id_t, BCStr> BCMap_t;
+        BCMap_t bcs_;
+    };
 
 private:
     void initMesh();
@@ -32,12 +79,5 @@ private:
 
 private:
     std::string            mesh_filename_;
-    static MeshPtr         mesh_;
-
-    /* If we were to use MeshBuilder directly, we would need a default constructor
-     * for MeshBuilder, because we need to declare it a static data member.
-     * There is no easy way to define a default constructor because of the
-     * EntityManager. Hence, this embedded mesh builder.
-     */
-    static MeshBuilderMock mesh_builder_;
+    static MockMeshBuilder mock_builder_;
 };

@@ -4,6 +4,7 @@
 #include "ASCIIMeshReaderNodeState.h"
 #include "ASCIIMeshReaderFaceState.h"
 #include "ASCIIMeshReaderCellState.h"
+#include "ASCIIMeshReaderBoundaryConditionState.h"
 #include "Util.h"
 
 #include <boost/tokenizer.hpp>
@@ -13,6 +14,7 @@
 #include <boost/iostreams/stream.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <istream>
 
@@ -37,6 +39,7 @@ ASCIIMeshReader::read() const {
      * State 1: in vertex mode, expect to read face keyword
      * State 2: in face mode, expect to read cell keyword
      * State 3: in cell mode
+     * State 4: in boundary condition mode
      */
 
     boost::iostreams::stream<boost::iostreams::file_source> file(mesh_filename_);
@@ -59,6 +62,7 @@ ASCIIMeshReader::read() const {
 
         if (!token_arr.empty()) {
             std::string t = *(tokens.begin());
+            boost::algorithm::to_lower(t);
 
             // Comment?
             if (t[0] == '#')
@@ -87,6 +91,14 @@ ASCIIMeshReader::read() const {
                     return Util::error(format.str());
                 }
                 state_ = ASCIIMeshReaderCellState::create(builder_);
+                continue;
+            }
+            else if (t == "boundaryconditions") {
+                if (!state_->inCellMode()) {
+                    boost::format format = boost::format("ASCIIMeshReader::read: Keyword 'boundaryconditions' unexpected in line %1%!\n") % line_number;
+                    return Util::error(format.str());
+                }
+                state_ = ASCIIMeshReaderBoundaryConditionState::create(builder_);
                 continue;
             }
 
