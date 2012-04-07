@@ -17,7 +17,7 @@
     <ClInclude Include="ASCIIMeshReaderCellState.h" />
     <ClInclude Include="ASCIIMeshReaderFaceState.h" />
     <ClInclude Include="ASCIIMeshReaderNodeState.h" />
-    <ClInclude Include="BoundaryCondition.h" />
+    <ClInclude Include="BoundaryConditionCollection.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellManager.h" />
     <ClInclude Include="ComputationalMolecule.h" />
@@ -57,7 +57,7 @@
     <ClCompile Include="ASCIIMeshReaderCellState.cpp" />
     <ClCompile Include="ASCIIMeshReaderFaceState.cpp" />
     <ClCompile Include="ASCIIMeshReaderNodeState.cpp" />
-    <ClCompile Include="BoundaryCondition.cpp" />
+    <ClCompile Include="BoundaryConditionCollection.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellManager.cpp" />
     <ClCompile Include="ComputationalMolecule.cpp" />

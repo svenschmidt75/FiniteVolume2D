@@ -15,7 +15,7 @@ path bottom-up.
 - read boundary condition for faces, store in extra object
 - ComputationalMeshBuilder(mesh)
 - CompNode, CompFace, CompCell
-- BoundaryCondition
+- BoundaryConditionCollection
   - check that for each boundary face, either d or n b.c. has been
     specified
 

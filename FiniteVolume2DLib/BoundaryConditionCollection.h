@@ -1,5 +1,5 @@
 /*
- * Name  : BoundaryCondition
+ * Name  : BoundaryConditionCollection
  * Path  : IMeshReaderState
  * Use   : Stores boundary conditions.
  * Author: Sven Schmidt
@@ -15,10 +15,10 @@
 #include <boost/optional.hpp>
 
 
-class BoundaryCondition {
+class BoundaryConditionCollection {
 public:
     enum Type {DIRICHLET, NEUMANN, UNKNOWN};
-    typedef std::tuple<BoundaryCondition::Type, double> Pair;
+    typedef std::tuple<BoundaryConditionCollection::Type, double> Pair;
 
 public:
     bool                  add(IGeometricEntity::Id_t face_id, Type bc_type, double bc_value);

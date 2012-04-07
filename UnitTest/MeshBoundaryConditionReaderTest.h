@@ -17,6 +17,8 @@ class MeshBoundaryConditionReaderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(testMeshFileExists);
     CPPUNIT_TEST(testNumberOfDirichletBoundaryConditions);
     CPPUNIT_TEST(testNumberOfNeumannBoundaryConditions);
+    CPPUNIT_TEST(testDirichlet);
+    CPPUNIT_TEST(testNeumann);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -27,15 +29,17 @@ protected:
     void testMeshFileExists();
     void testNumberOfDirichletBoundaryConditions();
     void testNumberOfNeumannBoundaryConditions();
+    void testDirichlet();
+    void testNeumann();
 
 private:
     class MockMeshBuilder : public IMeshBuilder {
     public:
         struct BCStr {
             BCStr() {}
-            BCStr(BoundaryCondition::Type bc_type, double bc_value) : bc_type_(bc_type), bc_value_(bc_value) {}
+            BCStr(BoundaryConditionCollection::Type bc_type, double bc_value) : bc_type_(bc_type), bc_value_(bc_value) {}
 
-            BoundaryCondition::Type bc_type_;
+            BoundaryConditionCollection::Type bc_type_;
             double                  bc_value_;
         };
 
@@ -56,7 +60,7 @@ private:
         }
 
         bool
-        buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryCondition::Type bc_type, double bc_value) {
+        buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryConditionCollection::Type bc_type, double bc_value) {
             bcs_[face_id] = BCStr(bc_type, bc_value);
             return true;
         }

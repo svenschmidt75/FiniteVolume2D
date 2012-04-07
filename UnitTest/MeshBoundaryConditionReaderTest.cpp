@@ -33,7 +33,7 @@ MeshBoundaryConditionReaderTest::testNumberOfDirichletBoundaryConditions() {
     unsigned int dcnt = 0;
 
     std::for_each(mock_builder_.bcs_.begin(), mock_builder_.bcs_.end(), [&dcnt](MockMeshBuilder::BCMap_t::value_type const & in) {
-        if (in.second.bc_type_ == BoundaryCondition::DIRICHLET)
+        if (in.second.bc_type_ == BoundaryConditionCollection::DIRICHLET)
             dcnt++;
     });
 
@@ -41,11 +41,27 @@ MeshBoundaryConditionReaderTest::testNumberOfDirichletBoundaryConditions() {
 }
 
 void
+MeshBoundaryConditionReaderTest::testDirichlet() {
+    auto it = mock_builder_.bcs_.find(9);
+    MockMeshBuilder::BCStr const & p = it->second;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of Dirichlet boundary conditions", BoundaryConditionCollection::DIRICHLET, p.bc_type_);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face area mismatch", -0.938475, p.bc_value_, 1E-10);
+}
+
+void
+MeshBoundaryConditionReaderTest::testNeumann() {
+    auto it = mock_builder_.bcs_.find(8);
+    MockMeshBuilder::BCStr const & p = it->second;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of Dirichlet boundary conditions", BoundaryConditionCollection::NEUMANN, p.bc_type_);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Face area mismatch", -4.234, p.bc_value_, 1E-10);
+}
+
+void
 MeshBoundaryConditionReaderTest::testNumberOfNeumannBoundaryConditions() {
     unsigned int dcnt = 0;
 
     std::for_each(mock_builder_.bcs_.begin(), mock_builder_.bcs_.end(), [&dcnt](MockMeshBuilder::BCMap_t::value_type const & in) {
-        if (in.second.bc_type_ == BoundaryCondition::NEUMANN)
+        if (in.second.bc_type_ == BoundaryConditionCollection::NEUMANN)
             dcnt++;
     });
 

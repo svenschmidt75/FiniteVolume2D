@@ -2,7 +2,7 @@
 
 #include "Util.h"
 #include "IMeshBuilder.h"
-#include "BoundaryCondition.h"
+#include "BoundaryConditionCollection.h"
 
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
@@ -11,16 +11,16 @@
 ASCIIMeshReaderBoundaryConditionState::ASCIIMeshReaderBoundaryConditionState(IMeshBuilder & mesh_builder) : mesh_builder_(mesh_builder) {}
 
 namespace {
-    BoundaryCondition::Type boundaryConditionType(char c) {
+    BoundaryConditionCollection::Type boundaryConditionType(char c) {
         switch (c) {
             case 'd':
-                return BoundaryCondition::DIRICHLET;
+                return BoundaryConditionCollection::DIRICHLET;
 
             case 'n':
-                return BoundaryCondition::NEUMANN;
+                return BoundaryConditionCollection::NEUMANN;
 
             default:
-                return BoundaryCondition::UNKNOWN;
+                return BoundaryConditionCollection::UNKNOWN;
         }
     }
 
@@ -39,8 +39,8 @@ ASCIIMeshReaderBoundaryConditionState::process(std::vector<std::string> const & 
     // read type of b.c.
     // d: Dirichlet
     // n: von Neumann
-    BoundaryCondition::Type bc_type = boundaryConditionType(tokens[1][0]);
-    if (bc_type == BoundaryCondition::UNKNOWN) {
+    BoundaryConditionCollection::Type bc_type = boundaryConditionType(tokens[1][0]);
+    if (bc_type == BoundaryConditionCollection::UNKNOWN) {
         boost::format format = boost::format("ASCIIMeshReaderBoundaryConditionState::process: Unknown boundary condition in line %1%!\n") % line;
         return Util::error(format.str());
     }
