@@ -1,6 +1,6 @@
 /*
  * Name  : Face
- * Path  : IGeometricEntity
+ * Path  : IFace
  * Use   : Represents a 2d face.
  * Author: Sven Schmidt
  * Date  : 03/11/2012
@@ -11,18 +11,16 @@
 
 #include "DeclSpec.h"
 
-#include "IGeometricEntity.h"
+#include "IFace.h"
 #include "EntityCollection.hpp"
 #include "Node.h"
 
-class Vector;
-class Vertex;
-
 
 #pragma warning(disable:4251)
+#pragma warning(disable:4275)
 
 
-class DECL_SYMBOLS Face : public IGeometricEntity {
+class DECL_SYMBOLS Face : public IFace {
 
     friend class FaceManager;
 
@@ -34,6 +32,7 @@ public:
     IGeometricEntity::Id_t id() const;
     IGeometricEntity::Id_t meshId() const;
 
+    // FROM IFace
     bool                           onBoundary() const;
     EntityCollection<Node> const & getNodes() const;
     double                         area() const;
@@ -53,4 +52,5 @@ private:
     EntityCollection<Node> nodes_;
 };
 
+#pragma warning(default:4275)
 #pragma warning(default:4251)

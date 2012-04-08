@@ -12,10 +12,9 @@ path bottom-up.
 
 ----------------------------------------------------
 
-- read boundary condition for faces, store in extra object
 - ComputationalMeshBuilder(mesh)
 - CompNode, CompFace, CompCell
-- BoundaryConditionCollection
+- BoundaryCondition
   - check that for each boundary face, either d or n b.c. has been
     specified
 
@@ -33,6 +32,14 @@ is not recognized, return to general state.
 Deal with errors there?
 
 ----------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------
+
 
 
 class ComputeManager {
@@ -295,7 +302,10 @@ int main(int argc, char* argv[])
     ComputationalGrid cgrid(mesh);
     cgrid.nodeVariable(NodeVariable("phi", CompMoleculeCallBack(pressure_computational_molecule)));
     cgrid.fluxEvaluator(FluxEvaluator("phi_flux", FluxCallBack(phi_flux_evaluator)));
-
+    cgrid.solve();
+    
+    sa = cgrid.getSolutionAccessor();
+    double value = sa.getValue("phi", cell_id);
     
     return 0;
 }

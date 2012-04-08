@@ -1,6 +1,6 @@
 /*
- * Name  : Vertex
- * Path  : IGeometricEntity
+ * Name  : Node
+ * Path  : INode
  * Use   : Represents a 2d node, i.e. a controlled (managed)
  *         2d vertex.
  * Author: Sven Schmidt
@@ -12,15 +12,16 @@
 
 #include "DeclSpec.h"
 
-#include "IGeometricEntity.h"
+#include "INode.h"
 #include "Vertex.h"
 
 class Vector;
 
 #pragma warning(disable:4251)
+#pragma warning(disable:4275)
 
 
-class DECL_SYMBOLS Node : public IGeometricEntity {
+class DECL_SYMBOLS Node : public INode {
 
     friend class NodeManager;
 
@@ -32,6 +33,7 @@ public:
     IGeometricEntity::Id_t id() const;
     IGeometricEntity::Id_t meshId() const;
 
+    // FROM INode
     bool   onBoundary() const;
     double x() const;
     double y() const;
@@ -50,4 +52,5 @@ private:
     Vertex                 vertex_;
 };
 
+#pragma warning(default:4275)
 #pragma warning(default:4251)

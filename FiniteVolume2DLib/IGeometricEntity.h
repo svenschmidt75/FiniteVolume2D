@@ -10,6 +10,7 @@
 #include "DeclSpec.h"
 
 #include <boost/cstdint.hpp>
+#include <boost/limits.hpp>
 
 
 class DECL_SYMBOLS IGeometricEntity {
@@ -22,4 +23,6 @@ public:
     // Unique id of this entity
     virtual Id_t id() const = 0;
     virtual Id_t meshId() const = 0;
+
+    static Id_t undef() { return std::numeric_limits<Id_t>::max(); }
 };

@@ -1,6 +1,6 @@
 /*
  * Name  : Cell
- * Path  : IGeometricEntity
+ * Path  : ICell
  * Use   : Represents a 2d cell.
  * Author: Sven Schmidt
  * Date  : 03/17/2012
@@ -11,16 +11,17 @@
 
 #include "DeclSpec.h"
 
-#include "IGeometricEntity.h"
+#include "ICell.h"
 #include "EntityCollection.hpp"
 #include "Node.h"
 #include "Face.h"
 
 
 #pragma warning(disable:4251)
+#pragma warning(disable:4275)
 
 
-class DECL_SYMBOLS Cell : public IGeometricEntity {
+class DECL_SYMBOLS Cell : public ICell {
 
     friend class CellManager;
 
@@ -32,6 +33,7 @@ public:
     IGeometricEntity::Id_t id() const;
     IGeometricEntity::Id_t meshId() const;
 
+    // FROM ICell
     EntityCollection<Node> const & getNodes() const;
     EntityCollection<Face> const & getFaces() const;
     double                         volume() const;
@@ -52,4 +54,5 @@ private:
     EntityCollection<Face> faces_;
 };
 
+#pragma warning(default:4275)
 #pragma warning(default:4251)

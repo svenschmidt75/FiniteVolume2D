@@ -29,8 +29,10 @@
     <ClInclude Include="Face.h" />
     <ClInclude Include="FaceConnectivity.h" />
     <ClInclude Include="FaceManager.h" />
+    <ClInclude Include="ICell.h" />
     <ClInclude Include="IComputationalVertex.h" />
     <ClInclude Include="IConstIteratorHelper.hpp" />
+    <ClInclude Include="IFace.h" />
     <ClInclude Include="IGeometricEntity.h" />
     <ClInclude Include="IGeometricEntityManager.h" />
     <ClInclude Include="IMesh.h" />
@@ -38,6 +40,7 @@
     <ClInclude Include="IMeshConnectivity.h" />
     <ClInclude Include="IMeshReader.h" />
     <ClInclude Include="IMeshReaderState.h" />
+    <ClInclude Include="INode.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshBuilder.h" />
