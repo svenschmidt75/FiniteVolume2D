@@ -15,11 +15,11 @@ Mesh::Mesh() {}
 void
 Mesh::addNode(Node::Ptr const & node) {
     if (node->onBoundary()) {
-        Thread<Node> & thread = getBoundaryVertexThread();
+        Thread<Node> & thread = getBoundaryNodeThread();
         thread.insert(node);
     }
     else {
-        Thread<Node> & thread = getInteriorVertexThread();
+        Thread<Node> & thread = getInteriorNodeThread();
         thread.insert(node);
     }
 }
@@ -52,12 +52,12 @@ Mesh::getMeshConnectivity() const {
 }
 
 Thread<Node> &
-Mesh::getBoundaryVertexThread() {
+Mesh::getBoundaryNodeThread() {
     return boundary_node_thread_;
 }
 
 Thread<Node> &
-Mesh::getInteriorVertexThread() {
+Mesh::getInteriorNodeThread() {
     return interior_node_thread_;
 }
 

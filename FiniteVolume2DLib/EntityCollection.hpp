@@ -23,6 +23,7 @@ class EntityCollection {
 
 private:
     typedef typename std::vector<typename Entity::Ptr> EntityCollection_t;
+    typedef typename Entity EntityType;
     typedef typename std::vector<typename Entity::Ptr>::iterator iterator;
     typedef typename std::vector<typename Entity::Ptr>::const_iterator const_iterator;
 

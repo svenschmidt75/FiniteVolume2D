@@ -17,6 +17,9 @@ private:
     typedef typename std::deque<typename Entity::Ptr> EntityCollection_t;
 
 public:
+    typedef typename EntityCollection_t::size_type size_type;
+
+public:
     void insert(typename Entity::Ptr const & entity) {
         data_.push_back(entity);
     }

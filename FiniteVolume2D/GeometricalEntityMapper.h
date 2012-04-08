@@ -11,7 +11,44 @@
  */
 #pragma once
 
+#include "ComputationalNode.h"
+#include "ComputationalFace.h"
+#include "ComputationalCell.h"
+#include "FiniteVolume2DLib/Node.h"
+#include "FiniteVolume2DLib/Face.h"
+#include "FiniteVolume2DLib/Cell.h"
+
+#include <map>
+
 
 class GeometricalEntityMapper {
+private:
+    template<typename GEOMETRICAL_ENTITY, typename COMPUTATIONAL_ENTITY>
+    struct Link {
+        Link() : gentity_(NULL), centity_(NULL) {}
+        explicit Link(typename GEOMETRICAL_ENTITY::Ptr const & gentity, typename COMPUTATIONAL_ENTITY::Ptr const & centity) : gentity_(gentity), centity_(centity) {}
 
+        typename GEOMETRICAL_ENTITY::Ptr   gentity_;
+        typename COMPUTATIONAL_ENTITY::Ptr centity_;
+
+    };
+
+public:
+    void addNode(Node::Ptr const & node, ComputationalNode::Ptr const & cnode);
+    void addFace(Face::Ptr const & face, ComputationalFace::Ptr const & cface);
+    void addCell(Cell::Ptr const & cell, ComputationalCell::Ptr const & ccell);
+
+    ComputationalNode::Ptr & getComputationalNode(Node::Ptr const & node);
+    ComputationalFace::Ptr & getComputationalFace(Face::Ptr const & face);
+    ComputationalCell::Ptr & getComputationalCell(Cell::Ptr const & cell);
+
+private:
+    typedef std::map<IGeometricEntity::Id_t, Link<Node, ComputationalNode>> ComputationalNodeMap_t;
+    typedef std::map<IGeometricEntity::Id_t, Link<Face, ComputationalFace>> ComputationalFaceMap_t;
+    typedef std::map<IGeometricEntity::Id_t, Link<Cell, ComputationalCell>> ComputationalCellMap_t;
+
+private:
+    ComputationalNodeMap_t node_map_;
+    ComputationalFaceMap_t face_map_;
+    ComputationalCellMap_t cell_map_;
 };

@@ -16,8 +16,13 @@
 
 class ComputationalMeshBuilder {
 public:
-    ComputationalMeshBuilder(Mesh const & mesh);
-    ComputationalMesh::Ptr build();
+    explicit ComputationalMeshBuilder(Mesh::Ptr const & mesh);
+
+    ComputationalMesh::Ptr build() const;
+
+private:
+    // geometric mesh to convert to a computational one
+    Mesh::Ptr geometrical_mesh_;
 };
 
 

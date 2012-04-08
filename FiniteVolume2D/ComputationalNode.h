@@ -14,8 +14,13 @@
 #include "FiniteVolume2DLib/Vector.h"
 #include "FiniteVolume2DLib/Node.h"
 
+#include <memory>
+
 
 class ComputationalNode : public INode {
+public:
+    typedef std::shared_ptr<ComputationalNode> Ptr;
+
 public:
     explicit ComputationalNode(Node::Ptr const & geometric_node);
 

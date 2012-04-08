@@ -31,10 +31,10 @@ MeshConnectivityTest::testMeshFileExists() {
 
 void
 MeshConnectivityTest::testNumberOfVerices() {
-    Thread<Node> const & bvertex_thread = mesh_->getBoundaryVertexThread();
+    Thread<Node> const & bvertex_thread = mesh_->getBoundaryNodeThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary vertices", 8u, bvertex_thread.size());
 
-    Thread<Node> const & ivertex_thread = mesh_->getInteriorVertexThread();
+    Thread<Node> const & ivertex_thread = mesh_->getInteriorNodeThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal vertices", 1u, ivertex_thread.size());
 }
 

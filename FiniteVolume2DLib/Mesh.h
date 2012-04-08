@@ -31,8 +31,8 @@ public:
     IMeshConnectivity const & getMeshConnectivity() const;
 
 
-    Thread<Node> & getBoundaryVertexThread();
-    Thread<Node> & getInteriorVertexThread();
+    Thread<Node> & getBoundaryNodeThread();
+    Thread<Node> & getInteriorNodeThread();
 
     Thread<Face> & getBoundaryFaceThread();
     Thread<Face> & getInteriorFaceThread();

@@ -7,12 +7,17 @@
  */
 #pragma once
 
+#include "FiniteVolume2DLib/IFace.h"
+
 #include "ComputationalMoleculeManager.h"
 #include "BoundaryCondition.h"
+
+#include <memory>
 
 
 class ComputationalFace : public IFace {
 public:
+    typedef std::shared_ptr<ComputationalFace> Ptr;
 
 private:
     /* A computational node may have a set of molecules,

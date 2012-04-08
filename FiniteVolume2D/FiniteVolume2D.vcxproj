@@ -85,11 +85,14 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComputationalMesh.cpp" />
+    <ClCompile Include="ComputationalMeshBuilder.cpp" />
     <ClCompile Include="ComputationalNode.cpp" />
     <ClCompile Include="FiniteVolume2D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GeometricalEntityMapper.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +109,7 @@
     <ClInclude Include="ComputationalMoleculeManager.h" />
     <ClInclude Include="ComputationalNode.h" />
     <ClInclude Include="GeometricalEntityMapper.h" />
+    <ClInclude Include="IComputationalGridAccessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
