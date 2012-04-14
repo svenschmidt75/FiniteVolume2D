@@ -85,6 +85,8 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComputationalCell.cpp" />
+    <ClCompile Include="ComputationalFace.cpp" />
     <ClCompile Include="ComputationalMesh.cpp" />
     <ClCompile Include="ComputationalMeshBuilder.cpp" />
     <ClCompile Include="ComputationalNode.cpp" />

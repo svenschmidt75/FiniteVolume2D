@@ -17,6 +17,7 @@
 
 
 class ICell : public IGeometricEntity {
+public:
     virtual EntityCollection<Node> const & getNodes() const = 0;
     virtual EntityCollection<Face> const & getFaces() const = 0;
     virtual double                         volume() const = 0;

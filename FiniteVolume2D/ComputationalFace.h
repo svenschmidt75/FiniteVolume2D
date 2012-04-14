@@ -8,6 +8,7 @@
 #pragma once
 
 #include "FiniteVolume2DLib/IFace.h"
+#include "FiniteVolume2DLib/Face.h"
 
 #include "ComputationalMoleculeManager.h"
 #include "BoundaryCondition.h"
@@ -19,10 +20,25 @@ class ComputationalFace : public IFace {
 public:
     typedef std::shared_ptr<ComputationalFace> Ptr;
 
+public:
+    explicit ComputationalFace(Face::Ptr const & geometric_face);
+
+    // FROM IGeometricEntity
+    IGeometricEntity::Id_t id() const;
+    IGeometricEntity::Id_t meshId() const;
+
+    // FROM IFace
+    IGeometricEntity::Entity_t     getEntityType() const;
+    EntityCollection<Node> const & getNodes() const;
+    double                         area() const;
+    Vector                         normal() const;
+    Vertex                         centroid() const;
+
 private:
-    /* A computational node may have a set of molecules,
-     * but does not have to.
-     */
+    // the geometric partner face
+    Face::Ptr geometric_face_;
+
+    // computational molecules of face
     ComputationalMoleculeManager::Ptr molecule_;
 
     // boundary conditions, in case this is a boundary face
