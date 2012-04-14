@@ -7,15 +7,19 @@
  */
 #pragma once
 
-#include "IGeometricEntity.h"
+#include "DeclSpec.h"
+ #include "IGeometricEntity.h"
 
 #include <tuple>
 #include <map>
 
 #include <boost/optional.hpp>
 
+ 
+ #pragma warning(disable:4251)
+ 
 
-class BoundaryConditionCollection {
+class DECL_SYMBOLS BoundaryConditionCollection {
 public:
     enum Type {DIRICHLET, NEUMANN, UNKNOWN};
     typedef std::tuple<BoundaryConditionCollection::Type, double> Pair;
@@ -30,3 +34,5 @@ private:
 private:
     BoundaryCondition_t data_;
 };
+
+#pragma warning(default:4251)

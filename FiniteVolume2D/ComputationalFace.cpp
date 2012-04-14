@@ -1,7 +1,7 @@
 #include "ComputationalFace.h"
 
 
-ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face) : geometric_face_(geometric_face) {}
+ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face, BoundaryCondition::Ptr const & bc) : geometric_face_(geometric_face), bc_(bc) {}
 
 IGeometricEntity::Id_t
 ComputationalFace::id() const {
@@ -37,4 +37,9 @@ ComputationalFace::normal() const {
 Vertex
 ComputationalFace::centroid() const {
     return geometric_face_->centroid();
+}
+
+BoundaryCondition const &
+ComputationalFace::getBoundaryCondition() const {
+    return *bc_;
 }

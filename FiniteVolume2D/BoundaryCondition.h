@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include "FiniteVolume2DLib/BoundaryConditionCollection.h"
+
 #include <memory>
 
 
@@ -15,4 +17,12 @@ public:
     typedef std::shared_ptr<BoundaryCondition> Ptr;
 
 public:
+    explicit BoundaryCondition(BoundaryConditionCollection::Pair const & bc);
+
+    double                            getValue() const;
+    BoundaryConditionCollection::Type type() const;
+
+private:
+    double                            value_;
+    BoundaryConditionCollection::Type type_;
 };

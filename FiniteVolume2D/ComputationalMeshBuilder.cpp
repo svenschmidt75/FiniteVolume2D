@@ -3,7 +3,7 @@
 #include "FiniteVolume2DLib/Thread.hpp"
 #include "FiniteVolume2DLib/Node.h"
 
-ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh) : geometrical_mesh_(geometrical_mesh) {}
+ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
 
 ComputationalMesh::Ptr
 ComputationalMeshBuilder::build() const {
@@ -23,12 +23,21 @@ ComputationalMeshBuilder::build() const {
     // build computational faces
     Thread<Face> const & interior_face_thread = geometrical_mesh_->getFaceThread(IGeometricEntity::INTERIOR);
     for (Thread<Face>::size_type i = 0; i < interior_face_thread.size(); ++i)
-        cmesh->addFace(interior_face_thread.getEntityAt(i), ComputationalFace::Ptr(new ComputationalFace(interior_face_thread.getEntityAt(i))));
+        cmesh->addFace(interior_face_thread.getEntityAt(i), ComputationalFace::Ptr(new ComputationalFace(interior_face_thread.getEntityAt(i), NULL)));
 
     Thread<Face> const & boundary_face_thread = geometrical_mesh_->getFaceThread(IGeometricEntity::BOUNDARY);
     for (Thread<Face>::size_type i = 0; i < boundary_face_thread.size(); ++i)
-        cmesh->addFace(boundary_face_thread.getEntityAt(i), ComputationalFace::Ptr(new ComputationalFace(boundary_face_thread.getEntityAt(i))));
+    {
+        BoundaryCondition::Ptr face_bc = NULL;
 
+        Face::Ptr const & face = boundary_face_thread.getEntityAt(i);
+
+        boost::optional<BoundaryConditionCollection::Pair> face_bc_opt = bc_.find(face->id());
+        if (face_bc_opt)
+            face_bc = BoundaryCondition::Ptr(new BoundaryCondition(*face_bc_opt));
+
+        cmesh->addFace(boundary_face_thread.getEntityAt(i), ComputationalFace::Ptr(new ComputationalFace(boundary_face_thread.getEntityAt(i), face_bc)));
+    }
 
     // build computational cells
     Thread<Cell> const & cell_thread = geometrical_mesh_->getCellThread();

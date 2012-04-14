@@ -21,7 +21,7 @@ public:
     typedef std::shared_ptr<ComputationalFace> Ptr;
 
 public:
-    explicit ComputationalFace(Face::Ptr const & geometric_face);
+    explicit ComputationalFace(Face::Ptr const & geometric_face, BoundaryCondition::Ptr const & bc);
 
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
@@ -33,6 +33,8 @@ public:
     double                         area() const;
     Vector                         normal() const;
     Vertex                         centroid() const;
+
+    BoundaryCondition const & getBoundaryCondition() const;
 
 private:
     // the geometric partner face
