@@ -38,7 +38,7 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
     EntityCollection<Cell> const & cells = it->second;
 
     // interior face
-    if (!face->onBoundary()) {
+    if (face->getEntityType() == IGeometricEntity::INTERIOR) {
         if (cells.size() != 2) {
             boost::format format = boost::format("FaceConnectivity::getOtherCell: Interior face %1% must have 2 cells!\n") % face->meshId();
             Util::error(format.str());

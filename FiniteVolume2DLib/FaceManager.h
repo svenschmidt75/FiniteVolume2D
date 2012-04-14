@@ -21,7 +21,7 @@ public:
     typedef std::shared_ptr<FaceManager> Ptr;
 
 public:
-    Face::Ptr createFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & vertices);
+    Face::Ptr createFace(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes);
 
     static Ptr create();
 

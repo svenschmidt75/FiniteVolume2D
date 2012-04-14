@@ -13,7 +13,7 @@
 #include "FiniteVolume2DLib/CellManager.h"
 #include "FiniteVolume2DLib/EntityCreatorManager.h"
 #include "FiniteVolume2DLib/MeshBuilder.h"
-#include "FiniteVolume2DLib/BoundaryCondition.h"
+#include "FiniteVolume2DLib/BoundaryConditionCollection.h"
 
 
 class MeshBuilderMock : public IMeshBuilder {
@@ -31,12 +31,12 @@ public:
         mesh_builder_ = std::shared_ptr<MeshBuilder>(new MeshBuilder(emgr, bc_));
     }
 
-    bool buildNode(IGeometricEntity::Id_t node_id, bool on_boundary, double x, double y) {
-        return mesh_builder_->buildNode(node_id, on_boundary, x, y);
+    bool buildNode(IGeometricEntity::Id_t node_id, IGeometricEntity::Entity_t entity_type, double x, double y) {
+        return mesh_builder_->buildNode(node_id, entity_type, x, y);
     }
 
-    bool buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & node_ids) {
-        return mesh_builder_->buildFace(face_id, on_boundary, node_ids);
+    bool buildFace(IGeometricEntity::Id_t face_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & node_ids) {
+        return mesh_builder_->buildFace(face_id, entity_type, node_ids);
     }
 
     bool buildCell(IGeometricEntity::Id_t cell_id, std::vector<IGeometricEntity::Id_t> const & face_ids) {
@@ -52,9 +52,9 @@ public:
     }
 
 private:
-    NodeManager::Ptr  node_mgr_;
-    FaceManager::Ptr  face_mgr_;
-    CellManager::Ptr  cell_mgr_;
-    MeshBuilder::Ptr  mesh_builder_;
+    NodeManager::Ptr            node_mgr_;
+    FaceManager::Ptr            face_mgr_;
+    CellManager::Ptr            cell_mgr_;
+    MeshBuilder::Ptr            mesh_builder_;
     BoundaryConditionCollection bc_;
 };

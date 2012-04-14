@@ -31,19 +31,19 @@ MeshConnectivityTest::testMeshFileExists() {
 
 void
 MeshConnectivityTest::testNumberOfVerices() {
-    Thread<Node> const & bvertex_thread = mesh_->getBoundaryNodeThread();
+    Thread<Node> const & bvertex_thread = mesh_->getNodeThread(IGeometricEntity::BOUNDARY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary vertices", 8u, bvertex_thread.size());
 
-    Thread<Node> const & ivertex_thread = mesh_->getInteriorNodeThread();
+    Thread<Node> const & ivertex_thread = mesh_->getNodeThread(IGeometricEntity::INTERIOR);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal vertices", 1u, ivertex_thread.size());
 }
 
 void
 MeshConnectivityTest::testNumberOfFaces() {
-    Thread<Face> const & bface_thread = mesh_->getBoundaryFaceThread();
+    Thread<Face> const & bface_thread = mesh_->getFaceThread(IGeometricEntity::BOUNDARY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary faces", 8u, bface_thread.size());
 
-    Thread<Face> const & iface_thread = mesh_->getInteriorFaceThread();
+    Thread<Face> const & iface_thread = mesh_->getFaceThread(IGeometricEntity::INTERIOR);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal faces", 8u, iface_thread.size());
 }
 

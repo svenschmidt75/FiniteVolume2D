@@ -38,7 +38,7 @@ void
 ASCIIMeshReaderTest::testVertex1() {
     MockMeshBuilder::NodeStr const & vertex_str = mock_builder_.nodes_[2];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary vertex", true, vertex_str.on_boundary_);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary vertex", IGeometricEntity::BOUNDARY, vertex_str.entity_type_);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 2.123432, vertex_str.x_, 1E-10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex y coordinate", -0.3847, vertex_str.y_, 1E-10);
 }
@@ -47,7 +47,7 @@ void
 ASCIIMeshReaderTest::testVertex2() {
     MockMeshBuilder::NodeStr const & vertex_str = mock_builder_.nodes_[5];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected boundary vertex", false, vertex_str.on_boundary_);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected boundary vertex", IGeometricEntity::INTERIOR, vertex_str.entity_type_);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex x coordinate", 5.123432, vertex_str.x_, 1E-10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong vertex y coordinate", -0.3847, vertex_str.y_, 1E-10);
 }
@@ -62,10 +62,10 @@ void
 ASCIIMeshReaderTest::testFace() {
     MockMeshBuilder::FaceStr const & face_str = mock_builder_.faces_[1];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 2u, face_str.vertex_ids_.size());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary face", true, face_str.on_boundary_);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(0), face_str.vertex_ids_[0]);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(2), face_str.vertex_ids_[1]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 2u, face_str.node_ids_.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary face", IGeometricEntity::BOUNDARY, face_str.entity_type_);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(0), face_str.node_ids_[0]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(2), face_str.node_ids_[1]);
 }
 
 void

@@ -26,8 +26,8 @@ public:
 
 
     // FROM IMeshBuilder
-    bool buildNode(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
-    bool buildFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids);
+    bool buildNode(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y);
+    bool buildFace(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & node_ids);
     bool buildCell(IGeometricEntity::Id_t mesh_id, std::vector<IGeometricEntity::Id_t> const & face_ids);
     bool buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryConditionCollection::Type bc_type, double bc_value);
 

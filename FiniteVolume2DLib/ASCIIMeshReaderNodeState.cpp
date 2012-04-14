@@ -20,7 +20,7 @@ ASCIIMeshReaderNodeState::process(std::vector<std::string> const & tokens, int l
     bool on_boundary = boost::lexical_cast<bool>(tokens[1]);
     double x = boost::lexical_cast<double>(tokens[2]);
     double y = boost::lexical_cast<double>(tokens[3]);
-    mesh_builder_.buildNode(id, on_boundary, x, y);
+    mesh_builder_.buildNode(id, on_boundary ? IGeometricEntity::BOUNDARY : IGeometricEntity::INTERIOR, x, y);
     return true;
 }
 

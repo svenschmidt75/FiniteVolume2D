@@ -45,12 +45,12 @@ private:
 
     public:
         bool
-        buildNode(IGeometricEntity::Id_t node_id, bool on_boundary, double x, double y) {
+        buildNode(IGeometricEntity::Id_t node_id, IGeometricEntity::Entity_t entity_type, double x, double y) {
             return true;
         }
 
         bool
-        buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & node_ids) {
+        buildFace(IGeometricEntity::Id_t face_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & node_ids) {
             return true;
         }
 

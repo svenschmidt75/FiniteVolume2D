@@ -21,7 +21,7 @@ public:
     typedef std::shared_ptr<NodeManager> Ptr;
 
 public:
-    Node::Ptr createNode(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    Node::Ptr createNode(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y);
 
     static Ptr create();
 

@@ -17,7 +17,7 @@
 
 class IFace : public IGeometricEntity {
 public:
-    virtual bool                           onBoundary() const = 0;
+    virtual IGeometricEntity::Entity_t     getEntityType() const = 0;
     virtual EntityCollection<Node> const & getNodes() const = 0;
     virtual double                         area() const = 0;
     virtual Vector                         normal() const = 0;

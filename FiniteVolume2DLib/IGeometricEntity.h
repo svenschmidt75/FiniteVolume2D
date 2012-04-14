@@ -16,6 +16,9 @@
 class DECL_SYMBOLS IGeometricEntity {
 public:
     typedef boost::uint64_t Id_t;
+ 
+    // entity type
+    enum Entity_t {BOUNDARY, INTERIOR, UNKNOWN};
 
 public:
     ~IGeometricEntity() {}

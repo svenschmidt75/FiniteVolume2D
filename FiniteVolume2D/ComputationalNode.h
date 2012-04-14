@@ -29,10 +29,10 @@ public:
     IGeometricEntity::Id_t meshId() const;
 
     // FROM INode
-    bool   onBoundary() const;
-    double x() const;
-    double y() const;
-    Vector vector() const;
+    IGeometricEntity::Entity_t getEntityType() const;
+    double                     x() const;
+    double                     y() const;
+    Vector                     vector() const;
 
 private:
     // the geometric partner node

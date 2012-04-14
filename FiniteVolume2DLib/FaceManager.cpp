@@ -7,15 +7,15 @@
 
 FaceManager::FaceManager() {}
 
-Face::Ptr
-FaceManager::createFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & vertices) {
+Face::Ptr FaceManager::createFace(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes)
+{
     if (findEntity(mesh_id)) {
         boost::format format = boost::format("FaceManager::create: Face with mesh id %1% already created!\n") % mesh_id;
         Util::error(format.str());
         return NULL;
     }
 
-    Face::Ptr face = Face::create(getNewEntityIndex(), mesh_id, on_boundary, vertices);
+    Face::Ptr face = Face::create(getNewEntityIndex(), mesh_id, entity_type, nodes);
     collection_.insert(face);
 
     /* The face is referenced within the mesh file by faces

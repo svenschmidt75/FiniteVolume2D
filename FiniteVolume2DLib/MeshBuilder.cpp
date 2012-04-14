@@ -15,9 +15,10 @@
 MeshBuilder::MeshBuilder(EntityCreatorManager::Ptr & entity_mgr, BoundaryConditionCollection & bc) : entity_mgr_(entity_mgr), bc_(bc), mesh_(Mesh::create()) {}
 
 bool
-MeshBuilder::buildNode(IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y) {
+MeshBuilder::buildNode(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y)
+{
     NodeManager::Ptr & node_mgr = entity_mgr_->getNodeManager();
-    Node::Ptr v = node_mgr->createNode(mesh_id, on_boundary, x, y);
+    Node::Ptr v = node_mgr->createNode(mesh_id, entity_type, x, y);
     if (v == NULL)
         return false;
     mesh_->addNode(v);
@@ -25,7 +26,8 @@ MeshBuilder::buildNode(IGeometricEntity::Id_t mesh_id, bool on_boundary, double 
 }
 
 bool
-MeshBuilder::buildFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & node_ids) {
+MeshBuilder::buildFace(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & node_ids)
+{
     if (node_ids.size() != 2) {
         boost::format format = boost::format("MeshBuilder::buildFace: Face %1% must have 2 vertices!\n") % mesh_id;
         Util::error(format.str());
@@ -42,7 +44,7 @@ MeshBuilder::buildFace(IGeometricEntity::Id_t mesh_id, bool on_boundary, std::ve
     }
 
     FaceManager::Ptr & face_mgr = entity_mgr_->getFaceManager();
-    Face::Ptr f = face_mgr->createFace(mesh_id, on_boundary, nodes);
+    Face::Ptr f = face_mgr->createFace(mesh_id, entity_type, nodes);
     if (f == NULL)
         return false;
     mesh_->addFace(f);

@@ -3,8 +3,8 @@
 #include "Vector.h"
 
 
-Face::Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & nodes)
-    : face_id_(face_id), mesh_id_(mesh_id), on_boundary_(on_boundary), nodes_(nodes) {}
+Face::Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes)
+    : face_id_(face_id), mesh_id_(mesh_id), entity_type_(entity_type), nodes_(nodes) {}
 
 IGeometricEntity::Id_t
 Face::id() const {
@@ -16,9 +16,9 @@ Face::meshId() const {
     return mesh_id_;
 }
 
-bool
-Face::onBoundary() const {
-    return on_boundary_;
+IGeometricEntity::Entity_t
+Face::getEntityType() const {
+    return entity_type_;
 }
 
 EntityCollection<Node> const &
@@ -73,7 +73,7 @@ Face::centroid() const {
 }
 
 Face::Ptr
-Face::create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, EntityCollection<Node> const & nodes) {
-    Face::Ptr face = Face::Ptr(new Face(face_id, mesh_id, on_boundary, nodes));
+Face::create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes) {
+    Face::Ptr face = Face::Ptr(new Face(face_id, mesh_id, entity_type, nodes));
     return face;
 }

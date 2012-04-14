@@ -34,22 +34,22 @@ public:
     IGeometricEntity::Id_t meshId() const;
 
     // FROM INode
-    bool   onBoundary() const;
-    double x() const;
-    double y() const;
-    Vector vector() const;
+    IGeometricEntity::Entity_t getEntityType() const;
+    double                     x() const;
+    double                     y() const;
+    Vector                     vector() const;
 
 private:
-    Node(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    Node(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y);
 
     // only called by VertexManager
-    static Ptr create(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y);
+    static Ptr create(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y);
 
 private:
-    IGeometricEntity::Id_t node_id_;
-    IGeometricEntity::Id_t mesh_id_;
-    bool                   on_boundary_;
-    Vertex                 vertex_;
+    IGeometricEntity::Id_t     node_id_;
+    IGeometricEntity::Id_t     mesh_id_;
+    IGeometricEntity::Entity_t entity_type_;
+    Vertex                     vertex_;
 };
 
 #pragma warning(default:4275)

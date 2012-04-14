@@ -14,26 +14,14 @@ Mesh::Mesh() {}
 
 void
 Mesh::addNode(Node::Ptr const & node) {
-    if (node->onBoundary()) {
-        Thread<Node> & thread = getBoundaryNodeThread();
-        thread.insert(node);
-    }
-    else {
-        Thread<Node> & thread = getInteriorNodeThread();
-        thread.insert(node);
-    }
+    Thread<Node> & thread = getNodeThread(node->getEntityType());
+    thread.insert(node);
 }
 
 void
 Mesh::addFace(Face::Ptr const & face) {
-    if (face->onBoundary()) {
-        Thread<Face> & thread = getBoundaryFaceThread();
-        thread.insert(face);
-    }
-    else {
-        Thread<Face> & thread = getInteriorFaceThread();
-        thread.insert(face);
-    }
+    Thread<Face> & thread = getFaceThread(face->getEntityType());
+    thread.insert(face);
 
     mesh_connectivity_.insert(face);
 }
@@ -52,22 +40,16 @@ Mesh::getMeshConnectivity() const {
 }
 
 Thread<Node> &
-Mesh::getBoundaryNodeThread() {
-    return boundary_node_thread_;
-}
-
-Thread<Node> &
-Mesh::getInteriorNodeThread() {
+Mesh::getNodeThread(IGeometricEntity::Entity_t entity_type) {
+    if (entity_type == IGeometricEntity::BOUNDARY)
+        return boundary_node_thread_;
     return interior_node_thread_;
 }
 
 Thread<Face> &
-Mesh::getBoundaryFaceThread() {
-    return boundary_face_thread_;
-}
-
-Thread<Face> &
-Mesh::getInteriorFaceThread() {
+Mesh::getFaceThread(IGeometricEntity::Entity_t entity_type) {
+    if (entity_type == IGeometricEntity::BOUNDARY)
+        return boundary_face_thread_;
     return interior_face_thread_;
 }
 

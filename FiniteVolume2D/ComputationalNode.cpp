@@ -13,9 +13,9 @@ ComputationalNode::meshId() const {
     return IGeometricEntity::undef();
 }
 
-bool
-ComputationalNode::onBoundary() const {
-    return geometric_node_->onBoundary();
+IGeometricEntity::Entity_t
+ComputationalNode::getEntityType() const {
+    return geometric_node_->getEntityType();
 }
 
 double

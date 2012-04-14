@@ -3,8 +3,8 @@
 #include "Vector.h"
 
 
-Node::Node(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y)
-    : node_id_(node_id), mesh_id_(mesh_id), on_boundary_(on_boundary), vertex_(Vertex(x, y)) {}
+Node::Node(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y)
+    : node_id_(node_id), mesh_id_(mesh_id), entity_type_(entity_type), vertex_(Vertex(x, y)) {}
 
 IGeometricEntity::Id_t
 Node::id() const {
@@ -16,9 +16,9 @@ Node::meshId() const {
     return mesh_id_;
 }
 
-bool
-Node::onBoundary() const {
-    return on_boundary_;
+IGeometricEntity::Entity_t
+Node::getEntityType() const {
+    return entity_type_;
 }
 
 double
@@ -37,7 +37,7 @@ Node::vector() const {
 }
 
 Node::Ptr
-Node::create(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, bool on_boundary, double x, double y) {
-    Node::Ptr node = Node::Ptr(new Node(node_id, mesh_id, on_boundary, x, y));
+Node::create(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y) {
+    Node::Ptr node = Node::Ptr(new Node(node_id, mesh_id, entity_type, x, y));
     return node;
 }

@@ -29,37 +29,37 @@ private:
     public:
         struct NodeStr {
             NodeStr() {}
-            NodeStr(bool on_boundary, double x, double y) : on_boundary_(on_boundary), x_(x), y_(y) {}
+            NodeStr(IGeometricEntity::Entity_t entity_type, double x, double y) : entity_type_(entity_type), x_(x), y_(y) {}
 
-            bool   on_boundary_;
-            double x_;
-            double y_;
+            IGeometricEntity::Entity_t entity_type_;
+            double                     x_;
+            double                     y_;
         };
 
         struct FaceStr {
             FaceStr() {}
-            FaceStr(bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids) : on_boundary_(on_boundary), vertex_ids_(vertex_ids) {}
+            FaceStr(IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & node_ids) : entity_type_(entity_type), node_ids_(node_ids) {}
 
-            bool                                on_boundary_;
-            std::vector<IGeometricEntity::Id_t> vertex_ids_;
+            IGeometricEntity::Entity_t          entity_type_;
+            std::vector<IGeometricEntity::Id_t> node_ids_;
         };
 
     public:
         bool
-        buildNode(IGeometricEntity::Id_t node_id, bool on_boundary, double x, double y) {
+        buildNode(IGeometricEntity::Id_t node_id, IGeometricEntity::Entity_t entity_type, double x, double y) {
             NodeMap_t::const_iterator it = nodes_.find(node_id);
             if (it != nodes_.end())
                 CPPUNIT_FAIL("Duplicate node!");
-            nodes_[node_id] = NodeStr(on_boundary, x, y);
+            nodes_[node_id] = NodeStr(entity_type, x, y);
             return true;
         }
 
         bool
-        buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & node_ids) {
+        buildFace(IGeometricEntity::Id_t face_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & node_ids) {
             FaceMap_t::const_iterator it = faces_.find(face_id);
             if (it != faces_.end())
                 CPPUNIT_FAIL("Duplicate face!");
-            faces_[face_id] = FaceStr(on_boundary, node_ids);
+            faces_[face_id] = FaceStr(entity_type, node_ids);
             return true;
         }
 

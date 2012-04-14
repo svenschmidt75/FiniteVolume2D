@@ -13,8 +13,9 @@
 
 
 class INode : public IGeometricEntity {
-    virtual bool   onBoundary() const = 0;
-    virtual double x() const = 0;
-    virtual double y() const = 0;
-    virtual Vector vector() const = 0;
+public:
+    virtual IGeometricEntity::Entity_t getEntityType() const = 0;
+    virtual double                     x() const = 0;
+    virtual double                     y() const = 0;
+    virtual Vector                     vector() const = 0;
 };

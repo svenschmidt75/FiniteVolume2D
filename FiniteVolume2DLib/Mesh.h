@@ -30,13 +30,9 @@ public:
 
     IMeshConnectivity const & getMeshConnectivity() const;
 
-
-    Thread<Node> & getBoundaryNodeThread();
-    Thread<Node> & getInteriorNodeThread();
-
-    Thread<Face> & getBoundaryFaceThread();
-    Thread<Face> & getInteriorFaceThread();
-
+    // all entities are kept in threads
+    Thread<Node> & getNodeThread(IGeometricEntity::Entity_t type);
+    Thread<Face> & getFaceThread(IGeometricEntity::Entity_t type);
     Thread<Cell> & getCellThread();
 
     static Ptr create();

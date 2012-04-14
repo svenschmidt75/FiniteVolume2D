@@ -25,7 +25,7 @@ ASCIIMeshReaderFaceState::process(std::vector<std::string> const & tokens, int l
 
     IGeometricEntity::Id_t face_id = boost::lexical_cast<IGeometricEntity::Id_t>(tokens[0]);
     bool on_boundary = boost::lexical_cast<bool>(tokens[1]);
-    mesh_builder_.buildFace(face_id, on_boundary, ids);
+    mesh_builder_.buildFace(face_id, on_boundary ? IGeometricEntity::BOUNDARY : IGeometricEntity::INTERIOR, ids);
     return true;
 }
 

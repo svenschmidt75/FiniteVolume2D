@@ -21,8 +21,8 @@ class DECL_SYMBOLS IMeshBuilder {
 public:
     ~IMeshBuilder() {}
 
-    virtual bool buildNode(IGeometricEntity::Id_t vertex_id, bool on_boundary, double x, double y) = 0;
-    virtual bool buildFace(IGeometricEntity::Id_t face_id, bool on_boundary, std::vector<IGeometricEntity::Id_t> const & vertex_ids) = 0;
+    virtual bool buildNode(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Entity_t entity_type, double x, double y) = 0;
+    virtual bool buildFace(IGeometricEntity::Id_t face_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & vertex_ids) = 0;
     virtual bool buildCell(IGeometricEntity::Id_t cell_id, std::vector<IGeometricEntity::Id_t> const & face_ids) = 0;
     virtual bool buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryConditionCollection::Type bc_type, double bc_value) = 0;
 
