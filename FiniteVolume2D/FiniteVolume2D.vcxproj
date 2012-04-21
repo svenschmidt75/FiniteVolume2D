@@ -90,11 +90,13 @@
     <ClCompile Include="ComputationalFace.cpp" />
     <ClCompile Include="ComputationalMesh.cpp" />
     <ClCompile Include="ComputationalMeshBuilder.cpp" />
+    <ClCompile Include="ComputationalMoleculeImpl.cpp" />
     <ClCompile Include="ComputationalNode.cpp" />
     <ClCompile Include="FiniteVolume2D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FluxComputationalMolecule.cpp" />
     <ClCompile Include="GeometricalEntityMapper.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -109,10 +111,14 @@
     <ClInclude Include="ComputationalFace.h" />
     <ClInclude Include="ComputationalMesh.h" />
     <ClInclude Include="ComputationalMeshBuilder.h" />
+    <ClInclude Include="ComputationalMolecule.h" />
+    <ClInclude Include="ComputationalMoleculeImpl.h" />
     <ClInclude Include="ComputationalMoleculeManager.h" />
     <ClInclude Include="ComputationalNode.h" />
+    <ClInclude Include="FluxComputationalMolecule.h" />
     <ClInclude Include="GeometricalEntityMapper.h" />
-    <ClInclude Include="IComputationalGridAccessor.h" />
+    <ClInclude Include="ComputationalGridAccessor.h" />
+    <ClInclude Include="IComputationalMolecule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

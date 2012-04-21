@@ -7,10 +7,12 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include <string>
 
 
-class Util {
+class DECL_SYMBOLS_2DLIB Util {
 public:
     static bool error(std::string const & msg);
 

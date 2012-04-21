@@ -1,7 +1,15 @@
 #include "ComputationalFace.h"
 
+#include "FluxComputationalMolecule.h"
 
-ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face, BoundaryCondition::Ptr const & bc) : geometric_face_(geometric_face), bc_(bc) {}
+#include "FiniteVolume2DLib/Util.h"
+
+#include <boost/format.hpp>
+
+#include <exception>
+
+
+ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face) : geometric_face_(geometric_face), bc_(std::nullptr_t()) {}
 
 IGeometricEntity::Id_t
 ComputationalFace::id() const {
@@ -42,4 +50,28 @@ ComputationalFace::centroid() const {
 BoundaryCondition const &
 ComputationalFace::getBoundaryCondition() const {
     return *bc_;
+}
+
+void
+ComputationalFace::setBoundaryCondition(BoundaryCondition::Ptr const & bc) {
+    bc_ = bc;
+}
+
+FluxComputationalMolecule &
+ComputationalFace::getComputationalMolecule(std::string const & flux_var) {
+    auto it = computational_molecules_.find(flux_var);
+    if (it == computational_molecules_.end()) {
+        boost::format format = boost::format("ComputationalFace::getComputationalMolecule: No computational molecule found for flux variable %1%!\n") % flux_var;
+        Util::error(format.str());
+
+        // as this method returns by reference, we have to throw in
+        // case of an error
+        throw std::exception(format.str().c_str());
+    }
+    return it->second;
+}
+
+void
+ComputationalFace::setComputationalMolecule(FluxComputationalMolecule const & cm) {
+    computational_molecules_[cm.name()] = cm;
 }

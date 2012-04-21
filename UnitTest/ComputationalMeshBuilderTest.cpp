@@ -31,18 +31,32 @@ ComputationalMeshBuilderTest::testMeshFileExists() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Mesh file not found!", true, exists);
 }
 
+namespace {
+    bool flux_eval(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr & face) {
+        return true;
+    }
+
+}
+
 void
 ComputationalMeshBuilderTest::buildMeshTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
     // set methods for solving face flux
-    cmesh.set(ComputationalVariable("phi"), &Solver1::evaluateFaceFlux);
+    cmesh.addComputationalVariable("T", "flux_T", flux_eval);
+
+           
+
+    //bool
+//    phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & cell, Face::Ptr & face)
 
 
+    // set phi comp. molecule on each comp. cell
+    // set flux phi on each comp. face
 
-    ComputationalMesh::Ptr cmesh = cmesh.build();
+//    ComputationalMesh::Ptr cmesh = cmesh.build();
 
-    PDESolver.solve(cmesh);
+//    PDESolver.solve(cmesh);
 }
 
 

@@ -15,13 +15,15 @@
 
 #include <memory>
 
+class FluxComputationalMolecule;
+
 
 class ComputationalFace : public IFace {
 public:
     typedef std::shared_ptr<ComputationalFace> Ptr;
 
 public:
-    explicit ComputationalFace(Face::Ptr const & geometric_face, BoundaryCondition::Ptr const & bc);
+    explicit ComputationalFace(Face::Ptr const & geometric_face);
 
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
@@ -34,7 +36,14 @@ public:
     Vector                         normal() const;
     Vertex                         centroid() const;
 
-    BoundaryCondition const & getBoundaryCondition() const;
+    BoundaryCondition const &      getBoundaryCondition() const;
+    void                           setBoundaryCondition(BoundaryCondition::Ptr const & bc);
+
+    FluxComputationalMolecule &    getComputationalMolecule(std::string const & flux_var);
+    void                           setComputationalMolecule(FluxComputationalMolecule const & cm);
+
+private:
+    typedef std::map<std::string, FluxComputationalMolecule> FluxComputationalMolecule_t;
 
 private:
     // the geometric partner face
@@ -45,4 +54,6 @@ private:
 
     // boundary conditions, in case this is a boundary face
     BoundaryCondition::Ptr bc_;
+
+    FluxComputationalMolecule_t computational_molecules_;
 };
