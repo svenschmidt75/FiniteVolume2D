@@ -98,7 +98,7 @@ ASCIIMeshReader::read() const {
                     boost::format format = boost::format("ASCIIMeshReader::read: Keyword 'boundaryconditions' unexpected in line %1%!\n") % line_number;
                     return Util::error(format.str());
                 }
-                state_ = ASCIIMeshReaderBoundaryConditionState::create(builder_);
+                state_ = ASCIIMeshReaderBoundaryConditionState::create(bc_);
                 continue;
             }
 
@@ -114,4 +114,9 @@ ASCIIMeshReader::read() const {
     }
 
     return true;
+}
+
+BoundaryConditionCollection const &
+ASCIIMeshReader::getBoundaryConditions() const {
+    return bc_;
 }

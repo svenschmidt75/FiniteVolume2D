@@ -9,10 +9,13 @@
 
 #include "DeclSpec.h"
 
+class BoundaryConditionCollection;
+
 
 class DECL_SYMBOLS IMeshReader {
 public:
-    ~IMeshReader() {}
+    virtual ~IMeshReader() {}
 
-    virtual bool read() const = 0;
+    virtual bool                                read() const = 0;
+    virtual BoundaryConditionCollection const & getBoundaryConditions() const = 0;
 };

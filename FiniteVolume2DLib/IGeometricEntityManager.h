@@ -10,5 +10,7 @@
 
 class IGeometricEntityManager {
 public:
+    virtual ~IGeometricEntityManager() {}
+
     IGeometricEntityManager() {}
 };

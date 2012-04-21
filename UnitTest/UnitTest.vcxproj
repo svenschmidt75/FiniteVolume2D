@@ -97,6 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ASCIIMeshReaderTest.cpp" />
+    <ClCompile Include="ComputationalMeshBuilderTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MeshBoundaryConditionReaderTest.cpp" />
@@ -104,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ASCIIMeshReaderTest.h" />
+    <ClInclude Include="ComputationalMeshBuilderTest.h" />
     <ClInclude Include="EntityTest.h" />
     <ClInclude Include="MeshBoundaryConditionReaderTest.h" />
     <ClInclude Include="MeshBuilderMock.h" />

@@ -8,7 +8,7 @@
 #include <boost/lexical_cast.hpp>
 
 
-ASCIIMeshReaderBoundaryConditionState::ASCIIMeshReaderBoundaryConditionState(IMeshBuilder & mesh_builder) : mesh_builder_(mesh_builder) {}
+ASCIIMeshReaderBoundaryConditionState::ASCIIMeshReaderBoundaryConditionState(BoundaryConditionCollection & bc) : bc_(bc) {}
 
 namespace {
     BoundaryConditionCollection::Type boundaryConditionType(char c) {
@@ -48,7 +48,7 @@ ASCIIMeshReaderBoundaryConditionState::process(std::vector<std::string> const & 
     // extract boundary condition value
     double bc_value = boost::lexical_cast<double>(tokens[2]);
 
-    mesh_builder_.buildBoundaryCondition(face_id, bc_type, bc_value);
+    bc_.add(face_id, bc_type, bc_value);
     return true;
 }
 
@@ -73,6 +73,6 @@ ASCIIMeshReaderBoundaryConditionState::inBoundaryConditionModeMode() const {
 }
 
 IMeshReaderState::Ptr
-ASCIIMeshReaderBoundaryConditionState::create(IMeshBuilder & mesh_builder) {
-    return Ptr(new ASCIIMeshReaderBoundaryConditionState(mesh_builder));
+ASCIIMeshReaderBoundaryConditionState::create(BoundaryConditionCollection & bc) {
+    return Ptr(new ASCIIMeshReaderBoundaryConditionState(bc));
 }

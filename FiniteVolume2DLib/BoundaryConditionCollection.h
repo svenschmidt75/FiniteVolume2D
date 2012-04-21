@@ -20,6 +20,9 @@
  
 
 class DECL_SYMBOLS BoundaryConditionCollection {
+
+    friend class MeshBoundaryConditionReaderTest;
+
 public:
     enum Type {DIRICHLET, NEUMANN, UNKNOWN};
     typedef std::tuple<BoundaryConditionCollection::Type, double> Pair;

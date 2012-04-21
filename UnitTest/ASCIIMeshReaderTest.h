@@ -72,11 +72,6 @@ private:
             return true;
         }
 
-        bool
-        buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryConditionCollection::Type bc_type, double bc_value) {
-            return true;
-        }
-
         boost::optional<Mesh::Ptr>
         getMesh() const {
             return boost::optional<Mesh::Ptr>();

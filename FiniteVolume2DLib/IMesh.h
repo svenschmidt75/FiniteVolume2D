@@ -17,7 +17,7 @@
 
 class DECL_SYMBOLS IMesh {
 public:
-    ~IMesh() {}
+    virtual ~IMesh() {}
 
     virtual void addNode(Node::Ptr const & node) = 0;
     virtual void addFace(Face::Ptr const & face) = 0;

@@ -18,7 +18,7 @@ public:
     typedef boost::shared_ptr<IMeshReaderState> Ptr;
 
 public:
-    ~IMeshReaderState() {}
+    virtual ~IMeshReaderState() {}
 
     virtual bool process(std::vector<std::string> const & tokens, int line) = 0;
 

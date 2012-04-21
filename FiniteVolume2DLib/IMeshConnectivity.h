@@ -17,6 +17,8 @@
 
 class IMeshConnectivity {
 public:
+    virtual ~IMeshConnectivity() {}
+
     virtual void                                    insert(Face::Ptr const & face) = 0;
     virtual void                                    insert(Cell::Ptr const & cell) = 0;
     virtual boost::optional<EntityCollection<Node>> getNodeNeighbors(Node::Ptr const & node) const = 0;

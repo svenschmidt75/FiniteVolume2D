@@ -12,6 +12,7 @@
 #include "DeclSpec.h"
 #include "IMeshReader.h"
 #include "IMeshReaderState.h"
+#include "BoundaryConditionCollection.h"
 
 class IMeshBuilder;
 
@@ -24,12 +25,14 @@ public:
     ASCIIMeshReader(std::string const & mesh_filename, IMeshBuilder & builder);
 
     // FROM IMeshReader
-    bool read() const;
+    bool                                read() const;
+    BoundaryConditionCollection const & getBoundaryConditions() const;
 
 private:
-    std::string mesh_filename_;
-    IMeshBuilder & builder_;
-    mutable IMeshReaderState::Ptr state_;
+    std::string                         mesh_filename_;
+    IMeshBuilder &                      builder_;
+    mutable BoundaryConditionCollection bc_;
+    mutable IMeshReaderState::Ptr       state_;
 };
 
 #pragma warning(default:4251)

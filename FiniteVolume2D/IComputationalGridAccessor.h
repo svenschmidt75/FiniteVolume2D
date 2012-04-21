@@ -11,5 +11,6 @@
 
 
 class IComputationalGridAccessor {
-
+public:
+    virtual ~IComputationalGridAccessor() {}
 };

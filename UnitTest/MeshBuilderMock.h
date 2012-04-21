@@ -43,10 +43,6 @@ public:
         return mesh_builder_->buildCell(cell_id, face_ids);
     }
 
-    bool buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryConditionCollection::Type bc_type, double bc_value) {
-        return mesh_builder_->buildBoundaryCondition(face_id, bc_type, bc_value);
-    }
-
     boost::optional<Mesh::Ptr> getMesh() const {
         return mesh_builder_->getMesh();
     }

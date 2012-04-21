@@ -8,8 +8,7 @@
 #pragma once
 
 #include "IMeshReaderState.h"
-
-class IMeshBuilder;
+#include "BoundaryConditionCollection.h"
 
 
 class ASCIIMeshReaderBoundaryConditionState : public IMeshReaderState {
@@ -23,11 +22,11 @@ public:
     bool inBoundaryConditionModeMode() const;
 
 
-    static Ptr create(IMeshBuilder & mesh_builder);
+    static Ptr create(BoundaryConditionCollection & bc);
 
 private:
-    ASCIIMeshReaderBoundaryConditionState(IMeshBuilder & mesh_builder);
+    ASCIIMeshReaderBoundaryConditionState(BoundaryConditionCollection & bc);
 
 private:
-    IMeshBuilder & mesh_builder_;
+    BoundaryConditionCollection & bc_;
 };

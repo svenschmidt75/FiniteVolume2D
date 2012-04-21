@@ -39,6 +39,7 @@ public:
 
 private:
     Mesh();
+    Mesh(Mesh const & in);
 
 private:
     Thread<Node> interior_node_thread_;

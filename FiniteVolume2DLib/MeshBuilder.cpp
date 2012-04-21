@@ -70,11 +70,6 @@ MeshBuilder::buildCell(IGeometricEntity::Id_t mesh_id, std::vector<IGeometricEnt
     return true;
 }
 
-bool
-MeshBuilder::buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryConditionCollection::Type bc_type, double bc_value) {
-    return bc_.add(face_id, bc_type, bc_value);
-}
-
 boost::optional<Mesh::Ptr>
 MeshBuilder::getMesh() const {
     return mesh_;

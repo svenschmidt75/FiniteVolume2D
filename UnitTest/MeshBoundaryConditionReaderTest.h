@@ -9,6 +9,8 @@
 
 #include "MeshBuilderMock.h"
 
+#include "FiniteVolume2DLib/BoundaryConditionCollection.h"
+
 #include <cppunit/extensions/HelperMacros.h>
 
 
@@ -33,55 +35,13 @@ protected:
     void testNeumann();
 
 private:
-    class MockMeshBuilder : public IMeshBuilder {
-    public:
-        struct BCStr {
-            BCStr() {}
-            BCStr(BoundaryConditionCollection::Type bc_type, double bc_value) : bc_type_(bc_type), bc_value_(bc_value) {}
-
-            BoundaryConditionCollection::Type bc_type_;
-            double                  bc_value_;
-        };
-
-    public:
-        bool
-        buildNode(IGeometricEntity::Id_t node_id, IGeometricEntity::Entity_t entity_type, double x, double y) {
-            return true;
-        }
-
-        bool
-        buildFace(IGeometricEntity::Id_t face_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & node_ids) {
-            return true;
-        }
-
-        bool
-        buildCell(IGeometricEntity::Id_t cell_id, std::vector<IGeometricEntity::Id_t> const & face_ids) {
-            return true;
-        }
-
-        bool
-        buildBoundaryCondition(IGeometricEntity::Id_t face_id, BoundaryConditionCollection::Type bc_type, double bc_value) {
-            bcs_[face_id] = BCStr(bc_type, bc_value);
-            return true;
-        }
-
-        boost::optional<Mesh::Ptr>
-        getMesh() const {
-            return boost::optional<Mesh::Ptr>();
-        }
-
-    public:
-        typedef std::map<IGeometricEntity::Id_t, BCStr> BCMap_t;
-        BCMap_t bcs_;
-    };
-
-private:
     void initMesh();
 
 private:
     typedef Mesh::Ptr MeshPtr;
 
 private:
-    std::string            mesh_filename_;
-    static MockMeshBuilder mock_builder_;
+    std::string                        mesh_filename_;
+    static MeshBuilderMock             mock_builder_;
+    static BoundaryConditionCollection bc_;
 };

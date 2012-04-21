@@ -13,7 +13,7 @@
 template<typename T>
 class IConstIteratorHelper {
 public:
-    ~IConstIteratorHelper() {}
+    virtual ~IConstIteratorHelper() {}
 
     // Any iterator implements the public iterator interface
     // with the help of these methods.
