@@ -20,7 +20,7 @@
 #pragma warning(disable:4275)
 
 
-class DECL_SYMBOLS Face : public IFace {
+class DECL_SYMBOLS_2DLIB Face : public IFace {
 
     friend class FaceManager;
 

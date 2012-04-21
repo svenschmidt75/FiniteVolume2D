@@ -16,7 +16,7 @@
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS FaceManager : public EntityManager<Face> {
+class DECL_SYMBOLS_2DLIB FaceManager : public EntityManager<Face> {
 public:
     typedef std::shared_ptr<FaceManager> Ptr;
 

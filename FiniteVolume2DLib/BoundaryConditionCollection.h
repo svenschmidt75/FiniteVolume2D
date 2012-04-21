@@ -19,7 +19,7 @@
  #pragma warning(disable:4251)
  
 
-class DECL_SYMBOLS BoundaryConditionCollection {
+class DECL_SYMBOLS_2DLIB BoundaryConditionCollection {
 
     friend class MeshBoundaryConditionReaderTest;
 

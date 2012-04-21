@@ -12,7 +12,7 @@
 class Vector;
 
 
-class DECL_SYMBOLS Math {
+class DECL_SYMBOLS_2DLIB Math {
 public:
     static double dot(Vector const & lhs, Vector const & rhs);
 };

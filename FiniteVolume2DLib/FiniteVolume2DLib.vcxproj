@@ -34,7 +34,6 @@
     <ClInclude Include="IConstIteratorHelper.hpp" />
     <ClInclude Include="IFace.h" />
     <ClInclude Include="IGeometricEntity.h" />
-    <ClInclude Include="IGeometricEntityManager.h" />
     <ClInclude Include="IMesh.h" />
     <ClInclude Include="IMeshBuilder.h" />
     <ClInclude Include="IMeshConnectivity.h" />

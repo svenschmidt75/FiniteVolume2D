@@ -20,7 +20,7 @@ class IMeshBuilder;
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS ASCIIMeshReader : public IMeshReader {
+class DECL_SYMBOLS_2DLIB ASCIIMeshReader : public IMeshReader {
 public:
     ASCIIMeshReader(std::string const & mesh_filename, IMeshBuilder & builder);
 

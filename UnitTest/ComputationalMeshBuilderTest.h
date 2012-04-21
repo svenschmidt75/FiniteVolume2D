@@ -9,12 +9,15 @@
 
 #include "MeshBuilderMock.h"
 
+#include "FiniteVolume2DLib/BoundaryConditionCollection.h"
+
 #include <cppunit/extensions/HelperMacros.h>
 
 
 class ComputationalMeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(ComputationalMeshBuilderTest);
     CPPUNIT_TEST(testMeshFileExists);
+    CPPUNIT_TEST(buildMeshTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -23,6 +26,7 @@ public:
 
 protected:
     void testMeshFileExists();
+    void buildMeshTest();
 
 private:
     void initMesh();
@@ -40,4 +44,6 @@ private:
      * EntityManager. Hence, this embedded mesh builder.
      */
     static MeshBuilderMock mesh_builder_;
+
+    static BoundaryConditionCollection bc_;
 };

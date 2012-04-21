@@ -16,7 +16,7 @@
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS NodeManager : public EntityManager<Node> {
+class DECL_SYMBOLS_2DLIB NodeManager : public EntityManager<Node> {
 public:
     typedef std::shared_ptr<NodeManager> Ptr;
 

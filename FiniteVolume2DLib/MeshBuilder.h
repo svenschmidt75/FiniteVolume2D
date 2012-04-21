@@ -17,7 +17,7 @@
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS MeshBuilder : public IMeshBuilder {
+class DECL_SYMBOLS_2DLIB MeshBuilder : public IMeshBuilder {
 public:
     typedef std::shared_ptr<MeshBuilder> Ptr;
 

@@ -13,7 +13,7 @@
 #include <boost/limits.hpp>
 
 
-class DECL_SYMBOLS IGeometricEntity {
+class DECL_SYMBOLS_2DLIB IGeometricEntity {
 public:
     typedef boost::uint64_t Id_t;
  

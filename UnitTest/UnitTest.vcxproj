@@ -115,6 +115,9 @@
     <ProjectReference Include="..\FiniteVolume2DLib\FiniteVolume2DLib.vcxproj">
       <Project>{6af3aa8b-0fe6-489e-b930-9d641a42f71f}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\FiniteVolume2D\FiniteVolume2D.vcxproj">
+      <Project>{aaf6ff3c-4cf4-41ea-b488-09f55745caa3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

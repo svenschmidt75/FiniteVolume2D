@@ -10,7 +10,7 @@
 #include "DeclSpec.h"
 
 
-class DECL_SYMBOLS Vertex {
+class DECL_SYMBOLS_2DLIB Vertex {
 public:
     Vertex();
     Vertex(double x, double y);

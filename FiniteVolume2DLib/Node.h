@@ -21,7 +21,7 @@ class Vector;
 #pragma warning(disable:4275)
 
 
-class DECL_SYMBOLS Node : public INode {
+class DECL_SYMBOLS_2DLIB Node : public INode {
 
     friend class NodeManager;
 

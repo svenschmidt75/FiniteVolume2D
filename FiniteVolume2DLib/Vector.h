@@ -12,7 +12,7 @@
 #include "Vertex.h"
 
 
-class DECL_SYMBOLS Vector {
+class DECL_SYMBOLS_2DLIB Vector {
 public:
     Vector(double x, double y);
 

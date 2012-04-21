@@ -21,7 +21,7 @@
 #pragma warning(disable:4275)
 
 
-class DECL_SYMBOLS Cell : public ICell {
+class DECL_SYMBOLS_2DLIB Cell : public ICell {
 
     friend class CellManager;
 

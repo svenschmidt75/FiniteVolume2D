@@ -15,7 +15,7 @@
 #include "Cell.h"
 
 
-class DECL_SYMBOLS IMesh {
+class DECL_SYMBOLS_2DLIB IMesh {
 public:
     virtual ~IMesh() {}
 

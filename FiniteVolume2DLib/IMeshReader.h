@@ -12,7 +12,7 @@
 class BoundaryConditionCollection;
 
 
-class DECL_SYMBOLS IMeshReader {
+class DECL_SYMBOLS_2DLIB IMeshReader {
 public:
     virtual ~IMeshReader() {}
 

@@ -2,6 +2,8 @@
 
 #include "FiniteVolume2DLib/ASCIIMeshReader.h"
 
+#include "FiniteVolume2D/ComputationalMeshBuilder.h"
+
 #include <boost/filesystem.hpp>
 
 namespace FS = boost::filesystem;
@@ -10,7 +12,7 @@ namespace FS = boost::filesystem;
 // Static class data members
 MeshBuilderMock                       ComputationalMeshBuilderTest::mesh_builder_;
 ComputationalMeshBuilderTest::MeshPtr ComputationalMeshBuilderTest::mesh_;
-
+BoundaryConditionCollection           ComputationalMeshBuilderTest::bc_;
 
 void
 ComputationalMeshBuilderTest::setUp() {
@@ -29,20 +31,19 @@ ComputationalMeshBuilderTest::testMeshFileExists() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Mesh file not found!", true, exists);
 }
 
-// void
-// ComputationalMeshBuilderTest::buildMeshTest() {
-//     
-//     node_mgr_ = NodeManager::create();
-//     face_mgr_ = FaceManager::create();
-//     cell_mgr_ = CellManager::create();
-//     EntityCreatorManager::Ptr emgr = EntityCreatorManager::create(node_mgr_, face_mgr_, cell_mgr_);
-//     
-//     
-//     mesh_builder_ = std::shared_ptr<MeshBuilder>(new MeshBuilder(emgr, bc_));
-// 
-//     ComputationalMeshBuilder(Mesh::Ptr const & mesh, BoundaryConditionCollection const & bc);
-// 
-// }
+void
+ComputationalMeshBuilderTest::buildMeshTest() {
+    ComputationalMeshBuilder cmesh(mesh_, bc_);
+
+    // set methods for solving face flux
+    cmesh.set(ComputationalVariable("phi"), &Solver1::evaluateFaceFlux);
+
+
+
+    ComputationalMesh::Ptr cmesh = cmesh.build();
+
+    PDESolver.solve(cmesh);
+}
 
 
 
@@ -62,5 +63,6 @@ ComputationalMeshBuilderTest::initMesh() {
         if (mesh)
             mesh_ = *mesh;
         CPPUNIT_ASSERT_MESSAGE("Failed to build mesh!", mesh);
+        bc_ = reader.getBoundaryConditions();
     }
 }

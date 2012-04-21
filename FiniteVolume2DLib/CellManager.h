@@ -16,7 +16,7 @@
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS CellManager : public EntityManager<Cell> {
+class DECL_SYMBOLS_2DLIB CellManager : public EntityManager<Cell> {
 public:
     typedef std::shared_ptr<CellManager> Ptr;
 

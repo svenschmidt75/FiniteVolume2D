@@ -18,7 +18,7 @@
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS Mesh : public IMesh {
+class DECL_SYMBOLS_2DLIB Mesh : public IMesh {
 public:
     typedef std::shared_ptr<Mesh> Ptr;
 

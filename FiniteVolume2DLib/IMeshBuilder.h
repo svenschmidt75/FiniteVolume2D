@@ -17,7 +17,7 @@
 #include <vector>
 
 
-class DECL_SYMBOLS IMeshBuilder {
+class DECL_SYMBOLS_2DLIB IMeshBuilder {
 public:
     virtual ~IMeshBuilder() {}
 

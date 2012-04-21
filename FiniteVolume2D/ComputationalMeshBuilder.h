@@ -10,13 +10,18 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "FiniteVolume2DLib/Mesh.h"
 #include "FiniteVolume2DLib/BoundaryConditionCollection.h"
 
 #include "ComputationalMesh.h"
 
 
-class ComputationalMeshBuilder {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D ComputationalMeshBuilder {
 public:
     explicit ComputationalMeshBuilder(Mesh::Ptr const & mesh, BoundaryConditionCollection const & bc);
 
@@ -29,3 +34,5 @@ private:
     // all face boundary conditions
     BoundaryConditionCollection const & bc_;
 };
+
+#pragma warning(default:4251)

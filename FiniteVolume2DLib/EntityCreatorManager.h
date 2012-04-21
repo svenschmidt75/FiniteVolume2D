@@ -19,7 +19,7 @@
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS EntityCreatorManager {
+class DECL_SYMBOLS_2DLIB EntityCreatorManager {
 public:
     typedef std::shared_ptr<EntityCreatorManager> Ptr;
 
