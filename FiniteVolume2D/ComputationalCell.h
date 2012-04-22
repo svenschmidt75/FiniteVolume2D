@@ -11,7 +11,7 @@
 #include "FiniteVolume2DLib/Cell.h"
 #include "FiniteVolume2DLib/Face.h"
 
-#include "ComputationalMoleculeManager.h"
+#include "FiniteVolume2D/ComputationalMolecule.h"
 
 #include <memory>
 
@@ -34,6 +34,9 @@ public:
     Vertex                         centroid() const;
 
     Vector                         faceNormal(Face::Ptr const & face) const;
+
+    ComputationalMolecule &        getComputationalMolecule(std::string const & flux_var);
+    void                           setComputationalMolecule(ComputationalMolecule const & cm);
 
 private:
     // the geometric partner cell

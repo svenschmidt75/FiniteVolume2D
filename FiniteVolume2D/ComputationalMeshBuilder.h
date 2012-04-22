@@ -24,7 +24,7 @@
 #include <deque>
 
 
-class IComputationalGridAccessor;
+class ComputationalGridAccessor;
 
 
 #pragma warning(disable:4251)
@@ -32,7 +32,7 @@ class IComputationalGridAccessor;
 
 class DECL_SYMBOLS_2D ComputationalMeshBuilder {
 public:
-    typedef std::function<bool (IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr & face)> FluxEvaluator_t;
+    typedef std::function<bool (ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr & face)> FluxEvaluator_t;
 
 public:
     explicit ComputationalMeshBuilder(Mesh::Ptr const & mesh, BoundaryConditionCollection const & bc);

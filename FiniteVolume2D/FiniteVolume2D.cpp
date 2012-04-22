@@ -216,14 +216,17 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
              */
             SourceTerm & face_source = flux_mulecule.getSourceTerm();
 
+            // compute face mid point
+            Vertex midpoint = (face->a() + face->b()) / 2.0;
+            
             // distance from face midpoint to the cell centroid
-            double dist = Math::dist(cell, face);
+            double dist = Math::dist(cell->centroid(), midpoint);
 
             // the boundary value contributes as a source term
             face_source += face->area() / dist * value;
 
             // contribution to the cell node
-            cell_molecule -= (face->area() / dist);
+            flux_molecule.add(cell->id(), -face->area() / dist);
         }
         else {
             // Face b.c. given as von Neumann
@@ -237,24 +240,30 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
 
     // internal face
 
+
     // Compute distance to face midpoint to monitor accuracy
 
-
-    Node::Ptr cell_centroid = cell->centroid();
+    
+    /* We have to approximate the term
+     * <\hat{n}, \gamma \grad \phi f_{area}>
+     * compute the usual gradient approximation,
+     * \grad \phi \approx \frac{phi_{N} - phi_{P}}{\dist N - P}
+     */
+    Vertex cell_centroid = cell->centroid();
 
     Cell::Ptr cell_nbr = cgrid.getOtherCell(face, cell);
-    Node::Ptr cell_nbr_centroid = cell_nbr->centroid();
+    Vertex cell_nbr_centroid = cell_nbr->centroid();
 
     // distance from face midpoint to the cell centroid
     double dist = Math::dist(cell_centroid, cell_nbr_centroid);
 
-
-    // get cell node variable
-    ComputationalMolecule & cell_molecule = cell->getComputationalMolecule("phi");
-    cell_molecule -= (face->area() / dist);
-
-    ComputationalMolecule & cell_nbr_molecule = cell_nbr_->getComputationalMolecule("phi");
-    cell_nbr_molecule += (face->area() / dist);
+    /* The weight for the computational molecule is
+     * \gamma f_{area} / dist(N - P).
+     */
+    double weight = face->area() / dist;
+    
+    flux_molecule.add(cell->id(), -weight);
+    flux_molecule.add(cell_nbr->id(), weight);
 
     return true;
 }
