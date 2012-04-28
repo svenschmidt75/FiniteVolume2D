@@ -7,6 +7,9 @@
  */
 #pragma once
 
+#include "FiniteVolume2D/ComputationalNode.h"
+#include "FiniteVolume2D/ComputationalFace.h"
+
 #include "FiniteVolume2DLib/ICell.h"
 #include "FiniteVolume2DLib/Cell.h"
 #include "FiniteVolume2DLib/Face.h"
@@ -21,7 +24,7 @@ public:
     typedef std::shared_ptr<ComputationalCell> Ptr;
 
 public:
-    explicit ComputationalCell(Cell::Ptr const & geometric_cell);
+    explicit ComputationalCell(Cell::Ptr const & geometric_cell, EntityCollection<ComputationalFace> const & faces);
 
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
@@ -35,11 +38,18 @@ public:
 
     Vector                         faceNormal(Face::Ptr const & face) const;
 
+
+     EntityCollection<ComputationalNode> const & getComputationalNodes() const;
+     EntityCollection<ComputationalFace> const & getComputationalFaces() const;
+
     ComputationalMolecule &        getComputationalMolecule();
 
 private:
     // the geometric partner cell
     Cell::Ptr geometric_cell_;
+
+    EntityCollection<ComputationalNode> nodes_;
+    EntityCollection<ComputationalFace> faces_;
 
 //    ComputationalMolecule computational_molecule_;
 };

@@ -38,9 +38,9 @@ public:
     void addFace(Face::Ptr const & face, ComputationalFace::Ptr const & cface);
     void addCell(Cell::Ptr const & cell, ComputationalCell::Ptr const & ccell);
 
-    ComputationalNode::Ptr & getComputationalNode(Node::Ptr const & node);
-    ComputationalFace::Ptr & getComputationalFace(Face::Ptr const & face);
-    ComputationalCell::Ptr & getComputationalCell(Cell::Ptr const & cell);
+    ComputationalNode::Ptr const & getComputationalNode(Node::Ptr const & node) const;
+    ComputationalFace::Ptr const & getComputationalFace(Face::Ptr const & face) const;
+    ComputationalCell::Ptr const & getComputationalCell(Cell::Ptr const & cell) const;
 
 private:
     typedef std::map<IGeometricEntity::Id_t, Link<Node, ComputationalNode>> ComputationalNodeMap_t;
@@ -48,7 +48,7 @@ private:
     typedef std::map<IGeometricEntity::Id_t, Link<Cell, ComputationalCell>> ComputationalCellMap_t;
 
 private:
-    ComputationalNodeMap_t node_map_;
-    ComputationalFaceMap_t face_map_;
-    ComputationalCellMap_t cell_map_;
+    mutable ComputationalNodeMap_t node_map_;
+    mutable ComputationalFaceMap_t face_map_;
+    mutable ComputationalCellMap_t cell_map_;
 };

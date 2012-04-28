@@ -109,6 +109,7 @@
   <ItemGroup>
     <ClInclude Include="BoundaryCondition.h" />
     <ClInclude Include="ComputationalCell.h" />
+    <ClInclude Include="ComputationalCellManager.h" />
     <ClInclude Include="ComputationalFace.h" />
     <ClInclude Include="ComputationalMesh.h" />
     <ClInclude Include="ComputationalMeshBuilder.h" />

@@ -29,24 +29,17 @@ ComputationalVariableTest::test() {
     Cell::Ptr const & c = mesh_builder_.cell_mgr_->getEntity(4);
     CPPUNIT_ASSERT_MESSAGE("Cell not found", c != NULL);
 
-    ComputationalVariableManager mgr & cv_mgr = cmesh->getComputationalVariableManager();
-
-
-
-
-    // create comp. variable
-    ComputationalVariable::Ptr cvT = cv_mgr.create(c, "Temperature");
-
-
-
-
-
-
-
-
-
-
-    ComputationalVariable::Ptr cvP = cv_mgr.create(c, "Pressure");
+//     ComputationalVariableManager mgr & cv_mgr = cmesh->getComputationalVariableManager();
+// 
+// 
+// 
+// 
+//     // create comp. variable
+//     ComputationalVariable::Ptr cvT = cv_mgr.create(c, "Temperature");
+//     
+// 
+// 
+//     ComputationalVariable::Ptr cvP = cv_mgr.create(c, "Pressure");
 
 }
 

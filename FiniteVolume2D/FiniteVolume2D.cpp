@@ -32,8 +32,13 @@ is not recognized, return to general state.
 Deal with errors there?
 
 ----------------------------------------------------
+TO-DO
+
+ICell: Node/ComputationalNode => covariant return types
 
 
+
+----------------------------------------------------
 
 Maybe
  
@@ -308,6 +313,8 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
     double weight = face->area() / dist;
     
     // get comp. variable to solve for
+    CompVar const & cvar = cell->getComputationalVariable("Temp");
+
     CompVar const & cvar = cell->getComputationalVariable("phi");
     CompVar const & cvar_nbr = cell_nbr->getComputationalVariable("phi");
 

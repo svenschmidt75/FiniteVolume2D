@@ -58,6 +58,7 @@ private:
 
 private:
     void insertComputationalEntities(ComputationalMesh::Ptr & cmesh) const;
+    void computeFaceFluxes(ComputationalMesh::Ptr & cmesh) const;
 
 private:
     // geometric mesh to convert to a computational one

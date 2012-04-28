@@ -1,5 +1,7 @@
 #include "ComputationalMesh.h"
 
+#include <cassert>
+
 
 /* Explicitly generate code for the below specializations.
  * This makes their methods available in the UnitTest
@@ -34,6 +36,11 @@ ComputationalMesh::getFaceThread(IGeometricEntity::Entity_t entity_type) {
 Thread<ComputationalCell> &
 ComputationalMesh::getCellThread() {
     return cell_thread_;
+}
+
+GeometricalEntityMapper const &
+ComputationalMesh::getMapper() const {
+    return mapper_;
 }
 
 void

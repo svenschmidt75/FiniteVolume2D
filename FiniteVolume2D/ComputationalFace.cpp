@@ -9,7 +9,7 @@
 #include <exception>
 
 
-ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face) : geometric_face_(geometric_face), bc_(std::nullptr_t()) {}
+ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face, EntityCollection<ComputationalNode> const & cnodes) : geometric_face_(geometric_face), cnodes_(cnodes) , bc_(std::nullptr_t()) {}
 
 IGeometricEntity::Id_t
 ComputationalFace::id() const {
@@ -45,6 +45,11 @@ ComputationalFace::normal() const {
 Vertex
 ComputationalFace::centroid() const {
     return geometric_face_->centroid();
+}
+
+EntityCollection<ComputationalNode> const &
+ComputationalFace::getComputationalNodes() const {
+    return cnodes_;
 }
 
 BoundaryCondition const &

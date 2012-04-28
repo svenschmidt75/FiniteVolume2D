@@ -36,9 +36,11 @@ public:
      * to construct the various computational grids for
      * the multigrid method.
      */
-    Thread<ComputationalNode> & getNodeThread(IGeometricEntity::Entity_t entity_type);
-    Thread<ComputationalFace> & getFaceThread(IGeometricEntity::Entity_t entity_type);
-    Thread<ComputationalCell> & getCellThread();
+    Thread<ComputationalNode> &     getNodeThread(IGeometricEntity::Entity_t entity_type);
+    Thread<ComputationalFace> &     getFaceThread(IGeometricEntity::Entity_t entity_type);
+    Thread<ComputationalCell> &     getCellThread();
+
+    GeometricalEntityMapper const & getMapper() const;
 
 private:
     ComputationalMesh();

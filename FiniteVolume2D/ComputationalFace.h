@@ -11,6 +11,7 @@
 #include "FiniteVolume2DLib/Face.h"
 
 #include "ComputationalMoleculeManager.h"
+#include "ComputationalNode.h"
 #include "BoundaryCondition.h"
 
 #include <memory>
@@ -23,7 +24,7 @@ public:
     typedef std::shared_ptr<ComputationalFace> Ptr;
 
 public:
-    explicit ComputationalFace(Face::Ptr const & geometric_face);
+    explicit ComputationalFace(Face::Ptr const & geometric_face, EntityCollection<ComputationalNode> const & cnodes);
 
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
@@ -36,14 +37,19 @@ public:
     Vector                         normal() const;
     Vertex                         centroid() const;
 
-    BoundaryCondition const &      getBoundaryCondition() const;
-    void                           setBoundaryCondition(BoundaryCondition::Ptr const & bc);
+
+    EntityCollection<ComputationalNode> const & getComputationalNodes() const;
+
+    BoundaryCondition const &                   getBoundaryCondition() const;
+    void                                        setBoundaryCondition(BoundaryCondition::Ptr const & bc);
 
 //    FluxComputationalMolecule &    getComputationalMolecule();
 
 private:
     // the geometric partner face
     Face::Ptr geometric_face_;
+
+    EntityCollection<ComputationalNode> cnodes_;
 
     // computational molecules of face
     ComputationalMoleculeManager::Ptr molecule_;
