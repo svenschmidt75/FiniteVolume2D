@@ -35,11 +35,52 @@ Deal with errors there?
 
 
 
-
+Maybe
+ 
+CompVar var(Cell::Ptr, var_index, "name")
+ 
+and
+ 
+ccell->addVariable(var);
+ 
+ 
+ 
+ 
+CompMolecule
+--------------------
+ 
+std::pair<var, weight>,
+ 
+CompVar::operator==(CompVar const & in), compare indices
 
 
 ----------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------
 
 
 class ComputeManager {
@@ -217,7 +258,7 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
             SourceTerm & face_source = flux_mulecule.getSourceTerm();
 
             // compute face mid point
-            Vertex midpoint = (face->a() + face->b()) / 2.0;
+            Vertex midpoint = (face->start() + face->end()) / 2.0;
             
             // distance from face midpoint to the cell centroid
             double dist = Math::dist(cell->centroid(), midpoint);
@@ -225,8 +266,12 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
             // the boundary value contributes as a source term
             face_source += face->area() / dist * value;
 
+            // get comp. variable to solve for
+            CompVar const & cvar = cell->getComputationalVariable("phi");
+            flux_molecule.add(cvar, -face->area() / dist);
+
             // contribution to the cell node
-            flux_molecule.add(cell->id(), -face->area() / dist);
+            flux_molecule.add(cell->getComputationalVariable(), -face->area() / dist);
         }
         else {
             // Face b.c. given as von Neumann
@@ -262,8 +307,12 @@ phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & c
      */
     double weight = face->area() / dist;
     
-    flux_molecule.add(cell->id(), -weight);
-    flux_molecule.add(cell_nbr->id(), weight);
+    // get comp. variable to solve for
+    CompVar const & cvar = cell->getComputationalVariable("phi");
+    CompVar const & cvar_nbr = cell_nbr->getComputationalVariable("phi");
+
+    flux_molecule.add(cvar, -weight);
+    flux_molecule.add(cvar_nbr, weight);
 
     return true;
 }
@@ -290,7 +339,17 @@ phi_computational_molecule(IComputationalGridAccessor const & cgrid, Cell::Ptr c
         if (flux_molecule.empty())
             throw std::exception("Empty face flux");
 
-        cell_cm += flux_molecule;
+        // if the flux was computed from the neighbor cell
+        // to this cell, we must take the nagative
+        if (flux_molecule->getCell() == cell)
+            cell_cm += flux_molecule;
+        else {
+          if (flux_molecule->getCell() == cgrid.getOtherCell(face, cell))
+            cell_cm -= flux_molecule;
+            
+          else
+            ERROR
+        }
         cell_source += flux_molecule.getSource();
     }
 }

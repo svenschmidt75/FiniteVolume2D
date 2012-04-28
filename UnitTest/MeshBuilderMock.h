@@ -21,6 +21,7 @@ class MeshBuilderMock : public IMeshBuilder {
     friend class MeshConnectivityTest;
     friend class EntityTest;
     friend class MeshBoundaryConditionReaderTest;
+    friend class ComputationalVariableTest;
 
 public:
     MeshBuilderMock() {

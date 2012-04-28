@@ -14,7 +14,17 @@ ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical
 
 bool
 ComputationalMeshBuilder::addComputationalVariable(std::string const & cell_var, std::string const & flux_var, FluxEvaluator_t const & flux_evaluator) {
-    /* cell_val: Variable to solve for at each cell center.
+    /* There are two types of variables.
+     * 1. The ones the are solved for and
+     * 2. the ones that are used just for caching values.
+     * For example, when the gradient is needed at face vertices,
+     * we first compute the gradient at cell centers in terms of
+     * the variables of type 1 (i.e. the ones that we will solve
+     * for). When computing the face fluxes, we can access the
+     * cell-centered gradient molecules to compute the face vertex
+     * gradients etc.
+     * 
+     * cell_val: Variable to solve for at each cell center.
      * flux_var: Corresponding flux variable (for diffusion terms)
      * flux_evaluator: Callback, called for each cell face to compute
      *                 flux through face.
@@ -40,6 +50,10 @@ ComputationalMeshBuilder::addComputationalVariable(std::string const & cell_var,
         return false;
     }
 
+    /* This only registers the comp. variable and the flux callback.
+     * We will insert the comp. variables into the cells in
+     * the build() method.
+     */
     computational_variables_.push_back(ComputationalVariables(cell_var, flux_var, flux_evaluator));
 
     return true;
@@ -93,9 +107,9 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
         cface->setBoundaryCondition(face_bc);
 
         // insert the computational molecules into the face
-        std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
-            cface->setComputationalMolecule(FluxComputationalMolecule(in.cfluxvar_name));
-        });
+//         std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
+//             cface->setComputationalMolecule(FluxComputationalMolecule(in.cfluxvar_name));
+//         });
 
         cmesh->addFace(boundary_face_thread.getEntityAt(i), cface);
     }

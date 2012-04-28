@@ -29,18 +29,20 @@ namespace NS_ComputationalNode {
         friend class ComputationalMoleculeConstIterator;
 
     public:
-        typedef std::map<IGeometricEntity::Id_t, double>::value_type Type;
+        typedef std::map<IGeometricEntity::Id_t, double>::value_type ComputationalMolecule_t;
 
     public:
-        // Insert a dependency on cell node id with weight
-        void insert(IGeometricEntity::Id_t id, double weight);
+        // Insert a dependency on cell id with weight
+        void                    add(IGeometricEntity::Id_t id, double weight);
 
         // Return the weight for an elements
         boost::optional<double> getWeight(IGeometricEntity::Id_t id) const;
 
+        int                     size() const;
+
     private:
         // Pair: Computational node id, weight
-        std::map<IGeometricEntity::Id_t, double> data_;
+        ComputationalMolecule_t data_;
     };
 
 }

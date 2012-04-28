@@ -43,7 +43,11 @@ void
 ComputationalMeshBuilderTest::buildMeshTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
-    cmesh.addComputationalVariable("T", "flux_T", flux_eval);
+    /* T
+     * 
+     * 
+     * */
+    cmesh.addComputationalVariable("Temperature", "Temperature_Flux", flux_eval);
 
     cmesh.build();
 }

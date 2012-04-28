@@ -92,6 +92,7 @@
     <ClCompile Include="ComputationalMeshBuilder.cpp" />
     <ClCompile Include="ComputationalMoleculeImpl.cpp" />
     <ClCompile Include="ComputationalNode.cpp" />
+    <ClCompile Include="ComputationalVariable.cpp" />
     <ClCompile Include="FiniteVolume2D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -115,6 +116,7 @@
     <ClInclude Include="ComputationalMoleculeImpl.h" />
     <ClInclude Include="ComputationalMoleculeManager.h" />
     <ClInclude Include="ComputationalNode.h" />
+    <ClInclude Include="ComputationalVariable.h" />
     <ClInclude Include="FluxComputationalMolecule.h" />
     <ClInclude Include="GeometricalEntityMapper.h" />
     <ClInclude Include="ComputationalGridAccessor.h" />

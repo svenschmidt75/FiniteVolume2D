@@ -35,15 +35,11 @@ public:
 
     Vector                         faceNormal(Face::Ptr const & face) const;
 
-    ComputationalMolecule &        getComputationalMolecule(std::string const & flux_var);
-    void                           setComputationalMolecule(ComputationalMolecule const & cm);
+    ComputationalMolecule &        getComputationalMolecule();
 
 private:
     // the geometric partner cell
     Cell::Ptr geometric_cell_;
 
-    /* A computational node may have a set of molecules,
-     * but does not have to.
-     */
-    ComputationalMoleculeManager::Ptr molecule_;
+//    ComputationalMolecule computational_molecule_;
 };
