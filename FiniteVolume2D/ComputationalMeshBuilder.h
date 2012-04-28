@@ -12,8 +12,9 @@
 
 #include "DeclSpec.h"
 
-#include "FiniteVolume2D/ComputationalCell.h"
-#include "FiniteVolume2D/ComputationalFace.h"
+#include "ComputationalCell.h"
+#include "ComputationalFace.h"
+#include "ComputationalVariableManager.h"
 
 #include "FiniteVolume2DLib/Mesh.h"
 #include "FiniteVolume2DLib/BoundaryConditionCollection.h"
@@ -32,33 +33,20 @@ class ComputationalGridAccessor;
 
 class DECL_SYMBOLS_2D ComputationalMeshBuilder {
 public:
-    typedef std::function<bool (ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr & face)> FluxEvaluator_t;
+    typedef ComputationalVariableManager::FluxEvaluator_t FluxEvaluator_t;
 
 public:
     explicit ComputationalMeshBuilder(Mesh::Ptr const & mesh, BoundaryConditionCollection const & bc);
 
-    bool                   addComputationalVariable(std::string const & cell_var, std::string const & flux_var, FluxEvaluator_t const & flux_evaluator);
+    bool                   addComputationalVariable(std::string const & cell_var, FluxEvaluator_t const & flux_evaluator);
     ComputationalMesh::Ptr build() const;
-
-private:
-    struct ComputationalVariables {
-        explicit ComputationalVariables(std::string const & cvar, std::string const & fvar, FluxEvaluator_t const & flux_eval) : cvar_name(cvar), cfluxvar_name(fvar), flux_evaluator(flux_eval) {}
-
-        // Variable to solve for. One per computational cell center.
-        std::string cvar_name;
-
-        // corresponding flux variable
-        std::string cfluxvar_name;
-
-        // flux evaluator
-        FluxEvaluator_t flux_evaluator;
-    };
-
-    typedef std::deque<ComputationalVariables> ComputationalVariables_t;
 
 private:
     void insertComputationalEntities(ComputationalMesh::Ptr & cmesh) const;
     void computeFaceFluxes(ComputationalMesh::Ptr & cmesh) const;
+    void setComputationalVariables(ComputationalNode::Ptr & cnode) const;
+    void setComputationalVariables(ComputationalFace::Ptr & cface) const;
+    void setComputationalVariables(ComputationalCell::Ptr & ccell) const;
 
 private:
     // geometric mesh to convert to a computational one
@@ -68,7 +56,7 @@ private:
     BoundaryConditionCollection const & bc_;
 
     // registered variables to solve for
-    ComputationalVariables_t computational_variables_;
+    ComputationalVariableManager cvar_mgr_;
 };
 
 #pragma warning(default:4251)

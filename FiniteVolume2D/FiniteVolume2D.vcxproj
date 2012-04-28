@@ -93,6 +93,7 @@
     <ClCompile Include="ComputationalMoleculeImpl.cpp" />
     <ClCompile Include="ComputationalNode.cpp" />
     <ClCompile Include="ComputationalVariable.cpp" />
+    <ClCompile Include="ComputationalVariableManager.cpp" />
     <ClCompile Include="FiniteVolume2D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -109,7 +110,7 @@
   <ItemGroup>
     <ClInclude Include="BoundaryCondition.h" />
     <ClInclude Include="ComputationalCell.h" />
-    <ClInclude Include="ComputationalCellManager.h" />
+    <ClInclude Include="ComputationalVariableManager.h" />
     <ClInclude Include="ComputationalFace.h" />
     <ClInclude Include="ComputationalMesh.h" />
     <ClInclude Include="ComputationalMeshBuilder.h" />

@@ -7,7 +7,7 @@ it is made up of. A face is made up of vertices, a cell is made up
 of faces etc. So, the direction top-down is covered like this.
 However, the direction bottom-up must be handled separately. A
 vertex cannot know which faces and cells it is attached to. These
-questions answers the Mesh Connectivity object, i.e. it covers the
+questions answers the Mesh Connectivity object, in.e. it covers the
 path bottom-up.
 
 ----------------------------------------------------
@@ -36,6 +36,15 @@ TO-DO
 
 ICell: Node/ComputationalNode => covariant return types
 
+----------------------------------------------------
+
+ComputationalVariableManager?
+
+- active
+- passive
+
+- on comp. nodes and comp. faces = passive only
+- comp. cells = active and passive
 
 
 ----------------------------------------------------

@@ -13,7 +13,7 @@
 ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
 
 bool
-ComputationalMeshBuilder::addComputationalVariable(std::string const & cell_var, std::string const & flux_var, FluxEvaluator_t const & flux_evaluator) {
+ComputationalMeshBuilder::addComputationalVariable(std::string const & cell_var, FluxEvaluator_t const & flux_evaluator) {
     /* There are two types of variables.
      * 1. The ones that are solved for and
      * 2. the ones that are used for caching values, but are NOT
@@ -28,44 +28,15 @@ ComputationalMeshBuilder::addComputationalVariable(std::string const & cell_var,
      * gradients using the computational molecule for them.
      * 
      * cell_val: Variable to solve for at each cell center.
-     * flux_var: Corresponding flux variable (for diffusion terms)
      * flux_evaluator: Callback, called for each cell face to compute
      *                 flux through face.
      */
-
-    auto it = std::find_if(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) -> bool {
-        return in.cvar_name == cell_var;
-    });
-
-    if (it != computational_variables_.end()) {
-        boost::format format = boost::format("ComputationalMeshBuilder::addComputationalVariable: Variable %1% already defined!\n") % cell_var;
-        Util::error(format.str());
-        return false;
-    }
-
-    it = std::find_if(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) -> bool {
-        return in.cfluxvar_name == flux_var;
-    });
-
-    if (it != computational_variables_.end()) {
-        boost::format format = boost::format("ComputationalMeshBuilder::addComputationalVariable: Flux variable %1% already added for computational variable %2%!\n") % cell_var % it->cvar_name;
-        Util::error(format.str());
-        return false;
-    }
-
-    /* This only registers the comp. variable and the flux callback.
-     * We will insert the comp. variables into the cells in
-     * the build() method.
-     */
-    computational_variables_.push_back(ComputationalVariables(cell_var, flux_var, flux_evaluator));
-
-    return true;
+    return cvar_mgr_.registerVariable(cell_var, flux_evaluator);
 }
-
 
 ComputationalMesh::Ptr
 ComputationalMeshBuilder::build() const {
-    if (computational_variables_.empty()) {
+    if (cvar_mgr_.size() == 0) {
         boost::format format = boost::format("ComputationalMeshBuilder::build: No computational variables defined!\n");
         Util::error(format.str());
         return std::nullptr_t();
@@ -90,12 +61,26 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
     // build computational nodes
     Thread<Node> const & interior_node_thread = geometrical_mesh_->getNodeThread(IGeometricEntity::INTERIOR);
-    for (Thread<Node>::size_type i = 0; i < interior_node_thread.size(); ++i)
-        cmesh->addNode(interior_node_thread.getEntityAt(i), ComputationalNode::Ptr(new ComputationalNode(interior_node_thread.getEntityAt(i))));
+    for (Thread<Node>::size_type i = 0; i < interior_node_thread.size(); ++i) {
+        Node::Ptr const & node = interior_node_thread.getEntityAt(i);
+        ComputationalNode::Ptr & cnode = ComputationalNode::Ptr(new ComputationalNode(node));
+
+        // set all applicable (passive) computational variables
+        setComputationalVariables(cnode);
+
+        cmesh->addNode(node, cnode);
+    }
 
     Thread<Node> const & boundary_node_thread = geometrical_mesh_->getNodeThread(IGeometricEntity::BOUNDARY);
-    for (Thread<Node>::size_type i = 0; i < boundary_node_thread.size(); ++i)
-        cmesh->addNode(boundary_node_thread.getEntityAt(i), ComputationalNode::Ptr(new ComputationalNode(boundary_node_thread.getEntityAt(i))));
+    for (Thread<Node>::size_type i = 0; i < boundary_node_thread.size(); ++i) {
+        Node::Ptr const & node = boundary_node_thread.getEntityAt(i);
+        ComputationalNode::Ptr & cnode = ComputationalNode::Ptr(new ComputationalNode(node));
+
+        // set all applicable (passive) computational variables
+        setComputationalVariables(cnode);
+
+        cmesh->addNode(node, cnode);
+    }
 
 
     // build computational faces
@@ -113,7 +98,12 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
             cnodes.insert(cnode);
         });
 
-        cmesh->addFace(face, ComputationalFace::Ptr(new ComputationalFace(interior_face_thread.getEntityAt(i), cnodes)));
+        ComputationalFace::Ptr & cface = ComputationalFace::Ptr(new ComputationalFace(interior_face_thread.getEntityAt(i), cnodes));
+
+        // set all applicable (passive) computational variables
+        setComputationalVariables(cface);
+
+        cmesh->addFace(face, cface);
     }
 
     Thread<Face> const & boundary_face_thread = geometrical_mesh_->getFaceThread(IGeometricEntity::BOUNDARY);
@@ -134,21 +124,27 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
             cnodes.insert(cnode);
         });
 
+        ComputationalFace::Ptr cface(new ComputationalFace(face, cnodes));
 
+
+        // extract boundary conditions
         boost::optional<BoundaryConditionCollection::Pair> face_bc_opt = bc_.find(face->meshId());
         if (face_bc_opt)
             face_bc = BoundaryCondition::Ptr(new BoundaryCondition(*face_bc_opt));
 
-        ComputationalFace::Ptr cface(new ComputationalFace(boundary_face_thread.getEntityAt(i), cnodes));
         cface->setBoundaryCondition(face_bc);
+
+        // set all applicable (passive) computational variables
+        // set all applicable computational variables
+        setComputationalVariables(cface);
 
 
         // insert the computational molecules into the face
-//         std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
-//             cface->setComputationalMolecule(FluxComputationalMolecule(in.cfluxvar_name));
-//         });
+        std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
+            cface->setComputationalMolecule(FluxComputationalMolecule(in.cfluxvar_name));
+        });
 
-        cmesh->addFace(boundary_face_thread.getEntityAt(i), cface);
+        cmesh->addFace(face, cface);
     }
 
 
@@ -169,6 +165,9 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
         ComputationalCell::Ptr ccell(new ComputationalCell(cell, cfaces));
 
+        // set all applicable computational variables
+        setComputationalVariables(ccell);
+
 
         // insert the computational molecules into the cell
 //         std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
@@ -176,6 +175,24 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 //         });
 
         cmesh->addCell(cell_thread.getEntityAt(i), ccell);
+    }
+}
+
+void
+ComputationalMeshBuilder::setComputationalVariables(ComputationalNode::Ptr & cnode) const {
+}
+
+void
+ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cface) const {
+}
+
+void
+ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & ccell) const {
+    ComputationalVariableManager::iterator it = cvar_mgr_.getIterator();
+
+    for (; it.isValid(); ++it) {
+        ComputationalVariable::Ptr & cvar = cvar_mgr_.create(ccell, it.name());
+        ccell->addComputationalVariable(cvar);
     }
 }
 

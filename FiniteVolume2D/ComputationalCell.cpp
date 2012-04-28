@@ -66,3 +66,16 @@ EntityCollection<ComputationalFace> const &
 ComputationalCell::getComputationalFaces() const {
     return faces_;
 }
+
+ComputationalVariable::Ptr const
+ComputationalCell::getComputationalVariable(std::string const & name) const {
+    auto it = cvars_.find(name);
+    if (it == cvars_.end())
+        return std::nullptr_t();
+    return it->second;
+}
+
+void
+ComputationalCell::setComputationalVariable(ComputationalVariable::Ptr const & cvar) {
+    cvars_[cvar->getName()] = cvar;
+}

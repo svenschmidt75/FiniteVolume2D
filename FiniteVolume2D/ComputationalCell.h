@@ -7,8 +7,9 @@
  */
 #pragma once
 
-#include "FiniteVolume2D/ComputationalNode.h"
-#include "FiniteVolume2D/ComputationalFace.h"
+#include "ComputationalNode.h"
+#include "ComputationalFace.h"
+#include "ComputationalVariable.h"
 
 #include "FiniteVolume2DLib/ICell.h"
 #include "FiniteVolume2DLib/Cell.h"
@@ -17,6 +18,7 @@
 #include "FiniteVolume2D/ComputationalMolecule.h"
 
 #include <memory>
+#include <map>
 
 
 class ComputationalCell : public ICell {
@@ -39,17 +41,26 @@ public:
     Vector                         faceNormal(Face::Ptr const & face) const;
 
 
-     EntityCollection<ComputationalNode> const & getComputationalNodes() const;
-     EntityCollection<ComputationalFace> const & getComputationalFaces() const;
+    EntityCollection<ComputationalNode> const & getComputationalNodes() const;
+    EntityCollection<ComputationalFace> const & getComputationalFaces() const;
 
-    ComputationalMolecule &        getComputationalMolecule();
+    ComputationalVariable::Ptr const            getComputationalVariable(std::string const & name) const;
+    void                                        setComputationalVariable(ComputationalVariable::Ptr const & cvar);
+
+    ComputationalMolecule &                     getComputationalMolecule();
+
+private:
+    typedef std::map<std::string, ComputationalVariable::Ptr> ComputationalVariables_t;
 
 private:
     // the geometric partner cell
-    Cell::Ptr geometric_cell_;
+    Cell::Ptr                           geometric_cell_;
 
     EntityCollection<ComputationalNode> nodes_;
     EntityCollection<ComputationalFace> faces_;
+
+    // all variables that will be solved for
+    ComputationalVariables_t            cvars_;
 
 //    ComputationalMolecule computational_molecule_;
 };

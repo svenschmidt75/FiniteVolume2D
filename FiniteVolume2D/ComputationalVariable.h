@@ -20,7 +20,7 @@ class ComputationalCell;
 
 class ComputationalVariable {
 
-    friend class ComputationalCellManager;
+    friend class ComputationalVariableManager;
 
 public:
     typedef std::shared_ptr<ComputationalVariable> Ptr;
@@ -30,6 +30,8 @@ public:
     explicit ComputationalVariable(std::shared_ptr<ComputationalCell> const & cell, std::string const & name, Id_t unique_id);
 
     bool operator==(ComputationalVariable const & in) const;
+
+    std::string const & getName() const;
 
     /* By using "std::shared_ptr<ComputationalCell>' instead of
      * ComputationalCell::Ptr, we are not required to include
