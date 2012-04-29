@@ -119,6 +119,7 @@
     <ClInclude Include="ComputationalMoleculeManager.h" />
     <ClInclude Include="ComputationalNode.h" />
     <ClInclude Include="ComputationalVariable.h" />
+    <ClInclude Include="ComputationalVariableManagerIterator.h" />
     <ClInclude Include="FluxComputationalMolecule.h" />
     <ClInclude Include="GeometricalEntityMapper.h" />
     <ClInclude Include="ComputationalGridAccessor.h" />

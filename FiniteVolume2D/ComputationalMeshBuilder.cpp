@@ -36,11 +36,11 @@ ComputationalMeshBuilder::addComputationalVariable(std::string const & cell_var,
 
 ComputationalMesh::Ptr
 ComputationalMeshBuilder::build() const {
-    if (cvar_mgr_.size() == 0) {
-        boost::format format = boost::format("ComputationalMeshBuilder::build: No computational variables defined!\n");
-        Util::error(format.str());
-        return std::nullptr_t();
-    }
+//     if (cvar_mgr_.size() == 0) {
+//         boost::format format = boost::format("ComputationalMeshBuilder::build: No computational variables defined!\n");
+//         Util::error(format.str());
+//         return std::nullptr_t();
+//     }
 
     ComputationalMesh::Ptr cmesh(new ComputationalMesh(geometrical_mesh_->getMeshConnectivity()));
 
@@ -140,9 +140,9 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
 
         // insert the computational molecules into the face
-        std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
-            cface->setComputationalMolecule(FluxComputationalMolecule(in.cfluxvar_name));
-        });
+//         std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
+//             cface->setComputationalMolecule(FluxComputationalMolecule(in.cfluxvar_name));
+//         });
 
         cmesh->addFace(face, cface);
     }
@@ -188,12 +188,12 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cfa
 
 void
 ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & ccell) const {
-    ComputationalVariableManager::iterator it = cvar_mgr_.getIterator();
-
-    for (; it.isValid(); ++it) {
-        ComputationalVariable::Ptr & cvar = cvar_mgr_.create(ccell, it.name());
-        ccell->addComputationalVariable(cvar);
-    }
+//     ComputationalVariableManager::iterator it = cvar_mgr_.getIterator();
+// 
+//     for (; it.isValid(); ++it) {
+//         ComputationalVariable::Ptr & cvar = cvar_mgr_.create(ccell, it.name());
+//         ccell->addComputationalVariable(cvar);
+//     }
 }
 
 void

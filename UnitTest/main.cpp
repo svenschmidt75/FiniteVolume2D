@@ -10,6 +10,7 @@
 #include "MeshBoundaryConditionReaderTest.h"
 #include "ComputationalMeshBuilderTest.h"
 #include "ComputationalVariableTest.h"
+#include "ComputationalVariableManagerTest.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
@@ -18,6 +19,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(EntityTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshBoundaryConditionReaderTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalMeshBuilderTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalVariableTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalVariableManagerTest);
 
 
 int main(int argc, char **argv) {

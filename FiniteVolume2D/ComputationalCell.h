@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "ComputationalNode.h"
 #include "ComputationalFace.h"
 #include "ComputationalVariable.h"
@@ -21,7 +23,11 @@
 #include <map>
 
 
-class ComputationalCell : public ICell {
+#pragma warning(disable:4251)
+#pragma warning(disable:4275)
+
+
+class DECL_SYMBOLS_2D ComputationalCell : public ICell {
 public:
     typedef std::shared_ptr<ComputationalCell> Ptr;
 
@@ -64,3 +70,6 @@ private:
 
 //    ComputationalMolecule computational_molecule_;
 };
+
+#pragma warning(default:4275)
+#pragma warning(default:4251)

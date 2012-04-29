@@ -101,6 +101,7 @@
     <ClCompile Include="ComputationalMoleculeTest.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="ComputationalVariableManagerTest.cpp" />
     <ClCompile Include="ComputationalVariableTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="main.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="ASCIIMeshReaderTest.h" />
     <ClInclude Include="ComputationalMeshBuilderTest.h" />
     <ClInclude Include="ComputationalMoleculeTest.h" />
+    <ClInclude Include="ComputationalVariableManagerTest.h" />
     <ClInclude Include="ComputationalVariableTest.h" />
     <ClInclude Include="EntityTest.h" />
     <ClInclude Include="MeshBoundaryConditionReaderTest.h" />

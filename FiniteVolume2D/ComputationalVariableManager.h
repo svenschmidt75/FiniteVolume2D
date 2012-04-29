@@ -9,6 +9,7 @@
 
 #include "DeclSpec.h"
 
+#include "ComputationalVariableManagerIterator.h"
 #include "ComputationalCell.h"
 #include "ComputationalFace.h"
 
@@ -23,7 +24,13 @@ class ComputationalVariable;
 class ComputationalGridAccessor;
 
 
-class ComputationalVariableManager {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D ComputationalVariableManager {
+
+    friend class ComputationalVariableManagerIterator;
+
 public:
     /* type of flux evaluator */
     typedef std::function<bool (ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr & face)> FluxEvaluator_t;
@@ -45,6 +52,7 @@ public:
 public:
     ComputationalVariableManager();
 
+    // insert a computational variable into a cell
     std::shared_ptr<ComputationalVariable> create(std::shared_ptr<ComputationalCell> const & cell, std::string const & name);
 
     bool                                   registerVariable(std::string const & name, FluxEvaluator_t const & flux_eval);
@@ -52,9 +60,6 @@ public:
     short                                  getBaseIndex(std::string const & cvar_name) const;
 
     size_type                              size() const;
-
-    std::tuple<std::string, ComputationalVariableManager::FluxEvaluator_t>
-                                           get(short index) const;
 
 private:
     /* Each computational variable has a unique index.
@@ -78,3 +83,5 @@ private:
      */
     bool        is_finialized_;
 };
+
+#pragma warning(default:4251)

@@ -18,7 +18,10 @@
 class ComputationalCell;
 
 
-class ComputationalVariable {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D ComputationalVariable {
 
     friend class ComputationalVariableManager;
 
@@ -57,3 +60,5 @@ private:
      */
     Id_t unique_id_;
 };
+
+#pragma warning(default:4251)

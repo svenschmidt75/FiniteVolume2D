@@ -11,7 +11,15 @@ ComputationalVariableManager::ComputationalVariableManager() : index_(0), is_fin
 
 
 ComputationalVariable::Ptr
-ComputationalVariableManager::create(std::shared_ptr<ComputationalCell> const & cell, std::string const & name) {
+ComputationalVariableManager::create(ComputationalCell::Ptr const & cell, std::string const & name) {
+    // check whether this variable has been registered
+    auto it = variables_.find(name);
+    if (it == variables_.end()) {
+        boost::format format = boost::format("ComputationalVariableManager::create: Computational variable %1% must be registered first!\n") % name;
+        Util::error(format.str());
+        return false;
+    }
+
     // no more comp. variable additions possible
     is_finialized_ = true;
 
@@ -25,6 +33,7 @@ ComputationalVariableManager::create(std::shared_ptr<ComputationalCell> const & 
     ComputationalVariable::Id_t cvar_id = cell->id() + getBaseIndex(name);
 
     ComputationalVariable::Ptr cvar = ComputationalVariable::create(cell, name, cvar_id);
+    cell->setComputationalVariable(cvar);
     return cvar;
 }
 
@@ -60,12 +69,7 @@ ComputationalVariableManager::getBaseIndex(std::string const & cvar_name) const 
     return it->second.index;
 }
 
-short
+ComputationalVariableManager::size_type
 ComputationalVariableManager::size() const {
     return variables_.size();
 }
-
-std::tuple<std::string, ComputationalVariableManager::FluxEvaluator_t>
-ComputationalVariableManager::get(short index) const {
-}
-
