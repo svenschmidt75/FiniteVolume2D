@@ -127,14 +127,20 @@ ComputationalVariableManagerTest::iteratorTest() {
     // create an iterator to iterate over all elements
     ComputationalVariableManager::Iterator_t it(cvar_mgr.begin());
 
-    short cnt = 0;
+    std::map<std::string, short> var_map;
+    ComputationalVariableManager::size_type cnt = 0;
 
     while (it != cvar_mgr.end()) {
-        std::string cvar_name = it->name();
-        ComputationalVariableManager::FluxEvaluator_t flux_eval = it->fluxEval();
+        std::string const & cvar_name = it->name;
+        ComputationalVariableManager::FluxEvaluator_t const & flux_eval = it->flux_eval;
+
+        ComputationalVariableManager::Iterator_t::Item_t const & item = *it;
+
+        var_map[cvar_name] = 1;
 
         ++it;
         cnt++;
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of elements", cvar_mgr.size(), cnt);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of elements", var_map.size(), 3u);
 }

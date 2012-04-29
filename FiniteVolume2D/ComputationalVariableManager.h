@@ -13,6 +13,14 @@
 #include "ComputationalFace.h"
 #include "internal/ComputationalVariableManagerTypes.h"
 
+/* We include this file here although a forward-declaration would suffice.
+ * The reason is that the iterator class is considered internal and should
+ * not be used outside this class. By including it here, any clients using
+ * this class can use the iterator without the need to include the iterator
+ * declaration.
+ */
+#include "internal/ComputationalVariableManagerIterator.h"
+
 #include <memory>
 #include <map>
 #include <string>
@@ -22,7 +30,6 @@
 
 class ComputationalVariable;
 class ComputationalGridAccessor;
-class ComputationalVariableManagerIterator;
 
 #pragma warning(disable:4251)
 
@@ -39,6 +46,8 @@ public:
 
     /* type of flux evaluator */
     typedef ComputationalVariableManagerTypes::FluxEvaluator_t FluxEvaluator_t;
+
+    typedef ComputationalVariableManagerIterator Iterator_t;
 
 private:
     // type of internal data
@@ -60,8 +69,8 @@ public:
 
     size_type                              size() const;
 
-    ComputationalVariableManagerIterator   begin() const;
-    ComputationalVariableManagerIterator   end() const;
+    Iterator_t                             begin() const;
+    Iterator_t                             end() const;
 
 private:
     /* Each computational variable has a unique index.

@@ -7,12 +7,17 @@
  */
 #pragma once
 
+#include "../DeclSpec.h"
+
 #include "ComputationalVariableManagerTypes.h"
 
 #include <string>
 
 
-class ComputationalVariableManagerIterator {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D ComputationalVariableManagerIterator {
 private:
     /* The following types are defined in ComputationalVariableManagerTypes.h as they also need
      * to be known to ComputationalVariableManager. Introduce them as "native" to this
@@ -57,8 +62,11 @@ private:
     Variables_t const &                 data_;
     static Variables_t                  end_data_;
     mutable Variables_t::const_iterator it_;
+    mutable enum Type_t                 type_;
 
     // this is returned by the iterator, so we can return
     // both by reference and pointer
     mutable Item_t                      item_;
 };
+
+#pragma warning(default:4251)
