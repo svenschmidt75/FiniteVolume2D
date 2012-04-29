@@ -9,9 +9,9 @@
 
 #include "DeclSpec.h"
 
-#include "ComputationalVariableManagerIterator.h"
 #include "ComputationalCell.h"
 #include "ComputationalFace.h"
+#include "internal/ComputationalVariableManagerTypes.h"
 
 #include <memory>
 #include <map>
@@ -22,7 +22,7 @@
 
 class ComputationalVariable;
 class ComputationalGridAccessor;
-
+class ComputationalVariableManagerIterator;
 
 #pragma warning(disable:4251)
 
@@ -32,19 +32,18 @@ class DECL_SYMBOLS_2D ComputationalVariableManager {
     friend class ComputationalVariableManagerIterator;
 
 public:
+    /* The following types are defined in ComputationalVariableManagerTypes.h as they also need
+     * to be known to ComputationalVariableManagerIterator. Introduce them as "native" to this
+     * class via typedefs.
+     */
+
     /* type of flux evaluator */
-    typedef std::function<bool (ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr & face)> FluxEvaluator_t;
+    typedef ComputationalVariableManagerTypes::FluxEvaluator_t FluxEvaluator_t;
 
 private:
-    struct ComputationalVariableItem {
-        // base index
-        short           index;
-
-        // Flux evaluator
-        FluxEvaluator_t flux_eval;
-    };
-
-    typedef std::map<std::string, ComputationalVariableItem> Variables_t;
+    // type of internal data
+    typedef ComputationalVariableManagerTypes::ComputationalVariableItem ComputationalVariableItem;
+    typedef ComputationalVariableManagerTypes::Variables_t Variables_t;
 
 public:
     typedef Variables_t::size_type size_type;
@@ -60,6 +59,9 @@ public:
     short                                  getBaseIndex(std::string const & cvar_name) const;
 
     size_type                              size() const;
+
+    ComputationalVariableManagerIterator   begin() const;
+    ComputationalVariableManagerIterator   end() const;
 
 private:
     /* Each computational variable has a unique index.

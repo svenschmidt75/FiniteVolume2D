@@ -93,13 +93,19 @@
     <ClCompile Include="ComputationalMoleculeImpl.cpp" />
     <ClCompile Include="ComputationalNode.cpp" />
     <ClCompile Include="ComputationalVariable.cpp" />
-    <ClCompile Include="ComputationalVariableManager.cpp" />
+    <ClCompile Include="ComputationalVariableManager.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
+      <PreprocessKeepComments Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessKeepComments>
+      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
+      <UseFullPaths Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</UseFullPaths>
+    </ClCompile>
     <ClCompile Include="FiniteVolume2D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="FluxComputationalMolecule.cpp" />
     <ClCompile Include="GeometricalEntityMapper.cpp" />
+    <ClCompile Include="internal\ComputationalVariableManagerIterator.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,11 +125,12 @@
     <ClInclude Include="ComputationalMoleculeManager.h" />
     <ClInclude Include="ComputationalNode.h" />
     <ClInclude Include="ComputationalVariable.h" />
-    <ClInclude Include="ComputationalVariableManagerIterator.h" />
     <ClInclude Include="FluxComputationalMolecule.h" />
     <ClInclude Include="GeometricalEntityMapper.h" />
     <ClInclude Include="ComputationalGridAccessor.h" />
     <ClInclude Include="IComputationalMolecule.h" />
+    <ClInclude Include="internal\ComputationalVariableManagerIterator.h" />
+    <ClInclude Include="internal\ComputationalVariableManagerTypes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

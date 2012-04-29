@@ -1,6 +1,8 @@
 #include "ComputationalVariableManager.h"
 
+
 #include "ComputationalVariable.h"
+#include "internal/ComputationalVariableManagerIterator.h"
 
 #include "FiniteVolume2DLib/Util.h"
 
@@ -72,4 +74,14 @@ ComputationalVariableManager::getBaseIndex(std::string const & cvar_name) const 
 ComputationalVariableManager::size_type
 ComputationalVariableManager::size() const {
     return variables_.size();
+}
+
+ComputationalVariableManagerIterator
+ComputationalVariableManager::begin() const {
+    return ComputationalVariableManagerIterator(variables_);
+}
+
+ComputationalVariableManagerIterator
+ComputationalVariableManager::end() const {
+    return ComputationalVariableManagerIterator();
 }
