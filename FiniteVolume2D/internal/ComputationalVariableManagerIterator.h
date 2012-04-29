@@ -29,7 +29,7 @@ private:
 public:
     struct Item_t {
         // comp. variable name
-        std::string name_;
+        std::string     name;
 
         // Flux evaluator
         FluxEvaluator_t flux_eval;
@@ -37,19 +37,28 @@ public:
 
 public:
     explicit ComputationalVariableManagerIterator(Variables_t const & data);
+    ComputationalVariableManagerIterator();
+    ComputationalVariableManagerIterator(ComputationalVariableManagerIterator const & in);
 
     Item_t const &                               operator*() const;
+    Item_t const *                               operator->() const;
     ComputationalVariableManagerIterator const & operator++() const;
+    bool                                         operator==(ComputationalVariableManagerIterator const & in) const;
+    bool                                         operator!=(ComputationalVariableManagerIterator const & in) const;
 
 private:
     // because of reference hold to internal data
-//    ComputationalVariableManagerIterator();
- //   ComputationalVariableManagerIterator(ComputationalVariableManagerIterator const &);
     ComputationalVariableManagerIterator & operator=(ComputationalVariableManagerIterator const &);
 
 private:
     enum Type_t {NON_END, END};
 
 private:
-    Variables_t const & data_;
+    Variables_t const &                 data_;
+    static Variables_t                  end_data_;
+    mutable Variables_t::const_iterator it_;
+
+    // this is returned by the iterator, so we can return
+    // both by reference and pointer
+    mutable Item_t                      item_;
 };
