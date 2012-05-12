@@ -15,12 +15,13 @@
 
 
 class ComputationalMoleculeImpl : public IComputationalMolecule {
+public:
+    std::string const & name() const;
+
 protected:
     // protected constructor: class should only be used to derive
     //                        from it
     explicit ComputationalMoleculeImpl(std::string const & name);
-
-    std::string const & name() const;
 
 private:
     std::string name_;

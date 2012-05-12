@@ -106,3 +106,8 @@ ComputationalCell::getComputationalMolecule(std::string const & name) {
     }
     return it->second;
 }
+
+void
+ComputationalFace::addComputationalMolecule(std::string const & var_name) {
+    cm_[var_name] = ComputationalMolecule(var_name);
+}

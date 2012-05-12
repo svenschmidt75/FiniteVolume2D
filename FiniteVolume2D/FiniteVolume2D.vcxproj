@@ -90,6 +90,7 @@
     <ClCompile Include="ComputationalFace.cpp" />
     <ClCompile Include="ComputationalMesh.cpp" />
     <ClCompile Include="ComputationalMeshBuilder.cpp" />
+    <ClCompile Include="ComputationalMolecule.cpp" />
     <ClCompile Include="ComputationalMoleculeImpl.cpp" />
     <ClCompile Include="ComputationalNode.cpp" />
     <ClCompile Include="ComputationalVariable.cpp" />

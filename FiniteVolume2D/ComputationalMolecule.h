@@ -13,13 +13,20 @@
 #include <boost/optional.hpp>
 
 #include <unordered_map>
+#include <string>
 
 
 class ComputationalMolecule : public ComputationalMoleculeImpl {
 public:
-    typedef std::unordered_map<ComputationalVariable::Id_t, double>::value_type ComputationalMolecule_t;
+    typedef std::unordered_map<ComputationalVariable::Id_t, double> ComputationalMolecule_t;
+    typedef ComputationalMolecule_t::size_type size_type;
 
 public:
+    /* The default constructor is necessary because
+     * std::unordered_map::operator[] creates an entry
+     * if one cannot be found.
+     */
+    ComputationalMolecule();
     explicit ComputationalMolecule(std::string const & var_name);
 
     // insert a dependency on cell id with weight
@@ -28,7 +35,7 @@ public:
     // Return the weight for an element
     boost::optional<double> getWeight(ComputationalVariable const & cvar) const;
 
-    int                     size() const;
+    size_type               size() const;
 
 private:
     // Pair: Computational variable id, weight

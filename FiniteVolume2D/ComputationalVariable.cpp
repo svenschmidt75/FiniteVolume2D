@@ -14,6 +14,11 @@ ComputationalVariable::getName() const {
     return name_;
 }
 
+ComputationalVariable::Id_t
+ComputationalVariable::id() const {
+    return unique_id_;
+}
+
 ComputationalVariable::Ptr
 ComputationalVariable::create(std::shared_ptr<ComputationalCell> const & cell, std::string const & name, Id_t unique_id) {
     return ComputationalVariable::Ptr(new ComputationalVariable(cell, name, unique_id));

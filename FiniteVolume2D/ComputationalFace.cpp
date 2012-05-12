@@ -80,3 +80,8 @@ ComputationalFace::setBoundaryCondition(BoundaryCondition::Ptr const & bc) {
 // ComputationalFace::setComputationalMolecule(FluxComputationalMolecule const & cm) {
 //     computational_molecules_[cm.name()] = cm;
 // }
+
+void
+ComputationalFace::addComputationalMolecule(std::string const & var_name) {
+    cm_[var_name] = ComputationalMolecule(var_name);
+}

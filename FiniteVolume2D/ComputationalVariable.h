@@ -35,6 +35,8 @@ public:
     bool operator==(ComputationalVariable const & in) const;
 
     std::string const & getName() const;
+    Id_t                id() const;
+
 
     /* By using "std::shared_ptr<ComputationalCell>' instead of
      * ComputationalCell::Ptr, we are not required to include

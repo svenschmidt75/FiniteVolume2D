@@ -10,7 +10,6 @@
 #include "FiniteVolume2DLib/IFace.h"
 #include "FiniteVolume2DLib/Face.h"
 
-#include "ComputationalMoleculeManager.h"
 #include "ComputationalNode.h"
 #include "BoundaryCondition.h"
 
@@ -43,7 +42,10 @@ public:
     BoundaryCondition const &                   getBoundaryCondition() const;
     void                                        setBoundaryCondition(BoundaryCondition::Ptr const & bc);
 
-//    FluxComputationalMolecule &    getComputationalMolecule();
+    void                                        addComputationalMolecule(std::string const & var_name);
+
+private:
+    typedef std::map<std::string, ComputationalMolecule> ComputationalMoleculeManager_t;
 
 private:
     // the geometric partner face
@@ -51,11 +53,11 @@ private:
 
     EntityCollection<ComputationalNode> cnodes_;
 
-    // computational molecules of face
-    ComputationalMoleculeManager::Ptr molecule_;
+    /* A computational face may have a set of molecules,
+     * but does not have to.
+     */
+    ComputationalMoleculeManager_t cm_;
 
     // boundary conditions, in case this is a boundary face
     BoundaryCondition::Ptr bc_;
-
-//    FluxComputationalMolecule computational_molecule_;
 };

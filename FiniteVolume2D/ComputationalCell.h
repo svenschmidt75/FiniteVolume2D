@@ -54,6 +54,7 @@ public:
     void                                        setComputationalVariable(ComputationalVariable::Ptr const & cvar);
 
     ComputationalMolecule &                     getComputationalMolecule(std::string const & name);
+    void                                        addComputationalMolecule(std::string const & var_name);
 
 private:
     typedef std::map<std::string, ComputationalVariable::Ptr> ComputationalVariables_t;
