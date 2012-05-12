@@ -53,6 +53,30 @@ ComputationalMeshBuilderTest::buildMeshTest() {
 }
 
 void
+ComputationalMeshBuilderTest::noActiveVarsTest() {
+    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMesh::Ptr mesh(cmesh.build());
+    bool is_null = mesh == std::nullptr_t();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Computational mesh build failure", true, is_null);
+}
+
+void
+ComputationalMeshBuilderTest::addPassiveVarSameAsActiveVarTest() {
+    ComputationalMeshBuilder cmesh(mesh_, bc_);
+
+    cmesh.addComputationalVariable("Temperature", flux_eval);
+
+    bool success = cmesh.addPassiveComputationalNodeVariable("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
+
+    cmesh.addComputationalVariable("Temperature", flux_eval);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
+
+    success = cmesh.addPassiveComputationalCellVariable("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
+}
+
+void
 ComputationalMeshBuilderTest::initMesh() {
     static bool init = false;
     if (!init)

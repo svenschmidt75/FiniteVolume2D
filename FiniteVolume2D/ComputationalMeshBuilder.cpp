@@ -13,34 +13,62 @@
 ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
 
 bool
-ComputationalMeshBuilder::addComputationalVariable(std::string const & cell_var, FluxEvaluator_t const & flux_evaluator) {
+ComputationalMeshBuilder::addComputationalVariable(std::string const & var_name, FluxEvaluator_t const & flux_evaluator) {
     /* There are two types of variables.
-     * 1. The ones that are solved for and
-     * 2. the ones that are used for caching values, but are NOT
-     * solved for.
+     * 1. The ones that are solved for (active) at the cell-centers and
+     * 2. the ones that are user-defined, but are NOT
+     * solved for (passive).
      * For example, when the gradient is needed at face vertices,
      * we first compute the gradient at cell centers in terms of
-     * the variables of type 1 (i.e. the ones that we will solve
-     * for). The corresponding comp. molecule is added to the
-     * computational cell, but it will play no role in solving the
-     * linear system. When computing the face fluxes, we can access
-     * the cell-centered gradient molecules to compute the face vertex
-     * gradients using the computational molecule for them.
+     * the variables of type 1 (i.e. the ones at the cell centers
+     * that we will solve for). The corresponding comp. molecule
+     * is added to the computational cell, but it will play no role
+     * in solving the linear system. When computing the face fluxes,
+     * we can access the cell-centered gradient molecules to compute
+     * the face vertex gradients using the computational molecule for
+     * them.
      * 
-     * cell_val: Variable to solve for at each cell center.
+     *       var_name: Variable to solve for at each cell center.
      * flux_evaluator: Callback, called for each cell face to compute
      *                 flux through face.
      */
-    return cvar_mgr_.registerVariable(cell_var, flux_evaluator);
+    return cvar_mgr_.registerVariable(var_name, flux_evaluator);
+}
+
+bool
+ComputationalMeshBuilder::addPassiveComputationalNodeVariable(std::string const & var_name) {
+    /* Add a 
+     * 
+     * 
+     * */
+    return true;
+}
+
+bool
+ComputationalMeshBuilder::addPassiveComputationalFaceVariable(std::string const & var_name) {
+    /* Add a 
+     * 
+     * 
+     * */
+    return true;
+}
+
+bool
+ComputationalMeshBuilder::addPassiveComputationalCellVariable(std::string const & var_name) {
+    /* Add a 
+     * 
+     * 
+     * */
+    return true;
 }
 
 ComputationalMesh::Ptr
 ComputationalMeshBuilder::build() const {
-//     if (cvar_mgr_.size() == 0) {
-//         boost::format format = boost::format("ComputationalMeshBuilder::build: No computational variables defined!\n");
-//         Util::error(format.str());
-//         return std::nullptr_t();
-//     }
+    if (cvar_mgr_.size() == 0) {
+        boost::format format = boost::format("ComputationalMeshBuilder::build: No computational variables defined!\n");
+        Util::error(format.str());
+        return std::nullptr_t();
+    }
 
     ComputationalMesh::Ptr cmesh(new ComputationalMesh(geometrical_mesh_->getMeshConnectivity()));
 
@@ -59,7 +87,10 @@ void
 ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & cmesh) const {
     GeometricalEntityMapper const & mapper = cmesh->getMapper();
 
-    // build computational nodes
+    /*
+     * Build computational nodes
+     */
+
     Thread<Node> const & interior_node_thread = geometrical_mesh_->getNodeThread(IGeometricEntity::INTERIOR);
     for (Thread<Node>::size_type i = 0; i < interior_node_thread.size(); ++i) {
         Node::Ptr const & node = interior_node_thread.getEntityAt(i);
@@ -83,7 +114,10 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
     }
 
 
-    // build computational faces
+    /*
+     * Build computational faces
+     */
+
     Thread<Face> const & interior_face_thread = geometrical_mesh_->getFaceThread(IGeometricEntity::INTERIOR);
     for (Thread<Face>::size_type i = 0; i < interior_face_thread.size(); ++i) {
         Face::Ptr const & face = interior_face_thread.getEntityAt(i);
@@ -98,7 +132,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
             cnodes.insert(cnode);
         });
 
-        ComputationalFace::Ptr & cface = ComputationalFace::Ptr(new ComputationalFace(interior_face_thread.getEntityAt(i), cnodes));
+        ComputationalFace::Ptr & cface = ComputationalFace::Ptr(new ComputationalFace(face, cnodes));
 
         // set all applicable (passive) computational variables
         setComputationalVariables(cface);
@@ -135,7 +169,6 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
         cface->setBoundaryCondition(face_bc);
 
         // set all applicable (passive) computational variables
-        // set all applicable computational variables
         setComputationalVariables(cface);
 
 
@@ -148,7 +181,10 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
     }
 
 
-    // build computational cells
+    /*
+     * Build computational cells
+     */
+
     Thread<Cell> const & cell_thread = geometrical_mesh_->getCellThread();
     for (Thread<Cell>::size_type i = 0; i < cell_thread.size(); ++i) {
         Cell::Ptr const & cell = cell_thread.getEntityAt(i);
@@ -180,10 +216,22 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
 void
 ComputationalMeshBuilder::setComputationalVariables(ComputationalNode::Ptr & cnode) const {
+    /* All variables solved for are located at the cell-centers.
+     * Nodes cannot have variables, but ComputationalMolecules, that the user
+     * can use to do additional computations etc. These ComputationalMolecules
+     * must only reference variables at cell centers that have been registered
+     * with "addComputationalVariable".
+     */
 }
 
 void
 ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cface) const {
+    /* All variables solved for are located at the cell-centers.
+     * Faces cannot have variables, but ComputationalMolecules, that the user
+     * can use to do additional computations etc. These ComputationalMolecules
+     * must only reference variables at cell centers that have been registered
+     * with "addComputationalVariable".
+     */
 }
 
 void

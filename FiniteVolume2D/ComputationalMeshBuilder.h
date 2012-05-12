@@ -38,7 +38,10 @@ public:
 public:
     explicit ComputationalMeshBuilder(Mesh::Ptr const & mesh, BoundaryConditionCollection const & bc);
 
-    bool                   addComputationalVariable(std::string const & cell_var, FluxEvaluator_t const & flux_evaluator);
+    bool                   addComputationalVariable(std::string const & var_name, FluxEvaluator_t const & flux_evaluator);
+    bool                   addPassiveComputationalNodeVariable(std::string const & var_name);
+    bool                   addPassiveComputationalFaceVariable(std::string const & var_name);
+    bool                   addPassiveComputationalCellVariable(std::string const & var_name);
     ComputationalMesh::Ptr build() const;
 
 private:
@@ -55,7 +58,7 @@ private:
     // all face boundary conditions
     BoundaryConditionCollection const & bc_;
 
-    // registered variables to solve for
+    // all variables to solve for
     ComputationalVariableManager cvar_mgr_;
 };
 

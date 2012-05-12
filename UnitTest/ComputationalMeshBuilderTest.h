@@ -18,6 +18,8 @@ class ComputationalMeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(ComputationalMeshBuilderTest);
     CPPUNIT_TEST(testMeshFileExists);
     CPPUNIT_TEST(buildMeshTest);
+    CPPUNIT_TEST(noActiveVarsTest);
+    CPPUNIT_TEST(addPassiveVarSameAsActiveVarTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -27,6 +29,8 @@ public:
 protected:
     void testMeshFileExists();
     void buildMeshTest();
+    void noActiveVarsTest();
+    void addPassiveVarSameAsActiveVarTest();
 
 private:
     void initMesh();
