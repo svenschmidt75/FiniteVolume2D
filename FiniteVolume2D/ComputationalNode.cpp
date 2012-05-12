@@ -32,3 +32,8 @@ Vector
 ComputationalNode::vector() const {
     return geometric_node_->vector();
 }
+
+void
+ComputationalNode::addComputationalMolecule(std::string const & var_name) {
+    cm_[var_name] = ComputationalMolecule(var_name);
+}

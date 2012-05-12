@@ -20,8 +20,6 @@
     <ClInclude Include="BoundaryConditionCollection.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellManager.h" />
-    <ClInclude Include="ComputationalMolecule.h" />
-    <ClInclude Include="ComputationalMoleculeConstIterator.h" />
     <ClInclude Include="ComputationalMoleculeOperators.h" />
     <ClInclude Include="EntityCollection.hpp" />
     <ClInclude Include="EntityCreatorManager.h" />
@@ -30,8 +28,6 @@
     <ClInclude Include="FaceConnectivity.h" />
     <ClInclude Include="FaceManager.h" />
     <ClInclude Include="ICell.h" />
-    <ClInclude Include="IComputationalVertex.h" />
-    <ClInclude Include="IConstIteratorHelper.hpp" />
     <ClInclude Include="IFace.h" />
     <ClInclude Include="IGeometricEntity.h" />
     <ClInclude Include="IMesh.h" />
@@ -62,7 +58,6 @@
     <ClCompile Include="BoundaryConditionCollection.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellManager.cpp" />
-    <ClCompile Include="ComputationalMolecule.cpp" />
     <ClCompile Include="ComputationalMoleculeOperators.cpp" />
     <ClCompile Include="EntityCreatorManager.cpp" />
     <ClCompile Include="Face.cpp" />

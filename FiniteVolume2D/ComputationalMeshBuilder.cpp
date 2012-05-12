@@ -35,31 +35,66 @@ ComputationalMeshBuilder::addComputationalVariable(std::string const & var_name,
     return cvar_mgr_.registerVariable(var_name, flux_evaluator);
 }
 
+namespace {
+
+    template<typename VAR_TYPE, typename DATA_TYPE>
+    bool
+    add(VAR_TYPE const & vars, DATA_TYPE & data, std::string const & var_name) {
+        /* Add a user-defined variable for nodes. These variables will not
+         * be solved for, only computational molecules will be added to
+         * the computational nodes created.
+         */
+
+        // check that there is no active variables with the same name
+        if (vars.getBaseIndex(var_name) >= 0) {
+            boost::format format = boost::format("ComputationalMeshBuilder::addPassiveComputationalNodeVariable: User-defined node variable \
+                                                 %1% cannot have the same name as computational variable!\n") % var_name;
+            Util::error(format.str());
+            return false;
+        }
+
+
+        // check that there is no active variables with the same name
+        auto it = data.find(var_name);
+        if (it != data.end()) {
+            boost::format format = boost::format("ComputationalMeshBuilder::addPassiveComputationalNodeVariable: User-defined node variable \
+                                                 %1% already added!\n") % var_name;
+            Util::error(format.str());
+            return false;
+        }
+
+        data.insert(var_name);
+
+        return true;
+    }
+
+}
+
 bool
 ComputationalMeshBuilder::addPassiveComputationalNodeVariable(std::string const & var_name) {
-    /* Add a 
-     * 
-     * 
-     * */
-    return true;
+    /* Add a user-defined variable for nodes. These variables will not
+     * be solved for, only computational molecules will be added to
+     * the computational nodes created.
+     */
+    return add(cvar_mgr_, node_vars_, var_name);
 }
 
 bool
 ComputationalMeshBuilder::addPassiveComputationalFaceVariable(std::string const & var_name) {
-    /* Add a 
-     * 
-     * 
-     * */
-    return true;
+    /* Add a user-defined variable for faces. These variables will not
+     * be solved for, only computational molecules will be added to
+     * the computational faces created.
+     */
+    return add(cvar_mgr_, face_vars_, var_name);
 }
 
 bool
 ComputationalMeshBuilder::addPassiveComputationalCellVariable(std::string const & var_name) {
-    /* Add a 
-     * 
-     * 
-     * */
-    return true;
+    /* Add a user-defined variable for nodes. These variables will not
+     * be solved for, only computational molecules will be added to
+     * the computational nodes created.
+     */
+    return add(cvar_mgr_, cell_vars_, var_name);
 }
 
 ComputationalMesh::Ptr
@@ -222,6 +257,9 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalNode::Ptr & cno
      * must only reference variables at cell centers that have been registered
      * with "addComputationalVariable".
      */
+    std::for_each(node_vars_.begin(), node_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
+        cnode->addComputationalMolecule(var_name);
+    });
 }
 
 void

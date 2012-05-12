@@ -10,11 +10,14 @@
 #include "FiniteVolume2DLib/INode.h"
 
 #include "ComputationalMoleculeManager.h"
+#include "ComputationalMolecule.h"
 #include "FiniteVolume2DLib/IGeometricEntity.h"
 #include "FiniteVolume2DLib/Vector.h"
 #include "FiniteVolume2DLib/Node.h"
 
 #include <memory>
+#include <string>
+#include <map>
 
 
 class ComputationalNode : public INode {
@@ -34,12 +37,17 @@ public:
     double                     y() const;
     Vector                     vector() const;
 
+    void                       addComputationalMolecule(std::string const & var_name);
+
+private:
+    typedef std::map<std::string, ComputationalMolecule> ComputationalMoleculeManager_t;
+
 private:
     // the geometric partner node
-    Node::Ptr geometric_node_;
+    Node::Ptr                      geometric_node_;
 
     /* A computational node may have a set of molecules,
      * but does not have to.
      */
-    ComputationalMoleculeManager::Ptr molecule_;
+    ComputationalMoleculeManager_t cm_;
 };

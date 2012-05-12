@@ -8,7 +8,6 @@
  */
 #pragma once
 
-#include "ComputationalMolecule.h"
 
 
 namespace NS_ComputationalNode {

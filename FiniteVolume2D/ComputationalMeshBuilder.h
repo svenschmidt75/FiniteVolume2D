@@ -22,7 +22,7 @@
 #include "ComputationalMesh.h"
 
 #include <functional>
-#include <deque>
+#include <set>
 
 
 class ComputationalGridAccessor;
@@ -52,14 +52,25 @@ private:
     void setComputationalVariables(ComputationalCell::Ptr & ccell) const;
 
 private:
+    typedef std::set<std::string> PassiveNodeVars_t;
+    typedef std::set<std::string> PassiveFaceVars_t;
+    typedef std::set<std::string> PassiveCellVars_t;
+
+
+private:
     // geometric mesh to convert to a computational one
-    Mesh::Ptr geometrical_mesh_;
+    Mesh::Ptr                           geometrical_mesh_;
 
     // all face boundary conditions
     BoundaryConditionCollection const & bc_;
 
     // all variables to solve for
-    ComputationalVariableManager cvar_mgr_;
+    ComputationalVariableManager        cvar_mgr_;
+
+    // user-defined node/face/cell variables
+    PassiveNodeVars_t                   node_vars_;
+    PassiveFaceVars_t                   face_vars_;
+    PassiveCellVars_t                   cell_vars_;
 };
 
 #pragma warning(default:4251)

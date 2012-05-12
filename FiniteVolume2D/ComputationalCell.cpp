@@ -1,5 +1,11 @@
 #include "ComputationalCell.h"
 
+#include "FiniteVolume2DLib/Util.h"
+
+#include <exception>
+
+#include <boost/format.hpp>
+
 
 ComputationalCell::ComputationalCell(Cell::Ptr const & geometric_cell, EntityCollection<ComputationalFace> const & faces)
     : geometric_cell_(geometric_cell), faces_(faces) {
@@ -69,6 +75,7 @@ ComputationalCell::getComputationalFaces() const {
 
 ComputationalVariable::Ptr const
 ComputationalCell::getComputationalVariable(std::string const & name) const {
+    /* cell-centered variables, will be solved for */
     auto it = cvars_.find(name);
     if (it == cvars_.end())
         return std::nullptr_t();
@@ -78,4 +85,24 @@ ComputationalCell::getComputationalVariable(std::string const & name) const {
 void
 ComputationalCell::setComputationalVariable(ComputationalVariable::Ptr const & cvar) {
     cvars_[cvar->getName()] = cvar;
+
+    // TODO: also insert the corr. computational molecule
+}
+
+ComputationalMolecule &
+ComputationalCell::getComputationalMolecule(std::string const & name) {
+    /* ComputationalMolecules are the same for active and passive variables, i.e.
+     * there is no difference between those for cell-centered variables that will
+     * be solved for and user-defined ones.
+     */
+    auto it = cm_.find(name);
+    if (it == cm_.end()) {
+        boost::format format = boost::format("ComputationalCell::getComputationalMolecule: No computational molecule found for \
+            variable %1% and cell %2%!\n") % name % meshId();
+        Util::error(format.str());
+
+        // have to throw because we only return by reference
+        throw std::exception(format.str().c_str());
+    }
+    return it->second;
 }

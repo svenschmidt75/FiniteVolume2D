@@ -51,14 +51,14 @@ private:
     std::shared_ptr<ComputationalCell> cell_;
     
     // the name of this variable, that will be solved for
-    std::string name_;
+    std::string                        name_;
     
     /* each comp. variable has a unique id.
      * This is used in the ComputationalMolecules
      * and as the index of this variable in the sparse
      * linear system later on.
      */
-    Id_t unique_id_;
+    Id_t                               unique_id_;
 };
 
 #pragma warning(default:4251)

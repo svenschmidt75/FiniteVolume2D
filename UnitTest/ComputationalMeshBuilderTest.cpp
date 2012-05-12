@@ -77,6 +77,35 @@ ComputationalMeshBuilderTest::addPassiveVarSameAsActiveVarTest() {
 }
 
 void
+ComputationalMeshBuilderTest::addPassiveVarTwiceTest() {
+    ComputationalMeshBuilder cmesh(mesh_, bc_);
+
+    cmesh.addComputationalVariable("Temperature", flux_eval);
+
+    bool success = cmesh.addPassiveComputationalNodeVariable("Pressure");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
+
+    success = cmesh.addPassiveComputationalNodeVariable("Pressure");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add the same passive variable twice", false, success);
+}
+
+void
+ComputationalMeshBuilderTest::addPassiveVarForSeveralDifferentEntitiesTest() {
+    ComputationalMeshBuilder cmesh(mesh_, bc_);
+
+    cmesh.addComputationalVariable("Temperature", flux_eval);
+
+    bool success = cmesh.addPassiveComputationalNodeVariable("Pressure");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
+
+    success = cmesh.addPassiveComputationalFaceVariable("Pressure");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
+
+    success = cmesh.addPassiveComputationalCellVariable("Pressure");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
+}
+
+void
 ComputationalMeshBuilderTest::initMesh() {
     static bool init = false;
     if (!init)

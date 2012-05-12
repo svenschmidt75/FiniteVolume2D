@@ -53,10 +53,11 @@ public:
     ComputationalVariable::Ptr const            getComputationalVariable(std::string const & name) const;
     void                                        setComputationalVariable(ComputationalVariable::Ptr const & cvar);
 
-    ComputationalMolecule &                     getComputationalMolecule();
+    ComputationalMolecule &                     getComputationalMolecule(std::string const & name);
 
 private:
     typedef std::map<std::string, ComputationalVariable::Ptr> ComputationalVariables_t;
+    typedef std::map<std::string, ComputationalMolecule> ComputationalMolecules_t;
 
 private:
     // the geometric partner cell
@@ -68,7 +69,10 @@ private:
     // all variables that will be solved for
     ComputationalVariables_t            cvars_;
 
-//    ComputationalMolecule computational_molecule_;
+    /* All computational molecules for this cell,
+     * for both active and passive variables.
+     */
+    ComputationalMolecules_t            cm_;
 };
 
 #pragma warning(default:4275)

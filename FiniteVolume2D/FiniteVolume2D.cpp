@@ -48,6 +48,13 @@ ComputationalVariableManager?
 
 
 ----------------------------------------------------
+CompCells have reference to the comp variable they stand for.
+Only for active variables, not user-defined.
+
+
+
+
+----------------------------------------------------
 
 Maybe
  
