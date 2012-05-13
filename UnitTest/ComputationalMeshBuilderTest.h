@@ -23,6 +23,8 @@ class ComputationalMeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(addPassiveVarTwiceTest);
     CPPUNIT_TEST(addPassiveVarForSeveralDifferentEntitiesTest);
     CPPUNIT_TEST(addUserDefinedNodeVarsTest);
+    CPPUNIT_TEST(addUserDefinedFaceVarsTest);
+    CPPUNIT_TEST(addUserDefinedCellVarsTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -37,6 +39,8 @@ protected:
     void addPassiveVarTwiceTest();
     void addPassiveVarForSeveralDifferentEntitiesTest();
     void addUserDefinedNodeVarsTest();
+    void addUserDefinedFaceVarsTest();
+    void addUserDefinedCellVarsTest();
 
 private:
     void initMesh();

@@ -23,6 +23,7 @@
 
 
 #pragma warning(disable:4251)
+#pragma warning(disable:4275)
 
 
 class DECL_SYMBOLS_2D ComputationalNode : public INode {
@@ -58,4 +59,5 @@ private:
     ComputationalMoleculeManager_t cm_;
 };
 
+#pragma warning(default:4275)
 #pragma warning(default:4251)

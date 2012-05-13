@@ -7,14 +7,12 @@
  */
 #pragma once
 
-#include "DeclSpec.h"
-
 #include "IGeometricEntity.h"
 
 #include "Vector.h"
 
 
-class DECL_SYMBOLS_2DLIB INode : public IGeometricEntity {
+class INode : public IGeometricEntity {
 public:
     virtual ~INode() {}
 

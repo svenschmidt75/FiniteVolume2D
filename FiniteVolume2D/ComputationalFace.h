@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "FiniteVolume2DLib/IFace.h"
 #include "FiniteVolume2DLib/Face.h"
 
@@ -15,10 +17,12 @@
 
 #include <memory>
 
-class FluxComputationalMolecule;
+
+#pragma warning(disable:4251)
+#pragma warning(disable:4275)
 
 
-class ComputationalFace : public IFace {
+class DECL_SYMBOLS_2D ComputationalFace : public IFace {
 public:
     typedef std::shared_ptr<ComputationalFace> Ptr;
 
@@ -62,3 +66,6 @@ private:
     // boundary conditions, in case this is a boundary face
     BoundaryCondition::Ptr bc_;
 };
+
+#pragma warning(default:4275)
+#pragma warning(default:4251)
