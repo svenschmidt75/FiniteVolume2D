@@ -10,9 +10,8 @@
 #include "DeclSpec.h"
 
 #include "FiniteVolume2DLib/INode.h"
-
-#include "ComputationalMoleculeManager.h"
 #include "ComputationalMolecule.h"
+
 #include "FiniteVolume2DLib/IGeometricEntity.h"
 #include "FiniteVolume2DLib/Vector.h"
 #include "FiniteVolume2DLib/Node.h"

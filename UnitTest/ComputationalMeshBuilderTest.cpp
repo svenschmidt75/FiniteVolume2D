@@ -171,7 +171,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
     std::for_each(interior_face_thread.begin(), interior_face_thread.end(), [&](ComputationalFace::Ptr const & cface) {
         try {
-            ComputationalMolecule & cm = cface->getComputationalMolecule("face_var");
+            FluxComputationalMolecule & cm = cface->getComputationalMolecule("face_var");
         }
         catch (std::exception const &) {
             nbad++;
@@ -189,7 +189,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
     std::for_each(boundary_face_thread.begin(), boundary_face_thread.end(), [&](ComputationalFace::Ptr const & cface) {
         try {
-            ComputationalMolecule & cm = cface->getComputationalMolecule("face_var");
+            FluxComputationalMolecule & cm = cface->getComputationalMolecule("face_var");
         }
         catch (std::exception const &) {
             nbad++;
@@ -198,7 +198,6 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined face variables failed", 0, nbad);
 }
-
 
 void
 ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
@@ -227,6 +226,38 @@ ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
     });
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined cell variables failed", 0, nbad);
+}
+
+void
+ComputationalMeshBuilderTest::addCellVarsTest() {
+    ComputationalMeshBuilder cmesh(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    cmesh.addComputationalVariable("Temperature", flux_eval);
+
+    // add user-defined cell variable
+    cmesh.addPassiveComputationalCellVariable("cell_var");
+
+    ComputationalMesh::Ptr mesh = cmesh.build();
+
+    Thread<ComputationalCell> & cell_thread = mesh->getCellThread();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
+
+    Thread<ComputationalCell>::iterator::difference_type ngood = 0;
+
+    std::for_each(cell_thread.begin(), cell_thread.end(), [&](ComputationalCell::Ptr const & ccell) {
+        try {
+            ComputationalMolecule & cm1 = ccell->getComputationalMolecule("Temperature");
+            ngood++;
+
+            ComputationalMolecule & cm2 = ccell->getComputationalMolecule("cell_var");
+            ngood++;
+        }
+        catch (std::exception const &) {
+        }
+    });
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined cell variables failed", 2 * 8, ngood);
 }
 
 void

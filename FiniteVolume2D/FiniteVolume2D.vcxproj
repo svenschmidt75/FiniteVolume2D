@@ -123,7 +123,6 @@
     <ClInclude Include="ComputationalMeshBuilder.h" />
     <ClInclude Include="ComputationalMolecule.h" />
     <ClInclude Include="ComputationalMoleculeImpl.h" />
-    <ClInclude Include="ComputationalMoleculeManager.h" />
     <ClInclude Include="ComputationalNode.h" />
     <ClInclude Include="ComputationalVariable.h" />
     <ClInclude Include="FluxComputationalMolecule.h" />

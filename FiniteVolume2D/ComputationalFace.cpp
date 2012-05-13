@@ -62,7 +62,7 @@ ComputationalFace::setBoundaryCondition(BoundaryCondition::Ptr const & bc) {
     bc_ = bc;
 }
 
-ComputationalMolecule &
+FluxComputationalMolecule &
 ComputationalFace::getComputationalMolecule(std::string const & name) {
     auto it = cm_.find(name);
     if (it == cm_.end()) {
@@ -78,5 +78,5 @@ ComputationalFace::getComputationalMolecule(std::string const & name) {
 
 void
 ComputationalFace::addComputationalMolecule(std::string const & name) {
-    cm_[name] = ComputationalMolecule(name);
+    cm_[name] = FluxComputationalMolecule(name);
 }

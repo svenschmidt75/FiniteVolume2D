@@ -14,8 +14,12 @@
 
 #include "ComputationalNode.h"
 #include "BoundaryCondition.h"
+#include "FluxComputationalMolecule.h"
 
 #include <memory>
+
+
+class FluxComputationalMolecule;
 
 
 #pragma warning(disable:4251)
@@ -46,11 +50,11 @@ public:
     BoundaryCondition const &                   getBoundaryCondition() const;
     void                                        setBoundaryCondition(BoundaryCondition::Ptr const & bc);
 
-    ComputationalMolecule &                     getComputationalMolecule(std::string const & name);
+    FluxComputationalMolecule &                 getComputationalMolecule(std::string const & name);
     void                                        addComputationalMolecule(std::string const & name);
 
 private:
-    typedef std::map<std::string, ComputationalMolecule> ComputationalMoleculeManager_t;
+    typedef std::map<std::string, FluxComputationalMolecule> FluxComputationalMoleculeManager_t;
 
 private:
     // the geometric partner face
@@ -61,10 +65,10 @@ private:
     /* A computational face may have a set of molecules,
      * but does not have to.
      */
-    ComputationalMoleculeManager_t cm_;
+    FluxComputationalMoleculeManager_t  cm_;
 
     // boundary conditions, in case this is a boundary face
-    BoundaryCondition::Ptr bc_;
+    BoundaryCondition::Ptr              bc_;
 };
 
 #pragma warning(default:4275)
