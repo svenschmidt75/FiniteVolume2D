@@ -206,12 +206,6 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
         // set all applicable (passive) computational variables
         setComputationalVariables(cface);
 
-
-        // insert the computational molecules into the face
-//         std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
-//             cface->setComputationalMolecule(FluxComputationalMolecule(in.cfluxvar_name));
-//         });
-
         cmesh->addFace(face, cface);
     }
 
@@ -239,12 +233,6 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
         // set all applicable computational variables
         setComputationalVariables(ccell);
 
-
-        // insert the computational molecules into the cell
-//         std::for_each(computational_variables_.begin(), computational_variables_.end(), [&](ComputationalVariables_t::value_type const & in) {
-//             ccell->setComputationalMolecule(ComputationalMolecule(in.cvar_name));
-//         });
-
         cmesh->addCell(cell_thread.getEntityAt(i), ccell);
     }
 }
@@ -270,16 +258,45 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cfa
      * must only reference variables at cell centers that have been registered
      * with "addComputationalVariable".
      */
+    std::for_each(face_vars_.begin(), face_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
+        cface->addComputationalMolecule(var_name);
+    });
 }
 
-void
+bool
 ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & ccell) const {
-//     ComputationalVariableManager::iterator it = cvar_mgr_.getIterator();
-// 
-//     for (; it.isValid(); ++it) {
-//         ComputationalVariable::Ptr & cvar = cvar_mgr_.create(ccell, it.name());
-//         ccell->addComputationalVariable(cvar);
-//     }
+    /* For computational cells, we need to add the cell-centered variables that
+     * will be solved for and that were registered via "addComputationalVariable"
+     * and also the user-defined variables that will NOT be solved for.
+     */
+
+
+    /*
+     * Add the cell-centered variables
+     */
+
+    ComputationalVariableManager::Iterator_t it = cvar_mgr_.begin();
+    ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
+
+    for (; it != it_end; ++it) {
+        // create and add the comp. variable to the comp. cell
+        if (!cvar_mgr_.create(ccell, it->name)) {
+            boost::format format = boost::format("ComputationalMeshBuilder::setComputationalVariables: Error creating computational variable \
+                                                 %1% on cell with cell id %2%!\n") % it->name % ccell->id();
+            Util::error(format.str());
+            return false;
+        }
+    }
+
+
+    /*
+     * Add all user-defined variables
+     */
+    std::for_each(cell_vars_.begin(), cell_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
+        ccell->addComputationalMolecule(var_name);
+    });
+
+    return true;
 }
 
 void

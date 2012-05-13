@@ -86,7 +86,8 @@ void
 ComputationalCell::setComputationalVariable(ComputationalVariable::Ptr const & cvar) {
     cvars_[cvar->getName()] = cvar;
 
-    // TODO: also insert the corr. computational molecule
+    // also insert the corr. computational molecule
+    addComputationalMolecule(cvar->getName());
 }
 
 ComputationalMolecule &
@@ -108,6 +109,6 @@ ComputationalCell::getComputationalMolecule(std::string const & name) {
 }
 
 void
-ComputationalFace::addComputationalMolecule(std::string const & var_name) {
+ComputationalCell::addComputationalMolecule(std::string const & var_name) {
     cm_[var_name] = ComputationalMolecule(var_name);
 }

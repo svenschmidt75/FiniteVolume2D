@@ -43,13 +43,13 @@ void
 ComputationalMeshBuilderTest::buildMeshTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
-    /* T
-     * 
-     * 
-     * */
-//     cmesh.addComputationalVariable("Temperature", "Temperature_Flux", flux_eval);
-// 
-//     cmesh.build();
+    // Temperature as cell-centered variable, will be solved for
+    cmesh.addComputationalVariable("Temperature", flux_eval);
+
+    // add user-defined node variable
+    cmesh.addPassiveComputationalNodeVariable("node_var");
+
+    cmesh.build();
 }
 
 void

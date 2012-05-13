@@ -49,7 +49,7 @@ private:
     void computeFaceFluxes(ComputationalMesh::Ptr & cmesh) const;
     void setComputationalVariables(ComputationalNode::Ptr & cnode) const;
     void setComputationalVariables(ComputationalFace::Ptr & cface) const;
-    void setComputationalVariables(ComputationalCell::Ptr & ccell) const;
+    bool setComputationalVariables(ComputationalCell::Ptr & ccell) const;
 
 private:
     typedef std::set<std::string> PassiveNodeVars_t;
@@ -59,18 +59,18 @@ private:
 
 private:
     // geometric mesh to convert to a computational one
-    Mesh::Ptr                           geometrical_mesh_;
+    Mesh::Ptr                             geometrical_mesh_;
 
     // all face boundary conditions
-    BoundaryConditionCollection const & bc_;
+    BoundaryConditionCollection const &   bc_;
 
     // all variables to solve for
-    ComputationalVariableManager        cvar_mgr_;
+    mutable ComputationalVariableManager  cvar_mgr_;
 
     // user-defined node/face/cell variables
-    PassiveNodeVars_t                   node_vars_;
-    PassiveFaceVars_t                   face_vars_;
-    PassiveCellVars_t                   cell_vars_;
+    PassiveNodeVars_t                     node_vars_;
+    PassiveFaceVars_t                     face_vars_;
+    PassiveCellVars_t                     cell_vars_;
 };
 
 #pragma warning(default:4251)
