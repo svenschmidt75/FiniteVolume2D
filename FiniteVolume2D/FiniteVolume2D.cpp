@@ -26,6 +26,12 @@ path bottom-up.
 - monitor aspect ratio
 
 ----------------------------------------------------
+All comp. entities inherit from ICompEntity,
+with
+addComputationalMolecule
+getComputationalMolecule
+
+----------------------------------------------------
 
 Read data directly in state, if something found that
 is not recognized, return to general state.

@@ -22,6 +22,7 @@ class ComputationalMeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(addPassiveVarSameAsActiveVarTest);
     CPPUNIT_TEST(addPassiveVarTwiceTest);
     CPPUNIT_TEST(addPassiveVarForSeveralDifferentEntitiesTest);
+    CPPUNIT_TEST(addUserDefinedNodeVarsTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -35,6 +36,7 @@ protected:
     void addPassiveVarSameAsActiveVarTest();
     void addPassiveVarTwiceTest();
     void addPassiveVarForSeveralDifferentEntitiesTest();
+    void addUserDefinedNodeVarsTest();
 
 private:
     void initMesh();
@@ -51,7 +53,7 @@ private:
      * There is no easy way to define a default constructor because of the
      * EntityManager. Hence, this embedded mesh builder.
      */
-    static MeshBuilderMock mesh_builder_;
+    static MeshBuilderMock             mesh_builder_;
 
     static BoundaryConditionCollection bc_;
 };

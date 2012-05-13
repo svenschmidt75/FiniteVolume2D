@@ -35,7 +35,7 @@ ComputationalVariableManager::create(ComputationalCell::Ptr const & cell, std::s
     ComputationalVariable::Id_t cvar_id = cell->id() + getBaseIndex(name);
 
     ComputationalVariable::Ptr cvar = ComputationalVariable::create(cell, name, cvar_id);
-    cell->setComputationalVariable(cvar);
+    cell->addComputationalVariable(cvar);
     return cvar;
 }
 

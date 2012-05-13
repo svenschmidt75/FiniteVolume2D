@@ -106,6 +106,53 @@ ComputationalMeshBuilderTest::addPassiveVarForSeveralDifferentEntitiesTest() {
 }
 
 void
+ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
+    ComputationalMeshBuilder cmesh(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    cmesh.addComputationalVariable("Temperature", flux_eval);
+
+    // add user-defined node variable
+    cmesh.addPassiveComputationalNodeVariable("node_var");
+
+    ComputationalMesh::Ptr mesh = cmesh.build();
+
+    Thread<ComputationalNode> & interior_node_thread = mesh->getNodeThread(IGeometricEntity::INTERIOR);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior nodes", 1u, interior_node_thread.size());
+
+    Thread<ComputationalNode>::iterator::difference_type nbad = 0;
+
+    std::for_each(interior_node_thread.begin(), interior_node_thread.end(), [&](ComputationalNode::Ptr const & cnode) {
+        try {
+            ComputationalMolecule & cm = cnode->getComputationalMolecule("node_var");
+        }
+        catch (std::exception const &) {
+            nbad++;
+        }
+    });
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined node variables failed", 0, nbad);
+
+
+
+    Thread<ComputationalNode> & boundary_node_thread = mesh->getNodeThread(IGeometricEntity::BOUNDARY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary nodes", 8u, boundary_node_thread.size());
+
+    nbad = 0;
+
+    std::for_each(boundary_node_thread.begin(), boundary_node_thread.end(), [&](ComputationalNode::Ptr const & cnode) {
+        try {
+            ComputationalMolecule & cm = cnode->getComputationalMolecule("node_var");
+        }
+        catch (std::exception const &) {
+            nbad++;
+        }
+    });
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined node variables failed", 0, nbad);
+}
+
+void
 ComputationalMeshBuilderTest::initMesh() {
     static bool init = false;
     if (!init)

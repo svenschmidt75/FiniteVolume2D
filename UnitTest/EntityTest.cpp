@@ -9,7 +9,7 @@
 
 
 // Static class data members
-MeshBuilderMock   EntityTest::mesh_builder_;
+MeshBuilderMock     EntityTest::mesh_builder_;
 EntityTest::MeshPtr EntityTest::mesh_;
 
 

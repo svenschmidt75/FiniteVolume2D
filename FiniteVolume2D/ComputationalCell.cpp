@@ -83,7 +83,7 @@ ComputationalCell::getComputationalVariable(std::string const & name) const {
 }
 
 void
-ComputationalCell::setComputationalVariable(ComputationalVariable::Ptr const & cvar) {
+ComputationalCell::addComputationalVariable(ComputationalVariable::Ptr const & cvar) {
     cvars_[cvar->getName()] = cvar;
 
     // also insert the corr. computational molecule

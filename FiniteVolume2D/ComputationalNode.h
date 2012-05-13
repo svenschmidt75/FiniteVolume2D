@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "FiniteVolume2DLib/INode.h"
 
 #include "ComputationalMoleculeManager.h"
@@ -20,7 +22,10 @@
 #include <map>
 
 
-class ComputationalNode : public INode {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D ComputationalNode : public INode {
 public:
     typedef std::shared_ptr<ComputationalNode> Ptr;
 
@@ -37,6 +42,7 @@ public:
     double                     y() const;
     Vector                     vector() const;
 
+    ComputationalMolecule &    getComputationalMolecule(std::string const & var_name);
     void                       addComputationalMolecule(std::string const & var_name);
 
 private:
@@ -51,3 +57,5 @@ private:
      */
     ComputationalMoleculeManager_t cm_;
 };
+
+#pragma warning(default:4251)

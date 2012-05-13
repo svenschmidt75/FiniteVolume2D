@@ -62,26 +62,21 @@ ComputationalFace::setBoundaryCondition(BoundaryCondition::Ptr const & bc) {
     bc_ = bc;
 }
 
-// FluxComputationalMolecule &
-// ComputationalFace::getComputationalMolecule(std::string const & flux_var) {
-//     auto it = computational_molecules_.find(flux_var);
-//     if (it == computational_molecules_.end()) {
-//         boost::format format = boost::format("ComputationalFace::getComputationalMolecule: No computational molecule found for flux variable %1%!\n") % flux_var;
-//         Util::error(format.str());
-// 
-//         // as this method returns by reference, we have to throw in
-//         // case of an error
-//         throw std::exception(format.str().c_str());
-//     }
-//     return it->second;
-// }
+ComputationalMolecule &
+ComputationalFace::getComputationalMolecule(std::string const & name) {
+    auto it = cm_.find(name);
+    if (it == cm_.end()) {
+        boost::format format = boost::format("ComputationalFace::getComputationalMolecule: No computational molecule found for \
+                                                variable %1% and face %2%!\n") % name % meshId();
+        Util::error(format.str());
 
-// void
-// ComputationalFace::setComputationalMolecule(FluxComputationalMolecule const & cm) {
-//     computational_molecules_[cm.name()] = cm;
-// }
+        // have to throw because we only return by reference
+        throw std::exception(format.str().c_str());
+    }
+    return it->second;
+}
 
 void
-ComputationalFace::addComputationalMolecule(std::string const & var_name) {
-    cm_[var_name] = ComputationalMolecule(var_name);
+ComputationalFace::addComputationalMolecule(std::string const & name) {
+    cm_[name] = ComputationalMolecule(name);
 }

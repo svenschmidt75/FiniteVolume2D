@@ -17,7 +17,8 @@ private:
     typedef typename std::deque<typename Entity::Ptr> EntityCollection_t;
 
 public:
-    typedef typename EntityCollection_t::size_type size_type;
+    typedef typename EntityCollection_t::size_type      size_type;
+    typedef typename EntityCollection_t::const_iterator iterator;
 
 public:
     void insert(typename Entity::Ptr const & entity) {
@@ -30,6 +31,15 @@ public:
 
     typename Entity::Ptr const getEntityAt(typename EntityCollection_t::size_type index) const {
         return data_[index];
+    }
+
+    // add begin() and end() so we can use STL algorithms
+    iterator begin() const {
+        return data_.begin();
+    }
+
+    iterator end() const {
+        return data_.end();
     }
 
 private:

@@ -42,7 +42,8 @@ public:
     BoundaryCondition const &                   getBoundaryCondition() const;
     void                                        setBoundaryCondition(BoundaryCondition::Ptr const & bc);
 
-    void                                        addComputationalMolecule(std::string const & var_name);
+    ComputationalMolecule &                     getComputationalMolecule(std::string const & name);
+    void                                        addComputationalMolecule(std::string const & name);
 
 private:
     typedef std::map<std::string, ComputationalMolecule> ComputationalMoleculeManager_t;

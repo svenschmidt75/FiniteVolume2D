@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "FiniteVolume2DLib/Mesh.h"
 #include "FiniteVolume2DLib/Thread.hpp"
 #include "FiniteVolume2DLib/IMeshConnectivity.h"
@@ -19,7 +21,10 @@
 #include <memory>
 
 
-class ComputationalMesh {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D ComputationalMesh {
 
     friend class ComputationalMeshBuilder;
 
@@ -58,7 +63,7 @@ private:
      * geometrical entities. This mapper allows the mapping from
      * geometric entities to computational ones.
      */
-    GeometricalEntityMapper mapper_;
+    GeometricalEntityMapper   mapper_;
 
     /* mesh connectivity is inherited from the geometrical mesh */
     IMeshConnectivity const & mesh_connectivity_;
@@ -71,3 +76,5 @@ private:
 
     Thread<ComputationalCell> cell_thread_;
 };
+
+#pragma warning(default:4251)

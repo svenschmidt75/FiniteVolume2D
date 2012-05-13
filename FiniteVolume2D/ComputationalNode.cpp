@@ -1,5 +1,12 @@
 #include "ComputationalNode.h"
 
+#include "FiniteVolume2DLib/Util.h"
+
+#include <exception>
+
+#include <boost/format.hpp>
+
+
 ComputationalNode::ComputationalNode(Node::Ptr const & geometric_node) : geometric_node_(geometric_node) {}
 
 IGeometricEntity::Id_t
@@ -33,7 +40,21 @@ ComputationalNode::vector() const {
     return geometric_node_->vector();
 }
 
+ComputationalMolecule &
+ComputationalNode::getComputationalMolecule(std::string const & name) {
+    auto it = cm_.find(name);
+    if (it == cm_.end()) {
+        boost::format format = boost::format("ComputationalNode::getComputationalMolecule: No computational molecule found for \
+                                                variable %1% and node %2%!\n") % name % meshId();
+        Util::error(format.str());
+
+        // have to throw because we only return by reference
+        throw std::exception(format.str().c_str());
+    }
+    return it->second;
+}
+
 void
-ComputationalNode::addComputationalMolecule(std::string const & var_name) {
-    cm_[var_name] = ComputationalMolecule(var_name);
+ComputationalNode::addComputationalMolecule(std::string const & name) {
+    cm_[name] = ComputationalMolecule(name);
 }
