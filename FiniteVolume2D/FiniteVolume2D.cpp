@@ -247,7 +247,7 @@ pressure_flux_evaluator_for_later(IComputationalGridAccessor & cgrid, Cell::Ptr 
 }
 
 bool
-phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & cell, Face::Ptr & face)
+phi_flux_evaluator(IComputationalGridAccessor const & cgrid, Cell::Ptr const & cell, Face::Ptr const & face)
 {
     /* Compute flux through a cell face. The cell face may be a boundary face
      * needing special treatment depending on whether Dirichlet or von Neumann

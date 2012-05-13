@@ -33,7 +33,7 @@ ComputationalMeshBuilderTest::testMeshFileExists() {
 }
 
 namespace {
-    bool flux_eval(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr & face) {
+    bool flux_eval(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
         return true;
     }
 

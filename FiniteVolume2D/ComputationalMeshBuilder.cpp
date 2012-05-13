@@ -2,6 +2,7 @@
 
 #include "FluxComputationalMolecule.h"
 #include "ComputationalMolecule.h"
+#include "ComputationalGridAccessor.h"
 
 #include "FiniteVolume2DLib/Util.h"
 #include "FiniteVolume2DLib/Thread.hpp"
@@ -262,23 +263,20 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cfa
     /*
      * Add the cell-centered variables to the faces.
      * This is done because the face fluxes are integral
-     * to the finite volume method.
+     * to the finite volume method. 
+     * We first compute the face fluxes as they are needed to fill in
+     * the ComputationalMolecules of the cell-centered variables.
      */
 
     ComputationalVariableManager::Iterator_t it = cvar_mgr_.begin();
     ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
 
     for (; it != it_end; ++it) {
-        // create and add the comp. variable to the comp. cell
-        if (!cvar_mgr_.create(ccell, it->name)) {
-            boost::format format = boost::format("ComputationalMeshBuilder::setComputationalVariables: Error creating computational variable \
-                                                 %1% on cell with cell id %2%!\n") % it->name % ccell->id();
-            Util::error(format.str());
-            return false;
-        }
+        cface->addComputationalMolecule(it->name);
     }
 
 
+    // add the user-defined face variables
 
     std::for_each(face_vars_.begin(), face_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
         cface->addComputationalMolecule(var_name);
@@ -323,21 +321,28 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & cce
 
 void
 ComputationalMeshBuilder::computeFaceFluxes(ComputationalMesh::Ptr & cmesh) const {
-    /* For all cells, fixx in the ComputationalMolecules for the
+    /* For all cells, fill in the ComputationalMolecules for the
      * ComputationalVariables.
      */
+    ComputationalGridAccessor grid_accessor;
+
     Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
     for (Thread<ComputationalCell>::size_type i = 0; i < cell_thread.size(); ++i) {
         ComputationalCell::Ptr const & ccell = cell_thread.getEntityAt(i);
 
-
-
-
-
         EntityCollection<ComputationalFace> const & cfaces = ccell->getComputationalFaces();
         std::for_each(cfaces.begin(), cfaces.end(), [&](ComputationalFace::Ptr const & cface) {
-            // compute flux through face
-//            flux_eval(ccell, cface);
+            /* Compute the face flux through all cell faces
+             * for all cell-centered variables. Each such
+             * variable should have its own flux-evaluator.
+             */ 
+            ComputationalVariableManager::Iterator_t it = cvar_mgr_.begin();
+            ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
+
+            for (; it != it_end; ++it) {
+                // compute flux through face
+                (it->flux_eval)(grid_accessor, ccell, cface);
+            }
         });
     }
 }

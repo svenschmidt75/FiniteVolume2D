@@ -20,7 +20,7 @@ class ComputationalFace;
 class ComputationalVariableManagerTypes {
 public:
     /* type of flux evaluator */
-    typedef std::function<bool (ComputationalGridAccessor const & cgrid, std::shared_ptr<ComputationalCell> const & cell, std::shared_ptr<ComputationalFace> & face)> FluxEvaluator_t;
+    typedef std::function<bool (ComputationalGridAccessor const & cgrid, std::shared_ptr<ComputationalCell> const & cell, std::shared_ptr<ComputationalFace> const & face)> FluxEvaluator_t;
 
     struct ComputationalVariableItem {
         // base index
