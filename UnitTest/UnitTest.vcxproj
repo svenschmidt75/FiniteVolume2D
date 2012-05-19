@@ -116,8 +116,8 @@
     <ClInclude Include="ComputationalVariableManagerTest.h" />
     <ClInclude Include="ComputationalVariableTest.h" />
     <ClInclude Include="EntityTest.h" />
+    <ClInclude Include="internal\MeshBuilderMock.h" />
     <ClInclude Include="MeshBoundaryConditionReaderTest.h" />
-    <ClInclude Include="MeshBuilderMock.h" />
     <ClInclude Include="MeshConnectivityTest.h" />
   </ItemGroup>
   <ItemGroup>

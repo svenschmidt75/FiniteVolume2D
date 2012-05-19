@@ -1,6 +1,7 @@
 #include "ComputationalMeshBuilderTest.h"
 
 #include "FiniteVolume2DLib/ASCIIMeshReader.h"
+#include "FiniteVolume2DLib/Math.h"
 
 #include "FiniteVolume2D/ComputationalMeshBuilder.h"
 
@@ -327,26 +328,26 @@ namespace {
 
                 // compute face mid point
                 Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
-            
+
                 // distance from face midpoint to the cell centroid
-                double dist = Math::dist(cell->centroid(), midpoint);
+                double dist = Math::dist(ccell->centroid(), midpoint);
 
                 // the boundary value contributes as a source term
-                face_source += face->area() / dist * value;
+                face_source += cface->area() / dist * value;
 
                 // get comp. variable to solve for
-                ComputationalVariable const & cvar = cell->getComputationalVariable("Temperature");
-                flux_molecule.add(cvar, -face->area() / dist);
+                ComputationalVariable const & cvar = ccell->getComputationalVariable("Temperature");
+                flux_molecule.add(cvar, -cface->area() / dist);
 
                 // contribution to the cell node
-                flux_molecule.add(cell->getComputationalVariable(), -face->area() / dist);
+                flux_molecule.add(ccell->getComputationalVariable(), -face->area() / dist);
             }
             else {
                 // Face b.c. given as von Neumann
-                SourceTerm & face_source = flux_mulecule.getSourceTerm();
+                SourceTerm & face_source = flux_molecule.getSourceTerm();
 
                 // the boundary flux contributes as a source term
-                face_source += bc.getFluxValue();
+                face_source += bc->getValue();
             }
             return true;
         }

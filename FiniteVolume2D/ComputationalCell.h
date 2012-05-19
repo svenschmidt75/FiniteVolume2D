@@ -50,7 +50,7 @@ public:
     EntityCollection<ComputationalNode> const & getComputationalNodes() const;
     EntityCollection<ComputationalFace> const & getComputationalFaces() const;
 
-    ComputationalVariable::Ptr const            getComputationalVariable(std::string const & name) const;
+    ComputationalVariable const &               getComputationalVariable(std::string const & name) const;
     void                                        addComputationalVariable(ComputationalVariable::Ptr const & cvar);
 
     ComputationalMolecule &                     getComputationalMolecule(std::string const & name);

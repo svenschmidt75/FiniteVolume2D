@@ -36,6 +36,7 @@
     <ClInclude Include="IMeshReader.h" />
     <ClInclude Include="IMeshReaderState.h" />
     <ClInclude Include="INode.h" />
+    <ClInclude Include="internal\VertexOperators.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshBuilder.h" />
@@ -63,6 +64,10 @@
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="FaceConnectivity.cpp" />
     <ClCompile Include="FaceManager.cpp" />
+    <ClCompile Include="internal\VertexOperators.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshBuilder.cpp" />

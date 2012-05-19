@@ -27,3 +27,5 @@ private:
     double x_;
     double y_;
 };
+
+#include "internal/VertexOperators.h"

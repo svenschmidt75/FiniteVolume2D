@@ -10,9 +10,11 @@
 #include "DeclSpec.h"
 
 class Vector;
+class Vertex;
 
 
 class DECL_SYMBOLS_2DLIB Math {
 public:
     static double dot(Vector const & lhs, Vector const & rhs);
+    static double dist(Vertex const & lhs, Vertex const & rhs);
 };
