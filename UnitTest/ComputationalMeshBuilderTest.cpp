@@ -326,7 +326,7 @@ namespace {
                 SourceTerm & face_source = flux_molecule.getSourceTerm();
 
                 // compute face mid point
-                Vertex midpoint = (cface->startNode() + cface->endNode()) / 2.0;
+                Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
             
                 // distance from face midpoint to the cell centroid
                 double dist = Math::dist(cell->centroid(), midpoint);

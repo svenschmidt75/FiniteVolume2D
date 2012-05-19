@@ -1,5 +1,7 @@
 #include "Vertex.h"
 
+#include "internal/VertexOperators.h"
+
 #include <numeric>
 
 
