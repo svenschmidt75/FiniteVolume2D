@@ -108,6 +108,7 @@
     <ClCompile Include="GeometricalEntityMapper.cpp" />
     <ClCompile Include="internal\ComputationalVariableManagerIterator.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SourceTerm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FiniteVolume2DLib\FiniteVolume2DLib.vcxproj">
@@ -131,6 +132,7 @@
     <ClInclude Include="IComputationalMolecule.h" />
     <ClInclude Include="internal\ComputationalVariableManagerIterator.h" />
     <ClInclude Include="internal\ComputationalVariableManagerTypes.h" />
+    <ClInclude Include="SourceTerm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

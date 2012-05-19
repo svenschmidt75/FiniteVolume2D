@@ -21,19 +21,9 @@ Node::getEntityType() const {
     return entity_type_;
 }
 
-double
-Node::x() const {
-    return vertex_.x();
-}
-
-double
-Node::y() const {
-    return vertex_.y();
-}
-
-Vector
-Node::vector() const {
-    return Vector(vertex_.x(), vertex_.y());
+Vertex
+Node::location() const {
+    return vertex_;
 }
 
 Node::Ptr

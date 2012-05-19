@@ -17,7 +17,7 @@
 class ComputationalMeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(ComputationalMeshBuilderTest);
     CPPUNIT_TEST(testMeshFileExists);
-    CPPUNIT_TEST(buildMeshTest);
+    CPPUNIT_TEST(evaluateFluxesDummyTest);
     CPPUNIT_TEST(noActiveVarsTest);
     CPPUNIT_TEST(addPassiveVarSameAsActiveVarTest);
     CPPUNIT_TEST(addPassiveVarTwiceTest);
@@ -26,6 +26,7 @@ class ComputationalMeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(addUserDefinedFaceVarsTest);
     CPPUNIT_TEST(addUserDefinedCellVarsTest);
     CPPUNIT_TEST(addCellVarsTest);
+    CPPUNIT_TEST(evaluateFluxesTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -34,7 +35,7 @@ public:
 
 protected:
     void testMeshFileExists();
-    void buildMeshTest();
+    void evaluateFluxesDummyTest();
     void noActiveVarsTest();
     void addPassiveVarSameAsActiveVarTest();
     void addPassiveVarTwiceTest();
@@ -43,6 +44,7 @@ protected:
     void addUserDefinedFaceVarsTest();
     void addUserDefinedCellVarsTest();
     void addCellVarsTest();
+    void evaluateFluxesTest();
 
 private:
     void initMesh();

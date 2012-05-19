@@ -25,19 +25,9 @@ ComputationalNode::getEntityType() const {
     return geometric_node_->getEntityType();
 }
 
-double
-ComputationalNode::x() const {
-    return geometric_node_->x();
-}
-
-double
-ComputationalNode::y() const {
-    return geometric_node_->y();
-}
-
-Vector
-ComputationalNode::vector() const {
-    return geometric_node_->vector();
+Vertex
+ComputationalNode::location() const {
+    return geometric_node_->location();
 }
 
 ComputationalMolecule &

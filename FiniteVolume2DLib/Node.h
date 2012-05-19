@@ -35,9 +35,7 @@ public:
 
     // FROM INode
     IGeometricEntity::Entity_t getEntityType() const;
-    double                     x() const;
-    double                     y() const;
-    Vector                     vector() const;
+    Vertex                     location() const;
 
 private:
     Node(IGeometricEntity::Id_t node_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y);

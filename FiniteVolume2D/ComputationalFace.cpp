@@ -7,9 +7,12 @@
 #include <boost/format.hpp>
 
 #include <exception>
+#include <cassert>
 
 
-ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face, EntityCollection<ComputationalNode> const & cnodes) : geometric_face_(geometric_face), cnodes_(cnodes) , bc_(std::nullptr_t()) {}
+ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face, EntityCollection<ComputationalNode> const & cnodes) : geometric_face_(geometric_face), cnodes_(cnodes) , bc_(std::nullptr_t()) {
+    assert(cnodes_.size() == 2);
+}
 
 IGeometricEntity::Id_t
 ComputationalFace::id() const {
@@ -52,9 +55,19 @@ ComputationalFace::getComputationalNodes() const {
     return cnodes_;
 }
 
-BoundaryCondition const &
+ComputationalNode const &
+ComputationalFace::startNode() const {
+    return *(cnodes_[0]);
+}
+
+ComputationalNode const &
+ComputationalFace::endNode() const {
+    return *(cnodes_[1]);
+}
+
+BoundaryCondition::Ptr const &
 ComputationalFace::getBoundaryCondition() const {
-    return *bc_;
+    return bc_;
 }
 
 void

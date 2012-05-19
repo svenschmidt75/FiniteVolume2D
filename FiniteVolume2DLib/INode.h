@@ -17,7 +17,5 @@ public:
     virtual ~INode() {}
 
     virtual IGeometricEntity::Entity_t getEntityType() const = 0;
-    virtual double                     x() const = 0;
-    virtual double                     y() const = 0;
-    virtual Vector                     vector() const = 0;
+    virtual Vertex                     location() const = 0;
 };

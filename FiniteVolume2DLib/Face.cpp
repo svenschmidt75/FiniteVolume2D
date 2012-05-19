@@ -31,8 +31,8 @@ Face::area() const {
     Node::Ptr const & v0 = nodes_.getEntity(0);
     Node::Ptr const & v1 = nodes_.getEntity(1);
 
-    double dx = v0->x() - v1->x();
-    double dy = v0->y() - v1->y();
+    double dx = v0->location().x() - v1->location().x();
+    double dy = v0->location().y() - v1->location().y();
     double d = dx * dx + dy * dy;
     return sqrt(d);
 }
@@ -46,8 +46,8 @@ Face::normal() const {
      * Normal and direction vector of
      * vertices v0 -> v1 yield a r.h.c.s.
      */
-    double dx = v1->x() - v0->x();
-    double dy = v1->y() - v0->y();
+    double dx = v1->location().x() - v0->location().x();
+    double dy = v1->location().y() - v0->location().y();
 
     Vector n(dy, -dx);
     return n;
@@ -62,13 +62,13 @@ Face::centroid() const {
      * Normal and direction vector of
      * nodes v0 -> v1 yield a r.h.c.s.
      */
-    double dx = v1->x() - v0->x();
-    double dy = v1->y() - v0->y();
+    double dx = v1->location().x() - v0->location().x();
+    double dy = v1->location().y() - v0->location().y();
 
     // the centroid of a line segment is
     // its mid-point
-    double x = v0->x() + 0.5 * dx;
-    double y = v0->y() + 0.5 * dy;
+    double x = v0->location().x() + 0.5 * dx;
+    double y = v0->location().y() + 0.5 * dy;
     return Vertex(x, y);
 }
 

@@ -38,9 +38,7 @@ public:
 
     // FROM INode
     IGeometricEntity::Entity_t getEntityType() const;
-    double                     x() const;
-    double                     y() const;
-    Vector                     vector() const;
+    Vertex                     location() const;
 
     ComputationalMolecule &    getComputationalMolecule(std::string const & var_name);
     void                       addComputationalMolecule(std::string const & var_name);

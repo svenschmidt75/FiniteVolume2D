@@ -5,6 +5,15 @@ ComputationalMoleculeImpl::ComputationalMoleculeImpl(std::string const & name)
     :
     name_(name) {}
 
+void
+ComputationalMoleculeImpl::print() const {
+    // print computational molecule
+
+    // use stream syntax, i.e.
+    // 
+    
+}
+
 std::string const &
 ComputationalMoleculeImpl::name() const {
     return name_;
@@ -26,4 +35,14 @@ ComputationalMoleculeImpl::getWeight(ComputationalVariable const & cvar) const {
 ComputationalMoleculeImpl::size_type
 ComputationalMoleculeImpl::size() const {
     return data_.size();
+}
+
+bool
+ComputationalMoleculeImpl::empty() const {
+    return data_.empty();
+}
+
+SourceTerm &
+ComputationalMoleculeImpl::getSourceTerm() {
+    return source_term_;
 }

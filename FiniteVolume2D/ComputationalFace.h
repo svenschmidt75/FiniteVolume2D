@@ -45,9 +45,13 @@ public:
     Vertex                         centroid() const;
 
 
+    // getComputationalNodes is certainly not necessary for a face that
+    // can only have two nodes, but for polygonal faces, it is.
     EntityCollection<ComputationalNode> const & getComputationalNodes() const;
+    ComputationalNode const &                   startNode() const;
+    ComputationalNode const &                   endNode() const;
 
-    BoundaryCondition const &                   getBoundaryCondition() const;
+    BoundaryCondition::Ptr const &              getBoundaryCondition() const;
     void                                        setBoundaryCondition(BoundaryCondition::Ptr const & bc);
 
     FluxComputationalMolecule &                 getComputationalMolecule(std::string const & name);
@@ -58,7 +62,7 @@ private:
 
 private:
     // the geometric partner face
-    Face::Ptr geometric_face_;
+    Face::Ptr                           geometric_face_;
 
     EntityCollection<ComputationalNode> cnodes_;
 

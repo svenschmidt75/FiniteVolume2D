@@ -64,7 +64,7 @@ Cell::volume() const {
         Node::Ptr const & v0 = nodes_.getEntity(i);
         Node::Ptr const & v1 = nodes_.getEntity(next);
 
-        delta += (v0->x() * v1->y() - v1->x() * v0->y());
+        delta += (v0->location().x() * v1->location().y() - v1->location().x() * v0->location().y());
     }
     return 0.5 * delta;
 }
@@ -72,8 +72,8 @@ Cell::volume() const {
 Vertex
 Cell::centroid() const {
     // a cell is a triangle
-    double x = (nodes_[0]->x() + nodes_[1]->x() + nodes_[2]->x()) / 3.0;
-    double y = (nodes_[0]->y() + nodes_[1]->y() + nodes_[2]->y()) / 3.0;
+    double x = (nodes_[0]->location().x() + nodes_[1]->location().x() + nodes_[2]->location().x()) / 3.0;
+    double y = (nodes_[0]->location().y() + nodes_[1]->location().y() + nodes_[2]->location().y()) / 3.0;
     return Vertex(x, y);
 }
 

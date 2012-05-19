@@ -130,7 +130,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
     Thread<Node> const & interior_node_thread = geometrical_mesh_->getNodeThread(IGeometricEntity::INTERIOR);
     for (Thread<Node>::size_type i = 0; i < interior_node_thread.size(); ++i) {
         Node::Ptr const & node = interior_node_thread.getEntityAt(i);
-        ComputationalNode::Ptr & cnode = ComputationalNode::Ptr(new ComputationalNode(node));
+        ComputationalNode::Ptr & cnode = std::make_shared<ComputationalNode>(node);
 
         // set all applicable (passive) computational variables
         setComputationalVariables(cnode);
@@ -141,7 +141,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
     Thread<Node> const & boundary_node_thread = geometrical_mesh_->getNodeThread(IGeometricEntity::BOUNDARY);
     for (Thread<Node>::size_type i = 0; i < boundary_node_thread.size(); ++i) {
         Node::Ptr const & node = boundary_node_thread.getEntityAt(i);
-        ComputationalNode::Ptr & cnode = ComputationalNode::Ptr(new ComputationalNode(node));
+        ComputationalNode::Ptr & cnode = std::make_shared<ComputationalNode>(node);
 
         // set all applicable (passive) computational variables
         setComputationalVariables(cnode);
@@ -278,7 +278,7 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cfa
 
     // add the user-defined face variables
 
-    std::for_each(face_vars_.begin(), face_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
+    std::for_each(face_vars_.begin(), face_vars_.end(), [&](PassiveFaceVars_t::value_type const & var_name) {
         cface->addComputationalMolecule(var_name);
     });
 }
@@ -310,9 +310,9 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & cce
 
 
     /*
-     * Add all user-defined variables
+     * Add all user-defined cell variables
      */
-    std::for_each(cell_vars_.begin(), cell_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
+    std::for_each(cell_vars_.begin(), cell_vars_.end(), [&](PassiveCellVars_t::value_type const & var_name) {
         ccell->addComputationalMolecule(var_name);
     });
 
@@ -336,7 +336,7 @@ ComputationalMeshBuilder::computeFaceFluxes(ComputationalMesh::Ptr & cmesh) cons
              * for all cell-centered variables. Each such
              * variable should have its own flux-evaluator.
              */ 
-            ComputationalVariableManager::Iterator_t it = cvar_mgr_.begin();
+            ComputationalVariableManager::Iterator_t it     = cvar_mgr_.begin();
             ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
 
             for (; it != it_end; ++it) {

@@ -9,8 +9,11 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "IComputationalMolecule.h"
 #include "ComputationalVariable.h"
+#include "SourceTerm.h"
 
 #include <boost/optional.hpp>
 
@@ -18,12 +21,20 @@
 #include <unordered_map>
 
 
-class ComputationalMoleculeImpl : public IComputationalMolecule {
+#pragma warning(disable:4251)
+#pragma warning(disable:4275)
+
+
+class DECL_SYMBOLS_2D ComputationalMoleculeImpl : public IComputationalMolecule {
 public:
     typedef std::unordered_map<ComputationalVariable::Id_t, double> ComputationalMolecule_t;
     typedef ComputationalMolecule_t::size_type                      size_type;
 
 public:
+    // FROM IComputationalMolecule
+    void                    print() const;
+
+
     std::string const &     name() const;
 
     // insert a dependency on cell id with weight
@@ -33,6 +44,9 @@ public:
     boost::optional<double> getWeight(ComputationalVariable const & cvar) const;
 
     size_type               size() const;
+    bool                    empty() const;
+
+    SourceTerm &            getSourceTerm();
 
 protected:
     // protected constructor: class should only be used to derive
@@ -44,4 +58,10 @@ private:
 
     // Pair: Computational variable id, weight
     ComputationalMolecule_t data_;
+
+    // Source term, i.e. the constant value
+    SourceTerm              source_term_;
 };
+
+#pragma warning(default:4275)
+#pragma warning(default:4251)

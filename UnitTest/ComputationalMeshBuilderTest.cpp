@@ -33,23 +33,47 @@ ComputationalMeshBuilderTest::testMeshFileExists() {
 }
 
 namespace {
-    bool flux_eval(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
-        return true;
-    }
+    class DummyFluxEvaluator {
+    public:
+        DummyFluxEvaluator(unsigned int & count) : count_(count) {}
+
+        bool operator()(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+            count_++;
+            return true;
+        }
+
+    private:
+        unsigned int & count_;
+    };
 
 }
 
 void
-ComputationalMeshBuilderTest::buildMeshTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+ComputationalMeshBuilderTest::evaluateFluxesDummyTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    unsigned int count = 0;
+    DummyFluxEvaluator flux_eval(count);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    builder.addComputationalVariable("Temperature", flux_eval);
 
-    // add user-defined node variable
-    cmesh.addPassiveComputationalNodeVariable("node_var");
+    ComputationalMesh::Ptr cmesh(builder.build());
 
-    cmesh.build();
+    /* There are 8 boundary faces for which the flux evaluation
+     * is called only once. For the 8 internal faces, the flux
+     * evaluation is called twice, once for each cell.
+     */
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Flux evaluation error", 24u, count);
+}
+
+namespace {
+    
+    bool
+    dummy_flux_eval(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+        return true;
+    }
+
 }
 
 void
@@ -64,12 +88,12 @@ void
 ComputationalMeshBuilderTest::addPassiveVarSameAsActiveVarTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
 
     bool success = cmesh.addPassiveComputationalNodeVariable("Temperature");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
 
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
 
     success = cmesh.addPassiveComputationalCellVariable("Temperature");
@@ -80,7 +104,7 @@ void
 ComputationalMeshBuilderTest::addPassiveVarTwiceTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
 
     bool success = cmesh.addPassiveComputationalNodeVariable("Pressure");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
@@ -93,7 +117,7 @@ void
 ComputationalMeshBuilderTest::addPassiveVarForSeveralDifferentEntitiesTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
 
     bool success = cmesh.addPassiveComputationalNodeVariable("Pressure");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
@@ -110,7 +134,7 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined node variable
     cmesh.addPassiveComputationalNodeVariable("node_var");
@@ -157,7 +181,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined face variable
     cmesh.addPassiveComputationalFaceVariable("face_var");
@@ -204,7 +228,7 @@ ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined cell variable
     cmesh.addPassiveComputationalCellVariable("cell_var");
@@ -233,7 +257,7 @@ ComputationalMeshBuilderTest::addCellVarsTest() {
     ComputationalMeshBuilder cmesh(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", flux_eval);
+    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined cell variable
     cmesh.addPassiveComputationalCellVariable("cell_var");
@@ -258,6 +282,123 @@ ComputationalMeshBuilderTest::addCellVarsTest() {
     });
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined cell variables failed", 2 * 8, ngood);
+}
+
+namespace {
+  
+    bool
+    flux_evaluator(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & ccell, ComputationalFace::Ptr const & cface)
+    {
+        /* Compute flux through a cell face. The cell face may be a boundary face
+         * needing special treatment depending on whether Dirichlet or von Neumann
+         * boundary conditions have been prescribed.
+         * 
+         * Flux through an internal face is evaluated by the usual gradient approximation.
+         * Note that this is not 2nd order, not even is there is no cell skewness as we
+         * omit the cross-diffusion term (Comp. Fluid Dynamics, Versteeg, p. 319).
+         */
+
+        // Get face flux molecules for "Temperature"
+        FluxComputationalMolecule & flux_molecule = cface->getComputationalMolecule("Temperature");
+
+        // Flux through face already computed?
+        if (!flux_molecule.empty())
+            return true;
+
+        /* We need to know the cell the flux was calculated with. This is because
+         * once the neighboring cell accesses the flux, the need to invert the sign.
+         */
+        flux_molecule.setCell(ccell);
+
+        BoundaryCondition::Ptr const & bc = cface->getBoundaryCondition();
+
+        if (bc) {
+            // get cell node variable
+            ComputationalMolecule & cell_molecule = ccell->getComputationalMolecule("Temperature");
+
+            if (bc->type() == BoundaryConditionCollection::DIRICHLET) {
+                /* The boundary condition is of type Dirichlet. Compute the
+                 * face flux using the half-cell approximation.
+                 * Versteeg, p. 331
+                 */
+                double value = bc->getValue();
+
+                SourceTerm & face_source = flux_molecule.getSourceTerm();
+
+                // compute face mid point
+                Vertex midpoint = (cface->startNode() + cface->endNode()) / 2.0;
+            
+                // distance from face midpoint to the cell centroid
+                double dist = Math::dist(cell->centroid(), midpoint);
+
+                // the boundary value contributes as a source term
+                face_source += face->area() / dist * value;
+
+                // get comp. variable to solve for
+                ComputationalVariable const & cvar = cell->getComputationalVariable("Temperature");
+                flux_molecule.add(cvar, -face->area() / dist);
+
+                // contribution to the cell node
+                flux_molecule.add(cell->getComputationalVariable(), -face->area() / dist);
+            }
+            else {
+                // Face b.c. given as von Neumann
+                SourceTerm & face_source = flux_mulecule.getSourceTerm();
+
+                // the boundary flux contributes as a source term
+                face_source += bc.getFluxValue();
+            }
+            return true;
+        }
+
+#if 0
+        // internal face
+
+
+        // Compute distance to face midpoint to monitor accuracy
+
+    
+        /* We have to approximate the term
+         * <\hat{n}, \gamma \grad \phi f_{area}>
+         * compute the usual gradient approximation,
+         * \grad \phi \approx \frac{phi_{N} - phi_{P}}{\dist N - P}
+         */
+        Vertex cell_centroid = cell->centroid();
+
+        Cell::Ptr cell_nbr = cgrid.getOtherCell(face, cell);
+        Vertex cell_nbr_centroid = cell_nbr->centroid();
+
+        // distance from face midpoint to the cell centroid
+        double dist = Math::dist(cell_centroid, cell_nbr_centroid);
+
+        /* The weight for the computational molecule is
+         * \gamma f_{area} / dist(N - P).
+         */
+        double weight = face->area() / dist;
+    
+        // get comp. variable to solve for
+        CompVar const & cvar = cell->getComputationalVariable("Temp");
+
+        CompVar const & cvar = cell->getComputationalVariable("phi");
+        CompVar const & cvar_nbr = cell_nbr->getComputationalVariable("phi");
+
+        flux_molecule.add(cvar, -weight);
+        flux_molecule.add(cvar_nbr, weight);
+#endif
+        return true;
+    }
+
+}
+
+void
+ComputationalMeshBuilderTest::evaluateFluxesTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+
+    ComputationalMesh::Ptr cmesh(builder.build());
+
 }
 
 void

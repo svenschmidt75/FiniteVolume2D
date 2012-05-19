@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "ComputationalMoleculeImpl.h"
 
 #include <memory>
@@ -15,7 +17,10 @@
 class ComputationalCell;
 
 
-class FluxComputationalMolecule : public ComputationalMoleculeImpl {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D FluxComputationalMolecule : public ComputationalMoleculeImpl {
 public:
     FluxComputationalMolecule();
     explicit FluxComputationalMolecule(std::string const & name);
@@ -31,3 +36,5 @@ private:
      */
     std::shared_ptr<ComputationalCell> ccell_;
 };
+
+#pragma warning(default:4251)
