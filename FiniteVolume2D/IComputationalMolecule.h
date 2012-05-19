@@ -11,4 +11,6 @@
 class IComputationalMolecule {
 public:
     virtual ~IComputationalMolecule() {}
+
+    virtual void print() const = 0;
 };

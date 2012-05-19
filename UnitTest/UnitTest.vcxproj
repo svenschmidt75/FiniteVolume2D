@@ -63,7 +63,7 @@
       <AdditionalLibraryDirectories>$(CPPUNIT_DIR)\cppunit\lib;$(BOOST_DIR)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /F /Y $(CPPUNIT_DIR)\cppunit\bin\cppunitd_dll.dll $(OutputPath)</Command>
+      <Command>xcopy /F /Y $(CPPUNIT_DIR)\cppunit\lib\cppunitd_dll.dll $(OutputPath)</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -92,7 +92,7 @@
       <AdditionalLibraryDirectories>$(CPPUNIT_DIR)\cppunit\lib;$(BOOST_DIR)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /F /Y %CPPUNIT_DIR%\cppunit\bin\cppunit_dll.dll %OutputPath%</Command>
+      <Command>xcopy /F /Y %CPPUNIT_DIR%\cppunit\lib\cppunit_dll.dll %OutputPath%</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -100,6 +100,7 @@
     <ClCompile Include="ComputationalMeshBuilderTest.cpp" />
     <ClCompile Include="ComputationalMoleculeTest.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="ComputationalVariableManagerTest.cpp" />
     <ClCompile Include="ComputationalVariableTest.cpp" />
