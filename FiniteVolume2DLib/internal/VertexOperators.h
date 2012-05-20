@@ -10,5 +10,8 @@
  */
 #pragma once
 
-Vertex operator+(Vertex const & lhs, Vertex const & rhs);
-Vertex operator/(Vertex const & in, double const value);
+#include "DeclSpec.h"
+
+
+Vertex DECL_SYMBOLS_2DLIB operator+(Vertex const & lhs, Vertex const & rhs);
+Vertex DECL_SYMBOLS_2DLIB operator/(Vertex const & in, double const value);

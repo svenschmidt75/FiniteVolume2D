@@ -21,7 +21,7 @@ ComputationalMoleculeImpl::name() const {
 
 void
 ComputationalMoleculeImpl::add(ComputationalVariable const & cvar, double weight) {
-    data_[cvar.id()] = weight;
+    data_[cvar.id()] += weight;
 }
 
 boost::optional<double>

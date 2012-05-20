@@ -4,6 +4,7 @@
 #include "FiniteVolume2DLib/Math.h"
 
 #include "FiniteVolume2D/ComputationalMeshBuilder.h"
+#include "FiniteVolume2D/IComputationalGridAccessor.h"
 
 #include <boost/filesystem.hpp>
 
@@ -38,7 +39,7 @@ namespace {
     public:
         DummyFluxEvaluator(unsigned int & count) : count_(count) {}
 
-        bool operator()(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+        bool operator()(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
             count_++;
             return true;
         }
@@ -71,7 +72,7 @@ ComputationalMeshBuilderTest::evaluateFluxesDummyTest() {
 namespace {
     
     bool
-    dummy_flux_eval(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+    dummy_flux_eval(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
         return true;
     }
 
@@ -288,7 +289,7 @@ ComputationalMeshBuilderTest::addCellVarsTest() {
 namespace {
   
     bool
-    flux_evaluator(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & ccell, ComputationalFace::Ptr const & cface)
+    flux_evaluator(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & ccell, ComputationalFace::Ptr const & cface)
     {
         /* Compute flux through a cell face. The cell face may be a boundary face
          * needing special treatment depending on whether Dirichlet or von Neumann
@@ -336,11 +337,11 @@ namespace {
                 face_source += cface->area() / dist * value;
 
                 // get comp. variable to solve for
-                ComputationalVariable const & cvar = ccell->getComputationalVariable("Temperature");
-                flux_molecule.add(cvar, -cface->area() / dist);
+                ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
+                flux_molecule.add(*cvar, -cface->area() / dist);
 
                 // contribution to the cell node
-                flux_molecule.add(ccell->getComputationalVariable(), -face->area() / dist);
+                flux_molecule.add(*cvar, -cface->area() / dist);
             }
             else {
                 // Face b.c. given as von Neumann
@@ -352,7 +353,6 @@ namespace {
             return true;
         }
 
-#if 0
         // internal face
 
 
@@ -364,9 +364,9 @@ namespace {
          * compute the usual gradient approximation,
          * \grad \phi \approx \frac{phi_{N} - phi_{P}}{\dist N - P}
          */
-        Vertex cell_centroid = cell->centroid();
+        Vertex cell_centroid = ccell->centroid();
 
-        Cell::Ptr cell_nbr = cgrid.getOtherCell(face, cell);
+        ComputationalCell::Ptr const & cell_nbr = cgrid.getOtherCell(cface, ccell);
         Vertex cell_nbr_centroid = cell_nbr->centroid();
 
         // distance from face midpoint to the cell centroid
@@ -375,17 +375,15 @@ namespace {
         /* The weight for the computational molecule is
          * \gamma f_{area} / dist(N - P).
          */
-        double weight = face->area() / dist;
+        double weight = cface->area() / dist;
     
         // get comp. variable to solve for
-        CompVar const & cvar = cell->getComputationalVariable("Temp");
+        ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
+        ComputationalVariable::Ptr const & cvar_nbr = cell_nbr->getComputationalVariable("Temperature");
 
-        CompVar const & cvar = cell->getComputationalVariable("phi");
-        CompVar const & cvar_nbr = cell_nbr->getComputationalVariable("phi");
+        flux_molecule.add(*cvar, -weight);
+        flux_molecule.add(*cvar_nbr, weight);
 
-        flux_molecule.add(cvar, -weight);
-        flux_molecule.add(cvar_nbr, weight);
-#endif
         return true;
     }
 
@@ -397,6 +395,19 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
 
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
+
+
+
+    /* 
+     * 
+     * 
+     * Cell has user-def variable TEMPERATURE and
+     * cell centered. ERROR!!!
+     * 
+     * 
+     * */
+
+
 
     ComputationalMesh::Ptr cmesh(builder.build());
 

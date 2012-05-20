@@ -8,8 +8,10 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
 
-class SourceTerm {
+
+class DECL_SYMBOLS_2D SourceTerm {
 public:
     SourceTerm();
 

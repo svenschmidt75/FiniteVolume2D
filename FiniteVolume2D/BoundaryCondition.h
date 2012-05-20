@@ -7,12 +7,14 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "FiniteVolume2DLib/BoundaryConditionCollection.h"
 
 #include <memory>
 
 
-class BoundaryCondition {
+class DECL_SYMBOLS_2D BoundaryCondition {
 public:
     typedef std::shared_ptr<BoundaryCondition> Ptr;
 

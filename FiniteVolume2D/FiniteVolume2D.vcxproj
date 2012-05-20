@@ -106,6 +106,7 @@
     </ClCompile>
     <ClCompile Include="FluxComputationalMolecule.cpp" />
     <ClCompile Include="GeometricalEntityMapper.cpp" />
+    <ClCompile Include="IComputationalGridAccessor.cpp" />
     <ClCompile Include="internal\ComputationalVariableManagerIterator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SourceTerm.cpp" />
@@ -128,7 +129,7 @@
     <ClInclude Include="ComputationalVariable.h" />
     <ClInclude Include="FluxComputationalMolecule.h" />
     <ClInclude Include="GeometricalEntityMapper.h" />
-    <ClInclude Include="ComputationalGridAccessor.h" />
+    <ClInclude Include="IComputationalGridAccessor.h" />
     <ClInclude Include="IComputationalMolecule.h" />
     <ClInclude Include="internal\ComputationalVariableManagerIterator.h" />
     <ClInclude Include="internal\ComputationalVariableManagerTypes.h" />

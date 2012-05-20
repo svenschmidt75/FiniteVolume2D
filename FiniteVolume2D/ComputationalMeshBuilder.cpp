@@ -2,7 +2,7 @@
 
 #include "FluxComputationalMolecule.h"
 #include "ComputationalMolecule.h"
-#include "ComputationalGridAccessor.h"
+#include "IComputationalGridAccessor.h"
 
 #include "FiniteVolume2DLib/Util.h"
 #include "FiniteVolume2DLib/Thread.hpp"
@@ -324,7 +324,7 @@ ComputationalMeshBuilder::computeFaceFluxes(ComputationalMesh::Ptr & cmesh) cons
     /* For all cells, fill in the ComputationalMolecules for the
      * ComputationalVariables.
      */
-    ComputationalGridAccessor grid_accessor;
+    IComputationalGridAccessor grid_accessor(cmesh->getMeshConnectivity(), cmesh->getMapper());
 
     Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
     for (Thread<ComputationalCell>::size_type i = 0; i < cell_thread.size(); ++i) {

@@ -63,6 +63,11 @@ ComputationalCell::faceNormal(Face::Ptr const & face) const {
     return geometric_cell_->faceNormal(face);
 }
 
+Cell::Ptr const &
+ComputationalCell::geometricEntity() const {
+    return geometric_cell_;
+}
+
 EntityCollection<ComputationalNode> const &
 ComputationalCell::getComputationalNodes() const {
     return nodes_;
@@ -73,18 +78,13 @@ ComputationalCell::getComputationalFaces() const {
     return faces_;
 }
 
-ComputationalVariable const &
+ComputationalVariable::Ptr const
 ComputationalCell::getComputationalVariable(std::string const & name) const {
     /* cell-centered variables, will be solved for */
     auto it = cvars_.find(name);
-    if (it == cvars_.end()) {
-        boost::format format = boost::format("ComputationalCell::getComputationalVariable: Computational variable %1% not found in cell %2%!\n") % name % meshId();
-        Util::error(format.str());
-
-        // have to throw because we only return by reference
-        throw std::exception(format.str().c_str());
-    }
-    return *(it->second);
+    if (it == cvars_.end())
+        return std::nullptr_t();
+    return it->second;
 }
 
 void

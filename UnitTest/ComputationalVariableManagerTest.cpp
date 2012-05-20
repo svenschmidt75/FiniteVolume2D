@@ -18,7 +18,7 @@ ComputationalVariableManagerTest::tearDown() {
 }
 
 namespace {
-    bool dummy(ComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+    bool dummy(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
         return false;
     }
 

@@ -65,6 +65,11 @@ ComputationalFace::endNode() const {
     return *(cnodes_[1]);
 }
 
+Face::Ptr const &
+ComputationalFace::geometricEntity() const {
+    return geometric_face_;
+}
+
 BoundaryCondition::Ptr const &
 ComputationalFace::getBoundaryCondition() const {
     return bc_;

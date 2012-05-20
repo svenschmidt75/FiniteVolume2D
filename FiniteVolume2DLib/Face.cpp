@@ -1,6 +1,7 @@
 #include "Face.h"
 
 #include "Vector.h"
+#include "Math.h"
 
 
 Face::Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes)
@@ -31,10 +32,7 @@ Face::area() const {
     Node::Ptr const & v0 = nodes_.getEntity(0);
     Node::Ptr const & v1 = nodes_.getEntity(1);
 
-    double dx = v0->location().x() - v1->location().x();
-    double dy = v0->location().y() - v1->location().y();
-    double d = dx * dx + dy * dy;
-    return sqrt(d);
+    return Math::dist(v0->location(), v1->location());
 }
 
 Vector

@@ -29,7 +29,7 @@
 
 
 class ComputationalVariable;
-class ComputationalGridAccessor;
+class IComputationalGridAccessor;
 
 #pragma warning(disable:4251)
 

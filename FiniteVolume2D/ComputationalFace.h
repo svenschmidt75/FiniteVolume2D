@@ -51,6 +51,8 @@ public:
     ComputationalNode const &                   startNode() const;
     ComputationalNode const &                   endNode() const;
 
+    Face::Ptr const &                           geometricEntity() const;
+
     BoundaryCondition::Ptr const &              getBoundaryCondition() const;
     void                                        setBoundaryCondition(BoundaryCondition::Ptr const & bc);
 

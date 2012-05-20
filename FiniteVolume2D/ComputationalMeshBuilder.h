@@ -25,9 +25,6 @@
 #include <set>
 
 
-class ComputationalGridAccessor;
-
-
 #pragma warning(disable:4251)
 
 

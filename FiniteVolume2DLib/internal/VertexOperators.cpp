@@ -1,6 +1,8 @@
 /* Note: This file MUST be excluded from the project.
  *       It is included by Vertex.cpp ONLY!!!
  */
+#include <cassert>
+
 
 Vertex
 operator+(Vertex const & lhs, Vertex const & rhs) {
@@ -9,5 +11,6 @@ operator+(Vertex const & lhs, Vertex const & rhs) {
 
 Vertex
 operator/(Vertex const & in, double const value) {
+    assert(value);
     return Vertex(in.x() / value, in.y() / value);
 }
