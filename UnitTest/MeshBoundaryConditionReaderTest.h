@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include "MeshBuilderMock.h"
+#include "internal/MeshBuilderMock.h"
 
 #include "FiniteVolume2DLib/BoundaryConditionCollection.h"
 

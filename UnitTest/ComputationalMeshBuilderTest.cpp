@@ -17,6 +17,9 @@ ComputationalMeshBuilderTest::MeshPtr ComputationalMeshBuilderTest::mesh_;
 BoundaryConditionCollection           ComputationalMeshBuilderTest::bc_;
 
 
+#pragma warning(disable:4482)
+
+
 void
 ComputationalMeshBuilderTest::setUp() {
     mesh_filename_ = "Data\\square.mesh";
@@ -395,21 +398,65 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
 
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
-
-
-
-    /* 
-     * 
-     * 
-     * Cell has user-def variable TEMPERATURE and
-     * cell centered. ERROR!!!
-     * 
-     * 
-     * */
-
-
-
     ComputationalMesh::Ptr cmesh(builder.build());
+
+    auto boundary_face_thread_ = cmesh->getFaceThread(IGeometricEntity::BOUNDARY);
+
+
+    /*
+     * check face boundary conditions
+     */
+
+    // Face 6 is a boundary face with b.c. Dirichlet = 0.9987
+    auto it = std::find_if(boundary_face_thread_.begin(), boundary_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 6u;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face not found", it != boundary_face_thread_.end());
+    ComputationalFace::Ptr const & cface_6 = *it;
+
+    BoundaryCondition::Ptr const & bc_6 = cface_6->getBoundaryCondition();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Dirichlet boundary conditions", BoundaryConditionCollection::DIRICHLET, bc_6->type());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Boundary condition value error", 0.9987, bc_6->getValue(), 1E-10);
+
+    // check flux computation across boundary faces
+    FluxComputationalMolecule fm = cface_6->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1u, fm.size());
+
+    // check flux value and source term value
+
+
+
+
+
+
+    // Face 11 is a boundary face with b.c. Dirichlet = 0
+    it = std::find_if(boundary_face_thread_.begin(), boundary_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 6u;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face not found", it != boundary_face_thread_.end());
+    ComputationalFace::Ptr const & cface_11 = *it;
+
+    BoundaryCondition::Ptr const & bc_11 = cface_11->getBoundaryCondition();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Dirichlet boundary conditions", BoundaryConditionCollection::DIRICHLET, bc_11->type());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Boundary condition value error", 0.9987, bc_11->getValue(), 1E-10);
+
+
+
+    // check flux for internal face
+
+    // no source term expected for internal flux
+
+    //    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to internal face flux", 2u, fm.size());
+
+
+
+
+
+
 
 }
 
@@ -428,3 +475,5 @@ ComputationalMeshBuilderTest::initMesh() {
         bc_ = reader.getBoundaryConditions();
     }
 }
+
+#pragma warning(default:4251)

@@ -10,7 +10,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "FiniteVolume2DLib/Mesh.h"
-#include "MeshBuilderMock.h"
+#include "internal/MeshBuilderMock.h"
 
 
 class EntityTest : public CppUnit::TestFixture {

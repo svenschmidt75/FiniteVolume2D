@@ -25,6 +25,11 @@ ComputationalNode::getEntityType() const {
     return geometric_node_->getEntityType();
 }
 
+Node::Ptr const &
+ComputationalNode::geometricEntity() const {
+    return geometric_node_;
+}
+
 Vertex
 ComputationalNode::location() const {
     return geometric_node_->location();

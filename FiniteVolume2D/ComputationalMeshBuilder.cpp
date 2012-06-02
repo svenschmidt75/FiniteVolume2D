@@ -179,7 +179,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
     Thread<Face> const & boundary_face_thread = geometrical_mesh_->getFaceThread(IGeometricEntity::BOUNDARY);
     for (Thread<Face>::size_type i = 0; i < boundary_face_thread.size(); ++i)
     {
-        BoundaryCondition::Ptr face_bc = std::nullptr_t();
+        BoundaryCondition::Ptr face_bc = nullptr;
 
         Face::Ptr const & face = boundary_face_thread.getEntityAt(i);
 

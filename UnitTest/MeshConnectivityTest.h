@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include "MeshBuilderMock.h"
+#include "internal/MeshBuilderMock.h"
 
 #include <cppunit/extensions/HelperMacros.h>
 

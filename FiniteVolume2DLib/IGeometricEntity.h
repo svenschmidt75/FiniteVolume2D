@@ -15,10 +15,10 @@
 
 class DECL_SYMBOLS_2DLIB IGeometricEntity {
 public:
-    typedef boost::uint64_t Id_t;
+    typedef unsigned long long Id_t;
  
     // entity type
-    enum Entity_t {BOUNDARY, INTERIOR, UNKNOWN};
+    enum Entity_t : unsigned int {BOUNDARY, INTERIOR, UNKNOWN};
 
 public:
     ~IGeometricEntity() {}

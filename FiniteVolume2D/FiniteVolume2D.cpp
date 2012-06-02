@@ -12,16 +12,6 @@ path bottom-up.
 
 ----------------------------------------------------
 
-- ComputationalMeshBuilder(mesh)
-- CompNode, CompFace, CompCell
-- BoundaryCondition
-  - check that for each boundary face, either d or n b.c. has been
-    specified
-
-- SourceTerm
-- (Flux)CompMolecule
-- NodeVariable
-
 - monitor skewness
 - monitor aspect ratio
 
@@ -44,41 +34,21 @@ ICell: Node/ComputationalNode => covariant return types
 
 ----------------------------------------------------
 
-ComputationalVariableManager?
+Face flux according to the one cell or the other negates sign
 
-- active
-- passive
+----------------------------------------------------
+Operators for CompMolecule
 
-- on comp. nodes and comp. faces = passive only
-- comp. cells = active and passive
+----------------------------------------------------
+Own iterator:
+
+Insteam of Item, just wrap a REFERENCE in Item and
+have a "smaller" interface.
+
+This way, FluxEvaluator can have state?
 
 
 ----------------------------------------------------
-CompCells have reference to the comp variable they stand for.
-Only for active variables, not user-defined.
-
-
-
-
-----------------------------------------------------
-
-Maybe
- 
-CompVar var(Cell::Ptr, var_index, "name")
- 
-and
- 
-ccell->addVariable(var);
- 
- 
- 
- 
-CompMolecule
---------------------
- 
-std::pair<var, weight>,
- 
-CompVar::operator==(CompVar const & in), compare indices
 
 
 ----------------------------------------------------
@@ -108,49 +78,6 @@ CompVar::operator==(CompVar const & in), compare indices
 
 
 ----------------------------------------------------
-
-
-class ComputeManager {
-    // To separate computational aspects from geometrical
-};
-
-class Cell : public GeometricEntity {
-
-    ComputeManager::Ptr cmgr_;
-};
-
-
-class NodeDependency {
-public:
-    // Id of node this dependency is for
-    NodeId id_;
-    
-    // Target node id
-    NodeId other_id_;
-
-    // Weight
-    double weight_;
-};
-
-class ComputationalMolecule {
-public:
-    // Id of node this dependency is for
-    NodeId id_;
-
-    std::vector<NodeDependency> dependencies_;
-};
-
-class INodeVariable {
-public:
-    ComputationalMolecule::Ptr molecule_;
-};
-
-class PressureNodeVariable : public INodeVariable {
-public:
-    // p for pressure etc.
-    std::string variable_text_;
-    double value_;
-};
 
 
 void

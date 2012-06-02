@@ -40,6 +40,8 @@ public:
     IGeometricEntity::Entity_t getEntityType() const;
     Vertex                     location() const;
 
+    Node::Ptr const &          geometricEntity() const;
+
     ComputationalMolecule &    getComputationalMolecule(std::string const & var_name);
     void                       addComputationalMolecule(std::string const & var_name);
 

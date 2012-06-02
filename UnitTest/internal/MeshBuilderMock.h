@@ -22,6 +22,7 @@ class MeshBuilderMock : public IMeshBuilder {
     friend class EntityTest;
     friend class MeshBoundaryConditionReaderTest;
     friend class ComputationalVariableTest;
+    friend class ComputationalMeshBuilderTest;
 
 public:
     MeshBuilderMock() {
@@ -29,7 +30,7 @@ public:
         face_mgr_ = FaceManager::create();
         cell_mgr_ = CellManager::create();
         EntityCreatorManager::Ptr emgr = EntityCreatorManager::create(node_mgr_, face_mgr_, cell_mgr_);
-        mesh_builder_ = std::shared_ptr<MeshBuilder>(new MeshBuilder(emgr, bc_));
+        mesh_builder_ = std::make_shared<MeshBuilder>(emgr, bc_);
     }
 
     bool buildNode(IGeometricEntity::Id_t node_id, IGeometricEntity::Entity_t entity_type, double x, double y) {

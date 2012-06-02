@@ -17,6 +17,7 @@ private:
     typedef typename std::deque<typename Entity::Ptr> EntityCollection_t;
 
 public:
+    typedef typename Entity                             type;
     typedef typename EntityCollection_t::size_type      size_type;
     typedef typename EntityCollection_t::const_iterator iterator;
 
