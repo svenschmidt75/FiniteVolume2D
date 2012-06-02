@@ -7,3 +7,8 @@ void
 SourceTerm::operator+=(double const value) {
     value_ += value;
 }
+
+double
+SourceTerm::value() const {
+    return value_;
+}

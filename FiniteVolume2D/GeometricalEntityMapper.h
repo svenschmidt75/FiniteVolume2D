@@ -11,6 +11,8 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "ComputationalNode.h"
 #include "ComputationalFace.h"
 #include "ComputationalCell.h"
@@ -21,7 +23,10 @@
 #include <map>
 
 
-class GeometricalEntityMapper {
+#pragma warning(disable:4251)
+
+
+class DECL_SYMBOLS_2D GeometricalEntityMapper {
 private:
     template<typename GEOMETRICAL_ENTITY, typename COMPUTATIONAL_ENTITY>
     struct Link {
@@ -52,3 +57,5 @@ private:
     mutable ComputationalFaceMap_t face_map_;
     mutable ComputationalCellMap_t cell_map_;
 };
+
+#pragma warning(default:4251)

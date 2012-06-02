@@ -17,6 +17,8 @@ public:
 
     void operator+=(double const value);
 
+    double value() const;
+
 private:
     double value_;
 };

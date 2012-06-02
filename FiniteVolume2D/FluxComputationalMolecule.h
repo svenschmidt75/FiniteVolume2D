@@ -25,7 +25,8 @@ public:
     FluxComputationalMolecule();
     explicit FluxComputationalMolecule(std::string const & name);
 
-    void setCell(std::shared_ptr<ComputationalCell> const & ccell);
+    void                                       setCell(std::shared_ptr<ComputationalCell> const & ccell);
+    std::shared_ptr<ComputationalCell> const & getCell(void) const;
 
 private:
     /* Flux through non-boundary faces involves two cells.

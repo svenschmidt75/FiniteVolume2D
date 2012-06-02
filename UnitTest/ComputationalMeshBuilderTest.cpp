@@ -301,6 +301,9 @@ namespace {
          * Flux through an internal face is evaluated by the usual gradient approximation.
          * Note that this is not 2nd order, not even is there is no cell skewness as we
          * omit the cross-diffusion term (Comp. Fluid Dynamics, Versteeg, p. 319).
+         * 
+         * Note that we are assuming that the face normal and the vector connecting
+         * the two cell centers are aligned, i.e. that the mesh is fully orthogonal.
          */
 
         // Get face flux molecules for "Temperature"
@@ -341,9 +344,6 @@ namespace {
 
                 // get comp. variable to solve for
                 ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
-                flux_molecule.add(*cvar, -cface->area() / dist);
-
-                // contribution to the cell node
                 flux_molecule.add(*cvar, -cface->area() / dist);
             }
             else {
@@ -400,64 +400,111 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
     builder.addComputationalVariable("Temperature", flux_evaluator);
     ComputationalMesh::Ptr cmesh(builder.build());
 
-    auto boundary_face_thread_ = cmesh->getFaceThread(IGeometricEntity::BOUNDARY);
+
 
 
     /*
-     * check face boundary conditions
+     * Face 6 is a boundary face with b.c. Dirichlet = 0.9987
      */
+    auto boundary_face_thread_ = cmesh->getFaceThread(IGeometricEntity::Entity_t::BOUNDARY);
 
-    // Face 6 is a boundary face with b.c. Dirichlet = 0.9987
     auto it = std::find_if(boundary_face_thread_.begin(), boundary_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
         return face->meshId() == 6u;
     });
 
     CPPUNIT_ASSERT_MESSAGE("Face not found", it != boundary_face_thread_.end());
-    ComputationalFace::Ptr const & cface_6 = *it;
+    ComputationalFace::Ptr cface = *it;
 
-    BoundaryCondition::Ptr const & bc_6 = cface_6->getBoundaryCondition();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Dirichlet boundary conditions", BoundaryConditionCollection::DIRICHLET, bc_6->type());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Boundary condition value error", 0.9987, bc_6->getValue(), 1E-10);
+    BoundaryCondition::Ptr bc = cface->getBoundaryCondition();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Dirichlet boundary conditions", BoundaryConditionCollection::DIRICHLET, bc->type());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Boundary condition value error", 0.9987, bc->getValue(), 1E-10);
 
     // check flux computation across boundary faces
-    FluxComputationalMolecule fm = cface_6->getComputationalMolecule("Temperature");
+    FluxComputationalMolecule fm = cface->getComputationalMolecule("Temperature");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1u, fm.size());
 
-    // check flux value and source term value
+    // check that the face flux was computed with the correct cell
+    ComputationalCell::Ptr ccell = fm.getCell();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong computational cell used for face flux calculation", 2ull, ccell->geometricEntity()->meshId());
+
+    // check the correct computational variable is used in the comp. face molecule
+    ComputationalVariable::Ptr cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong computational variable in face comp. molecule", -2.6832815729997472, *fm.getWeight(*cvar), 1E-10);
+
+    // check that the source term is correct
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term value", 2.6797933069548479, fm.getSourceTerm().value(), 1E-10);
 
 
-
-
-
-
-    // Face 11 is a boundary face with b.c. Dirichlet = 0
+    /*
+     * Face 11 is a boundary face with b.c. Dirichlet = 0
+     */
     it = std::find_if(boundary_face_thread_.begin(), boundary_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
-        return face->meshId() == 6u;
+        return face->meshId() == 11u;
     });
 
     CPPUNIT_ASSERT_MESSAGE("Face not found", it != boundary_face_thread_.end());
-    ComputationalFace::Ptr const & cface_11 = *it;
+    cface = *it;
 
-    BoundaryCondition::Ptr const & bc_11 = cface_11->getBoundaryCondition();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Dirichlet boundary conditions", BoundaryConditionCollection::DIRICHLET, bc_11->type());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Boundary condition value error", 0.9987, bc_11->getValue(), 1E-10);
+    bc = cface->getBoundaryCondition();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Dirichlet boundary conditions", BoundaryConditionCollection::DIRICHLET, bc->type());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Boundary condition value error", 0.0, bc->getValue(), 1E-10);
+
+    // check flux computation across boundary faces
+    fm = cface->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1u, fm.size());
+
+    // check that the face flux was computed with the correct cell
+    ccell = fm.getCell();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong computational cell used for face flux calculation", 7ull, ccell->geometricEntity()->meshId());
+
+    // check the correct computational variable is used in the comp. face molecule
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong computational variable in face comp. molecule", -2.6832815729997472, *fm.getWeight(*cvar), 1E-10);
+
+    // check that the source term is correct
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term value", 0.0, fm.getSourceTerm().value(), 1E-10);
 
 
 
-    // check flux for internal face
+    
+    /*
+     * Face 3 is a internal face
+     */
+    auto internal_face_thread_ = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
 
-    // no source term expected for internal flux
+    it = std::find_if(internal_face_thread_.begin(), internal_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 3u;
+    });
 
-    //    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to internal face flux", 2u, fm.size());
+    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread_.end());
+    cface = *it;
 
+    bc = cface->getBoundaryCondition();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected no boundary conditions for internal face", BoundaryCondition::Ptr(), bc);
 
+    // check flux computation across boundary faces
+    fm = cface->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2u, fm.size());
 
+    // check that the face flux was computed with the correct cell
+    ccell = fm.getCell();
+    CPPUNIT_ASSERT_MESSAGE("Wrong computational cell used for face flux calculation", ccell->geometricEntity()->meshId() == 5 || ccell->geometricEntity()->meshId() == 6);
 
+    // check the correct computational variable is used in the comp. face molecule
+    cvar = ccell->getComputationalVariable("Temperature");
+    Cell::Ptr cother = cmesh->getMeshConnectivity().getOtherCell(cface->geometricEntity(), ccell->geometricEntity());
+    ComputationalCell::Ptr ccother = cmesh->getMapper().getComputationalCell(cother);
+    ComputationalVariable::Ptr ccother_var = ccother->getComputationalVariable("Temperature");
+    double w1 = *fm.getWeight(*cvar);
+    double w2 = *fm.getWeight(*ccother_var);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong computational variable in face comp. molecule", 1.5, std::abs(w1), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weights expected to be opposite in value", w1, -w2, 1E-10);
 
-
-
+    // check that the source term is correct
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term value", 0.0, fm.getSourceTerm().value(), 1E-10);
 }
 
 void

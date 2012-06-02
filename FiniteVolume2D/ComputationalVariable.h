@@ -27,7 +27,7 @@ class DECL_SYMBOLS_2D ComputationalVariable {
 
 public:
     typedef std::shared_ptr<ComputationalVariable> Ptr;
-    typedef long long int Id_t;
+    typedef unsigned long long int Id_t;
 
 public:
     explicit ComputationalVariable(std::shared_ptr<ComputationalCell> const & cell, std::string const & name, Id_t unique_id);

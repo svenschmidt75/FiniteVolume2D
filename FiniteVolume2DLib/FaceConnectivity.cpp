@@ -32,7 +32,7 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
     if (it == face_cells_.end()) {
         // face not found
         assert(false);
-        return NULL;
+        return nullptr;
     }
 
     EntityCollection<Cell> const & cells = it->second;
@@ -42,7 +42,7 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
         if (cells.size() != 2) {
             boost::format format = boost::format("FaceConnectivity::getOtherCell: Interior face %1% must have 2 cells!\n") % face->meshId();
             Util::error(format.str());
-            return NULL;
+            return nullptr;
 
         }
     }
@@ -51,18 +51,18 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
         if (cells.size() != 1) {
             boost::format format = boost::format("FaceConnectivity::getOtherCell: Boundary face %1% must have 1 cell!\n") % face->meshId();
             Util::error(format.str());
-            return NULL;
+            return nullptr;
         }
     }
 
     if (!cells.find(cell->meshId())) {
         boost::format format = boost::format("FaceConnectivity::getOtherCell: Face %1% does not reference cell %2%!\n") % face->meshId() % cell->meshId();
         Util::error(format.str());
-        return NULL;
+        return nullptr;
     }
 
     if (cells.size() == 1)
-        return NULL;
+        return nullptr;
 
     if (cells.getEntity(0) == cell)
         return cells.getEntity(1);

@@ -83,7 +83,7 @@ ComputationalCell::getComputationalVariable(std::string const & name) const {
     /* cell-centered variables, will be solved for */
     auto it = cvars_.find(name);
     if (it == cvars_.end())
-        return std::nullptr_t();
+        return nullptr;
     return it->second;
 }
 
