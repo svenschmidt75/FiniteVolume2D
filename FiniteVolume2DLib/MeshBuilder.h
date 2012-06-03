@@ -22,7 +22,7 @@ public:
     typedef std::shared_ptr<MeshBuilder> Ptr;
 
 public:
-    MeshBuilder(EntityCreatorManager::Ptr & entity_mgr, BoundaryConditionCollection & bc);
+    MeshBuilder(EntityCreatorManager::Ptr & entity_mgr);
 
 
     // FROM IMeshBuilder
@@ -39,7 +39,6 @@ private:
 private:
     Mesh::Ptr                 mesh_;
     EntityCreatorManager::Ptr entity_mgr_;
-    BoundaryConditionCollection &       bc_;
 };
 
 #pragma warning(default:4251)

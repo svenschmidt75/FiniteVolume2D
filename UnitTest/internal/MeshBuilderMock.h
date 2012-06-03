@@ -13,7 +13,6 @@
 #include "FiniteVolume2DLib/CellManager.h"
 #include "FiniteVolume2DLib/EntityCreatorManager.h"
 #include "FiniteVolume2DLib/MeshBuilder.h"
-#include "FiniteVolume2DLib/BoundaryConditionCollection.h"
 
 
 class MeshBuilderMock : public IMeshBuilder {
@@ -30,7 +29,7 @@ public:
         face_mgr_ = FaceManager::create();
         cell_mgr_ = CellManager::create();
         EntityCreatorManager::Ptr emgr = EntityCreatorManager::create(node_mgr_, face_mgr_, cell_mgr_);
-        mesh_builder_ = std::make_shared<MeshBuilder>(emgr, bc_);
+        mesh_builder_ = std::make_shared<MeshBuilder>(emgr);
     }
 
     bool buildNode(IGeometricEntity::Id_t node_id, IGeometricEntity::Entity_t entity_type, double x, double y) {
@@ -50,9 +49,8 @@ public:
     }
 
 private:
-    NodeManager::Ptr            node_mgr_;
-    FaceManager::Ptr            face_mgr_;
-    CellManager::Ptr            cell_mgr_;
-    MeshBuilder::Ptr            mesh_builder_;
-    BoundaryConditionCollection bc_;
+    NodeManager::Ptr node_mgr_;
+    FaceManager::Ptr face_mgr_;
+    CellManager::Ptr cell_mgr_;
+    MeshBuilder::Ptr mesh_builder_;
 };

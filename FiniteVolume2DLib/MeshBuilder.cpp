@@ -6,13 +6,12 @@
 #include "Face.h"
 #include "EntityCreatorManager.h"
 #include "Util.h"
-#include "BoundaryConditionCollection.h"
 
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
 
 
-MeshBuilder::MeshBuilder(EntityCreatorManager::Ptr & entity_mgr, BoundaryConditionCollection & bc) : entity_mgr_(entity_mgr), bc_(bc), mesh_(Mesh::create()) {}
+MeshBuilder::MeshBuilder(EntityCreatorManager::Ptr & entity_mgr) : entity_mgr_(entity_mgr), mesh_(Mesh::create()) {}
 
 bool
 MeshBuilder::buildNode(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, double x, double y)
