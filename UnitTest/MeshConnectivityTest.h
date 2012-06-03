@@ -55,7 +55,7 @@ private:
     void initMesh();
 
 private:
-    typedef Mesh::Ptr MeshPtr;
+    typedef Mesh::CPtr MeshPtr;
 
 private:
     std::string            mesh_filename_;

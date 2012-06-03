@@ -107,6 +107,7 @@
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MeshBoundaryConditionReaderTest.cpp" />
+    <ClCompile Include="MeshCheckerTest.cpp" />
     <ClCompile Include="MeshConnectivityTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +119,7 @@
     <ClInclude Include="EntityTest.h" />
     <ClInclude Include="internal\MeshBuilderMock.h" />
     <ClInclude Include="MeshBoundaryConditionReaderTest.h" />
+    <ClInclude Include="MeshCheckerTest.h" />
     <ClInclude Include="MeshConnectivityTest.h" />
   </ItemGroup>
   <ItemGroup>

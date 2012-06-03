@@ -17,6 +17,6 @@ FluxComputationalMolecule::setCell(ComputationalCell::Ptr const & ccell) {
 }
 
 ComputationalCell::Ptr const &
-FluxComputationalMolecule::getCell(void) const {
+FluxComputationalMolecule::getCell() const {
     return ccell_;
 }

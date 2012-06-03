@@ -11,7 +11,7 @@
 #include <boost/format.hpp>
 
 
-ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
+ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::CPtr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
 
 bool
 ComputationalMeshBuilder::addComputationalVariable(std::string const & var_name, FluxEvaluator_t const & flux_evaluator) {

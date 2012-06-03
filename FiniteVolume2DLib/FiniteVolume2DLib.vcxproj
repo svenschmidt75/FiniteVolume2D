@@ -40,6 +40,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshBuilder.h" />
+    <ClInclude Include="MeshChecker.h" />
     <ClInclude Include="MeshConnectivity.h" />
     <ClInclude Include="Thread.hpp" />
     <ClInclude Include="Util.h" />
@@ -71,6 +72,7 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshBuilder.cpp" />
+    <ClCompile Include="MeshChecker.cpp" />
     <ClCompile Include="MeshConnectivity.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Vector.cpp" />

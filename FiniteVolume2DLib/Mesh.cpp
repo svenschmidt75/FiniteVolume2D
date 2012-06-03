@@ -46,6 +46,12 @@ Mesh::getNodeThread(IGeometricEntity::Entity_t entity_type) {
     return interior_node_thread_;
 }
 
+Thread<Node> const &
+Mesh::getNodeThread(IGeometricEntity::Entity_t entity_type) const {
+  Mesh* this_ = const_cast<Mesh*>(this);
+  return this_->getNodeThread(entity_type);
+}
+
 Thread<Face> &
 Mesh::getFaceThread(IGeometricEntity::Entity_t entity_type) {
     if (entity_type == IGeometricEntity::BOUNDARY)
@@ -53,8 +59,19 @@ Mesh::getFaceThread(IGeometricEntity::Entity_t entity_type) {
     return interior_face_thread_;
 }
 
+Thread<Face> const &
+Mesh::getFaceThread(IGeometricEntity::Entity_t entity_type) const {
+    Mesh* this_ = const_cast<Mesh*>(this);
+    return this_->getFaceThread(entity_type);
+}
+
 Thread<Cell> &
 Mesh::getCellThread() {
+    return cell_thread_;
+}
+
+Thread<Cell> const &
+Mesh::getCellThread() const {
     return cell_thread_;
 }
 

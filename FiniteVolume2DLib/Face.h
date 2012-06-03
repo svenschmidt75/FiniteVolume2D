@@ -25,7 +25,8 @@ class DECL_SYMBOLS_2DLIB Face : public IFace {
     friend class FaceManager;
 
 public:
-    typedef std::shared_ptr<Face> Ptr;
+    typedef std::shared_ptr<Face>       Ptr;
+    typedef std::shared_ptr<Face const> CPtr;
 
 public:
     // FROM IGeometricEntity
