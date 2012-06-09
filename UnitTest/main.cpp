@@ -16,6 +16,7 @@
 #include "ComputationalVariableTest.h"
 #include "ComputationalVariableManagerTest.h"
 #include "MeshCheckerTest.h"
+#include "VersteegMalalasekeraTest.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
@@ -26,6 +27,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalMeshBuilderTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalVariableTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalVariableManagerTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshCheckerTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(VersteegMalalasekeraTest);
 
 
 int main(int /*argc*/, char ** /*argv*/) {

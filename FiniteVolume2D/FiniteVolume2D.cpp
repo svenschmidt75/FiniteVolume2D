@@ -55,22 +55,10 @@ Check that every b.f. has a b.c.!!
 
 
 
-
-std::vector<std::shared_ptr<Type>> coll;
-
-typename Entity::Ptr & operator[](int index) {
-    return coll[index];
-}
-
-coll[index] = std::shared_ptr<Type>;
-
-Now:
-Entity* ptr = *(coll[index]);
-
-std::shared_ptr<Entity const> sp = std::shared_ptr<Entity const>().reset(ptr);
+xcopy /F /Y $(CPPUNIT_DIR)\cppunit\lib\cppunitd_dll.dll $(OutputPath)
 
 
-
+echo $(SolutionDir)$(Configuration)\$(ProjectName)
 
 
 

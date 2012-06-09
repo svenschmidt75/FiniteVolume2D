@@ -2,6 +2,7 @@
 
 #include "Util.h"
 
+#include <exception>
 #include <boost/format.hpp>
 
 
@@ -14,6 +15,20 @@ FaceConnectivity::insert(Cell::Ptr const & cell) {
     for (size_type i = 0; i < faces.size(); ++i) {
         Face::Ptr const & face = faces.getEntity(i);
         face_cells_[face->id()].insert(cell);
+
+        if (face->getEntityType() == IGeometricEntity::BOUNDARY && face_cells_[face->id()].size() > 1) {
+            boost::format format = boost::format("FaceConnectivity::insert: Boundary face %1% has more than 1 cell neighbor \
+                                                 when inserting cell %2%!\n") % face->meshId() % cell->meshId();
+            Util::error(format.str());
+            throw std::exception(format.str().c_str());
+        }
+
+        if (face->getEntityType() == IGeometricEntity::INTERIOR && face_cells_[face->id()].size() > 2) {
+            boost::format format = boost::format("FaceConnectivity::insert: Interior face %1% has more than 2 cell neighbors \
+                                                 when inserting cell %2%!\n") % face->meshId() % cell->meshId();
+            Util::error(format.str());
+            throw std::exception(format.str().c_str());
+        }
     }
 }
 
@@ -40,7 +55,7 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
     // interior face
     if (face->getEntityType() == IGeometricEntity::INTERIOR) {
         if (cells.size() != 2) {
-            boost::format format = boost::format("FaceConnectivity::getOtherCell: Interior face %1% must have 2 cells!\n") % face->meshId();
+            boost::format format = boost::format("FaceConnectivity::getOtherCell: Interior face %1% must have 2 cell neighbors!\n") % face->meshId();
             Util::error(format.str());
             return nullptr;
 
@@ -49,7 +64,7 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
     else {
         // boundary face
         if (cells.size() != 1) {
-            boost::format format = boost::format("FaceConnectivity::getOtherCell: Boundary face %1% must have 1 cell!\n") % face->meshId();
+            boost::format format = boost::format("FaceConnectivity::getOtherCell: Boundary face %1% must have 1 cell neighbor!\n") % face->meshId();
             Util::error(format.str());
             return nullptr;
         }

@@ -47,5 +47,55 @@ MeshChecker::checkMesh(Mesh::CPtr const & mesh, BoundaryConditionCollection cons
         }
     });
 
+    if (!check)
+        return false;
+
+
+    /* Check that 
+     * 1. internal faces have two cell neighbors
+     * 2. boundary faces have one cell neighbor
+     */
+    IMeshConnectivity const & mesh_connectivity = mesh->getMeshConnectivity();
+
+    std::for_each(bface_thread.begin(), bface_thread.end(), [&](Face::Ptr const & face) {
+        boost::optional<EntityCollection<Cell>> cell_nbrs = mesh_connectivity.getCellsAttachedToFace(face);
+
+        if (!cell_nbrs) {
+            boost::format format = boost::format("MeshChecker::checkMesh: Expected two cell neighbors \
+                                                 for internal face with mesh id %1%!\n") % face->meshId();
+            Util::error(format.str());
+            check = false;
+        }
+
+        else if ((*cell_nbrs).size() != 1) {
+            boost::format format = boost::format("MeshChecker::checkMesh: Expected two cell neighbors \
+                                                 for internal face with mesh id %1%!\n") % face->meshId();
+            Util::error(format.str());
+            check = false;
+        }
+    });
+
+    if (!check)
+        return false;
+
+
+    std::for_each(iface_thread.begin(), iface_thread.end(), [&](Face::Ptr const & face) {
+        boost::optional<EntityCollection<Cell>> cell_nbrs = mesh_connectivity.getCellsAttachedToFace(face);
+
+        if (!cell_nbrs) {
+            boost::format format = boost::format("MeshChecker::checkMesh: Expected two cell neighbors \
+                                                 for internal face with mesh id %1%!\n") % face->meshId();
+            Util::error(format.str());
+            check = false;
+        }
+
+        else if ((*cell_nbrs).size() != 2) {
+            boost::format format = boost::format("MeshChecker::checkMesh: Expected two cell neighbors \
+                                                 for internal face with mesh id %1%!\n") % face->meshId();
+            Util::error(format.str());
+            check = false;
+        }
+    });
+
     return check;
 }

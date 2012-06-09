@@ -14,6 +14,9 @@ ComputationalCell::Ptr
 IComputationalGridAccessor::getOtherCell(ComputationalFace::Ptr const & cface, ComputationalCell::Ptr const & ccell) const {
     Cell::Ptr other_cell = mesh_connectivity_.getOtherCell(cface->geometricEntity(), ccell->geometricEntity());
 
+    if (!other_cell)
+        return nullptr;
+
     ComputationalCell::Ptr const & other_ccell = mapper_.getComputationalCell(other_cell);
     return other_ccell;
 }

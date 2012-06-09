@@ -16,6 +16,7 @@ class MeshCheckerTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(MeshCheckerTest);
     CPPUNIT_TEST(testMissingBoundaryCondition);
     CPPUNIT_TEST(testWrongBoundaryCondition);
+    CPPUNIT_TEST(testFaceNeighbors);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -25,6 +26,7 @@ public:
 protected:
     void testMissingBoundaryCondition();
     void testWrongBoundaryCondition();
+    void testFaceNeighbors();
 
 private:
     MeshBuilderMock             mock_builder_;

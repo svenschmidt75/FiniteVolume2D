@@ -64,7 +64,8 @@
       <AdditionalLibraryDirectories>$(CPPUNIT_DIR)\cppunit\lib;$(BOOST_DIR)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /F /Y $(CPPUNIT_DIR)\cppunit\lib\cppunitd_dll.dll $(OutputPath)</Command>
+      <Command>xcopy /F /Y $(CPPUNIT_DIR)\cppunit\lib\cppunitd_dll.dll $(OutputPath)
+</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -111,6 +112,7 @@
     <ClCompile Include="MeshBoundaryConditionReaderTest.cpp" />
     <ClCompile Include="MeshCheckerTest.cpp" />
     <ClCompile Include="MeshConnectivityTest.cpp" />
+    <ClCompile Include="VersteegMalalasekeraTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ASCIIMeshReaderTest.h" />
@@ -123,6 +125,7 @@
     <ClInclude Include="MeshBoundaryConditionReaderTest.h" />
     <ClInclude Include="MeshCheckerTest.h" />
     <ClInclude Include="MeshConnectivityTest.h" />
+    <ClInclude Include="VersteegMalalasekeraTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FiniteVolume2DLib\FiniteVolume2DLib.vcxproj">
