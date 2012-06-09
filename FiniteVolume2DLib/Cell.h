@@ -26,7 +26,8 @@ class DECL_SYMBOLS_2DLIB Cell : public ICell {
     friend class CellManager;
 
 public:
-    typedef std::shared_ptr<Cell> Ptr;
+    typedef std::shared_ptr<Cell>       Ptr;
+    typedef std::shared_ptr<Cell const> CPtr;
 
 public:
     // FROM IGeometricEntity
@@ -34,24 +35,24 @@ public:
     IGeometricEntity::Id_t meshId() const;
 
     // FROM ICell
-    EntityCollection<Node> const & getNodes() const;
-    EntityCollection<Face> const & getFaces() const;
-    double                         volume() const;
-    Vertex                         centroid() const;
+    EntityCollection<Node const> const & getNodes() const;
+    EntityCollection<Face const> const & getFaces() const;
+    double                               volume() const;
+    Vertex                               centroid() const;
 
-    Vector                         faceNormal(Face::Ptr const & face) const;
+    Vector                               faceNormal(Face::CPtr const & face) const;
 
 private:
-    Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
+    Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face const> const & faces);
 
     // only called by CellManager
-    static Ptr create(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
+    static Ptr create(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face const> const & faces);
 
 private:
-    IGeometricEntity::Id_t cell_id_;
-    IGeometricEntity::Id_t mesh_id_;
-    EntityCollection<Node> nodes_;
-    EntityCollection<Face> faces_;
+    IGeometricEntity::Id_t       cell_id_;
+    IGeometricEntity::Id_t       mesh_id_;
+    EntityCollection<Node const> nodes_;
+    EntityCollection<Face const> faces_;
 };
 
 #pragma warning(default:4275)

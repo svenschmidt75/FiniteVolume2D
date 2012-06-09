@@ -13,22 +13,22 @@ template class Thread<Cell>;
 Mesh::Mesh() {}
 
 void
-Mesh::addNode(Node::Ptr const & node) {
+Mesh::addNode(Node::CPtr const & node) {
     Thread<Node> & thread = getNodeThread(node->getEntityType());
     thread.insert(node);
 }
 
 void
-Mesh::addFace(Face::Ptr const & face) {
-    Thread<Face> & thread = getFaceThread(face->getEntityType());
+Mesh::addFace(Face::CPtr const & face) {
+    Thread<Face const> & thread = getFaceThread(face->getEntityType());
     thread.insert(face);
 
     mesh_connectivity_.insert(face);
 }
 
 void
-Mesh::addCell(Cell::Ptr const & cell) {
-    Thread<Cell> & thread = getCellThread();
+Mesh::addCell(Cell::CPtr const & cell) {
+    Thread<Cell const> & thread = getCellThread();
     thread.insert(cell);
 
     mesh_connectivity_.insert(cell);
@@ -46,7 +46,7 @@ Mesh::getNodeThread(IGeometricEntity::Entity_t entity_type) {
     return interior_node_thread_;
 }
 
-Thread<Node> const &
+Thread<Node const> const &
 Mesh::getNodeThread(IGeometricEntity::Entity_t entity_type) const {
   Mesh* this_ = const_cast<Mesh*>(this);
   return this_->getNodeThread(entity_type);
@@ -59,7 +59,7 @@ Mesh::getFaceThread(IGeometricEntity::Entity_t entity_type) {
     return interior_face_thread_;
 }
 
-Thread<Face> const &
+Thread<Face const> const &
 Mesh::getFaceThread(IGeometricEntity::Entity_t entity_type) const {
     Mesh* this_ = const_cast<Mesh*>(this);
     return this_->getFaceThread(entity_type);

@@ -10,7 +10,9 @@
 #include <cassert>
 
 
-ComputationalFace::ComputationalFace(Face::Ptr const & geometric_face, EntityCollection<ComputationalNode> const & cnodes) : geometric_face_(geometric_face), cnodes_(cnodes) , bc_(std::nullptr_t()) {
+ComputationalFace::ComputationalFace(Face::CPtr const & geometric_face, EntityCollection<ComputationalNode const> const & cnodes)
+    :
+    geometric_face_(geometric_face), cnodes_(cnodes) , bc_(std::nullptr_t()) {
     assert(cnodes_.size() == 2);
 }
 
@@ -30,7 +32,7 @@ ComputationalFace::getEntityType() const {
     return geometric_face_->getEntityType();
 }
 
-EntityCollection<Node> const &
+EntityCollection<Node const> const &
 ComputationalFace::getNodes() const {
     return geometric_face_->getNodes();
 }
@@ -50,7 +52,7 @@ ComputationalFace::centroid() const {
     return geometric_face_->centroid();
 }
 
-EntityCollection<ComputationalNode> const &
+EntityCollection<ComputationalNode const> const &
 ComputationalFace::getComputationalNodes() const {
     return cnodes_;
 }
@@ -65,18 +67,18 @@ ComputationalFace::endNode() const {
     return *(cnodes_[1]);
 }
 
-Face::Ptr const &
+Face::CPtr const &
 ComputationalFace::geometricEntity() const {
     return geometric_face_;
 }
 
-BoundaryCondition::Ptr const &
+BoundaryCondition::CPtr const &
 ComputationalFace::getBoundaryCondition() const {
     return bc_;
 }
 
 void
-ComputationalFace::setBoundaryCondition(BoundaryCondition::Ptr const & bc) {
+ComputationalFace::setBoundaryCondition(BoundaryCondition::CPtr const & bc) {
     bc_ = bc;
 }
 

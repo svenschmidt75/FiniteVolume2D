@@ -8,7 +8,7 @@
 CellManager::CellManager() {}
 
 Cell::Ptr
-CellManager::createCell(IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces) {
+CellManager::createCell(IGeometricEntity::Id_t mesh_id, EntityCollection<Face const> const & faces) {
     if (findEntity(mesh_id)) {
         boost::format format = boost::format("CellManager::create: Cell with mesh id %1% already created!\n") % mesh_id;
         Util::error(format.str());

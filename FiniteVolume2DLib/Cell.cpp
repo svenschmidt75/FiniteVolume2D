@@ -6,22 +6,18 @@
 #include <algorithm>
 
 
-Cell::Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces)
+Cell::Cell(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face const> const & faces)
     : cell_id_(cell_id), mesh_id_(mesh_id), faces_(faces) {
 
 
-    // this is necessary since the compiler expects the references passed to the lambda expression
-    // in the current scope. VS2010 compiler bug? See http://connect.microsoft.com/VisualStudio/feedback/details/560907/capturing-variables-in-nested-lambdas
-    EntityCollection<Node> & v = nodes_;
-
     // extract nodes
-    std::for_each(faces.begin(), faces.end(), [&v](Face::Ptr const & face) {
+    std::for_each(faces.begin(), faces.end(), [this](Face::CPtr const & face) {
         // Extract and check all nodes before inserting into v
-        EntityCollection<Node> const & nodes = face->getNodes();
+        EntityCollection<Node const> const & nodes = face->getNodes();
 
-        for (EntityCollection<Node>::size_type i = 0; i < nodes.size(); ++i) {
-            Node::Ptr const & vert = nodes.getEntity(i);
-            v.insertUnique(vert);
+        for (EntityCollection<Node const>::size_type i = 0; i < nodes.size(); ++i) {
+            Node::CPtr const & vert = nodes.getEntity(i);
+            nodes_.insertUnique(vert);
         }
     });
 }
@@ -36,12 +32,12 @@ Cell::meshId() const {
     return mesh_id_;
 }
 
-EntityCollection<Node> const &
+EntityCollection<Node const> const &
 Cell::getNodes() const {
     return nodes_;
 }
 
-EntityCollection<Face> const &
+EntityCollection<Face const> const &
 Cell::getFaces() const {
     return faces_;
 }
@@ -61,8 +57,8 @@ Cell::volume() const {
     for (size_type i = 0; i < n; ++i) {
         size_type next = (i + 1) % n;
 
-        Node::Ptr const & v0 = nodes_.getEntity(i);
-        Node::Ptr const & v1 = nodes_.getEntity(next);
+        Node::CPtr const & v0 = nodes_.getEntity(i);
+        Node::CPtr const & v1 = nodes_.getEntity(next);
 
         delta += (v0->location().x() * v1->location().y() - v1->location().x() * v0->location().y());
     }
@@ -78,7 +74,7 @@ Cell::centroid() const {
 }
 
 Vector
-Cell::faceNormal(Face::Ptr const & face) const {
+Cell::faceNormal(Face::CPtr const & face) const {
     /* A face is not owned by a cell. If two cells share a
      * face, the face normal has the opposite direction for
      * each cell.
@@ -99,7 +95,7 @@ Cell::faceNormal(Face::Ptr const & face) const {
 }
 
 Cell::Ptr
-Cell::create(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces) {
+Cell::create(IGeometricEntity::Id_t cell_id, IGeometricEntity::Id_t mesh_id, EntityCollection<Face const> const & faces) {
     Cell::Ptr cell = Cell::Ptr(new Cell(cell_id, mesh_id, faces));
     return cell;
 }

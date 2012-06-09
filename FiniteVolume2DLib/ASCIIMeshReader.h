@@ -29,6 +29,10 @@ public:
     BoundaryConditionCollection const & getBoundaryConditions() const;
 
 private:
+    // no implicit assignment operator due to reference (builder_)
+    ASCIIMeshReader & operator=(ASCIIMeshReader const & in);
+
+private:
     std::string                         mesh_filename_;
     IMeshBuilder &                      builder_;
     mutable BoundaryConditionCollection bc_;

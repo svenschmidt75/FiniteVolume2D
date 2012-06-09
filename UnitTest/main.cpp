@@ -28,7 +28,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalVariableManagerTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshCheckerTest);
 
 
-int main(int argc, char **argv) {
+int main(int /*argc*/, char ** /*argv*/) {
     // informs test-listener about testresults
     CPPUNIT_NS::TestResult testresult;
 

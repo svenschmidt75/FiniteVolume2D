@@ -7,21 +7,18 @@
 #include <boost/format.hpp>
 
 
-ComputationalCell::ComputationalCell(Cell::Ptr const & geometric_cell, EntityCollection<ComputationalFace> const & faces)
-    : geometric_cell_(geometric_cell), faces_(faces) {
-
-    // this is necessary since the compiler expects the references passed to the lambda expression
-    // in the current scope. VS2010 compiler bug? See http://connect.microsoft.com/VisualStudio/feedback/details/560907/capturing-variables-in-nested-lambdas
-    EntityCollection<ComputationalNode> & v = nodes_;
+ComputationalCell::ComputationalCell(Cell::CPtr const & geometric_cell, EntityCollection<ComputationalFace const> const & faces)
+    :
+    geometric_cell_(geometric_cell), faces_(faces) {
 
     // extract nodes
-    std::for_each(faces.begin(), faces.end(), [&v](ComputationalFace::Ptr const & cface) {
+    std::for_each(faces.begin(), faces.end(), [this](ComputationalFace::CPtr const & cface) {
         // Extract and check all nodes before inserting into v
-        EntityCollection<ComputationalNode> const & nodes = cface->getComputationalNodes();
+        EntityCollection<ComputationalNode const> const & nodes = cface->getComputationalNodes();
 
-        for (EntityCollection<ComputationalNode>::size_type i = 0; i < nodes.size(); ++i) {
-            ComputationalNode::Ptr const & vert = nodes.getEntity(i);
-            v.insertUnique(vert);
+        for (EntityCollection<ComputationalNode const>::size_type i = 0; i < nodes.size(); ++i) {
+            ComputationalNode::CPtr const & vert = nodes.getEntity(i);
+            nodes_.insertUnique(vert);
         }
     });
 }
@@ -38,12 +35,12 @@ ComputationalCell::meshId() const {
     return IGeometricEntity::undef();
 }
 
-EntityCollection<Node> const &
+EntityCollection<Node const> const &
 ComputationalCell::getNodes() const {
     return geometric_cell_->getNodes();
 }
 
-EntityCollection<Face> const &
+EntityCollection<Face const> const &
 ComputationalCell::getFaces() const {
     return geometric_cell_->getFaces();
 }
@@ -59,26 +56,26 @@ ComputationalCell::centroid() const {
 }
 
 Vector
-ComputationalCell::faceNormal(Face::Ptr const & face) const {
+ComputationalCell::faceNormal(Face::CPtr const & face) const {
     return geometric_cell_->faceNormal(face);
 }
 
-Cell::Ptr const &
+Cell::CPtr const &
 ComputationalCell::geometricEntity() const {
     return geometric_cell_;
 }
 
-EntityCollection<ComputationalNode> const &
+EntityCollection<ComputationalNode const> const &
 ComputationalCell::getComputationalNodes() const {
     return nodes_;
 }
 
-EntityCollection<ComputationalFace> const &
+EntityCollection<ComputationalFace const> const &
 ComputationalCell::getComputationalFaces() const {
     return faces_;
 }
 
-ComputationalVariable::Ptr const
+ComputationalVariable::CPtr const
 ComputationalCell::getComputationalVariable(std::string const & name) const {
     /* cell-centered variables, will be solved for */
     auto it = cvars_.find(name);
@@ -88,7 +85,7 @@ ComputationalCell::getComputationalVariable(std::string const & name) const {
 }
 
 void
-ComputationalCell::addComputationalVariable(ComputationalVariable::Ptr const & cvar) {
+ComputationalCell::addComputationalVariable(ComputationalVariable::CPtr const & cvar) {
     cvars_[cvar->getName()] = cvar;
 
     // also insert the corr. computational molecule

@@ -16,7 +16,8 @@
 
 class DECL_SYMBOLS_2D BoundaryCondition {
 public:
-    typedef std::shared_ptr<BoundaryCondition> Ptr;
+    typedef std::shared_ptr<BoundaryCondition>       Ptr;
+    typedef std::shared_ptr<BoundaryCondition const> CPtr;
 
 public:
     explicit BoundaryCondition(BoundaryConditionCollection::Pair const & bc);

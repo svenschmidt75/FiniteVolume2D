@@ -25,17 +25,17 @@ public:
 
 public:
     // FROM IMesh
-    void addNode(Node::Ptr const & node);
-    void addFace(Face::Ptr const & face);
-    void addCell(Cell::Ptr const & cell);
+    void addNode(Node::CPtr const & node);
+    void addFace(Face::CPtr const & face);
+    void addCell(Cell::CPtr const & cell);
 
 
     IMeshConnectivity const & getMeshConnectivity() const;
 
     // all entities are kept in threads
-    Thread<Node> const & getNodeThread(IGeometricEntity::Entity_t type) const;
-    Thread<Face> const & getFaceThread(IGeometricEntity::Entity_t type) const;
-    Thread<Cell> const & getCellThread() const;
+    Thread<Node const> const & getNodeThread(IGeometricEntity::Entity_t type) const;
+    Thread<Face const> const & getFaceThread(IGeometricEntity::Entity_t type) const;
+    Thread<Cell const> const & getCellThread() const;
 
     static Ptr create();
 

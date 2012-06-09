@@ -28,6 +28,9 @@ public:
 private:
     ASCIIMeshReaderFaceState(IMeshBuilder & mesh_builder);
 
+    // no implicit assignment operator due to reference (mesh_builder_)
+    ASCIIMeshReaderFaceState & operator=(ASCIIMeshReaderFaceState const & in);
+
 private:
     IMeshBuilder & mesh_builder_;
 };

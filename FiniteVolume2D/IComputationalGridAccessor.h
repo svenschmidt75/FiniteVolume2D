@@ -28,7 +28,7 @@ public:
 private:
     // no assignment, no copy-construction
     IComputationalGridAccessor(IComputationalGridAccessor const & in);
-    IComputationalGridAccessor & operator==(IComputationalGridAccessor const & in);
+    IComputationalGridAccessor & operator=(IComputationalGridAccessor const & in);
 
 private:
     IMeshConnectivity const &       mesh_connectivity_;

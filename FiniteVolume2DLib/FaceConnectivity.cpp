@@ -6,28 +6,28 @@
 
 
 void
-FaceConnectivity::insert(Cell::Ptr const & cell) {
+FaceConnectivity::insert(Cell::CPtr const & cell) {
     // attach this cell to all its faces
-    typedef EntityCollection<Face>::size_type size_type;
+    typedef EntityCollection<Face const>::size_type size_type;
 
-    EntityCollection<Face> const & faces = cell->getFaces();
+    EntityCollection<Face const> const & faces = cell->getFaces();
     for (size_type i = 0; i < faces.size(); ++i) {
-        Face::Ptr const & face = faces.getEntity(i);
+        Face::CPtr const & face = faces.getEntity(i);
         face_cells_[face->id()].insert(cell);
     }
 }
 
-boost::optional<EntityCollection<Cell>>
-FaceConnectivity::getCellsAttachedToFace(Face::Ptr const & face) const {
+boost::optional<EntityCollection<Cell const>>
+FaceConnectivity::getCellsAttachedToFace(Face::CPtr const & face) const {
     const_iterator it = face_cells_.find(face->id());
     if (it == face_cells_.end())
-        return boost::optional<EntityCollection<Cell>>();
+        return boost::optional<EntityCollection<Cell const>>();
 
-    return boost::optional<EntityCollection<Cell>>(it->second);
+    return boost::optional<EntityCollection<Cell const>>(it->second);
 }
 
-Cell::Ptr
-FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const {
+Cell::CPtr
+FaceConnectivity::getOtherCell(Face::CPtr const & face, Cell::CPtr const & cell) const {
     const_iterator it = face_cells_.find(face->id());
     if (it == face_cells_.end()) {
         // face not found
@@ -35,7 +35,7 @@ FaceConnectivity::getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) c
         return nullptr;
     }
 
-    EntityCollection<Cell> const & cells = it->second;
+    EntityCollection<Cell const> const & cells = it->second;
 
     // interior face
     if (face->getEntityType() == IGeometricEntity::INTERIOR) {

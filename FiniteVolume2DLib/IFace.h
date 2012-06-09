@@ -19,9 +19,9 @@ class IFace : public IGeometricEntity {
 public:
     virtual ~IFace() {}
 
-    virtual IGeometricEntity::Entity_t     getEntityType() const = 0;
-    virtual EntityCollection<Node> const & getNodes() const = 0;
-    virtual double                         area() const = 0;
-    virtual Vector                         normal() const = 0;
-    virtual Vertex                         centroid() const = 0;
+    virtual IGeometricEntity::Entity_t           getEntityType() const = 0;
+    virtual EntityCollection<Node const> const & getNodes() const = 0;
+    virtual double                               area() const = 0;
+    virtual Vector                               normal() const = 0;
+    virtual Vertex                               centroid() const = 0;
 };

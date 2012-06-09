@@ -27,10 +27,11 @@
 
 class DECL_SYMBOLS_2D ComputationalNode : public INode {
 public:
-    typedef std::shared_ptr<ComputationalNode> Ptr;
+    typedef std::shared_ptr<ComputationalNode>       Ptr;
+    typedef std::shared_ptr<ComputationalNode const> CPtr;
 
 public:
-    explicit ComputationalNode(Node::Ptr const & geometric_node);
+    explicit ComputationalNode(Node::CPtr const & geometric_node);
 
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
@@ -40,7 +41,7 @@ public:
     IGeometricEntity::Entity_t getEntityType() const;
     Vertex                     location() const;
 
-    Node::Ptr const &          geometricEntity() const;
+    Node::CPtr const &         geometricEntity() const;
 
     ComputationalMolecule &    getComputationalMolecule(std::string const & var_name);
     void                       addComputationalMolecule(std::string const & var_name);
@@ -50,7 +51,7 @@ private:
 
 private:
     // the geometric partner node
-    Node::Ptr                      geometric_node_;
+    Node::CPtr                     geometric_node_;
 
     /* A computational node may have a set of molecules,
      * but does not have to.

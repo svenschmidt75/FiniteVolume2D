@@ -4,7 +4,7 @@
 #include "Math.h"
 
 
-Face::Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes)
+Face::Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node const> const & nodes)
     : face_id_(face_id), mesh_id_(mesh_id), entity_type_(entity_type), nodes_(nodes) {}
 
 IGeometricEntity::Id_t
@@ -22,23 +22,23 @@ Face::getEntityType() const {
     return entity_type_;
 }
 
-EntityCollection<Node> const &
+EntityCollection<Node const> const &
 Face::getNodes() const {
     return nodes_;
 }
 
 double
 Face::area() const {
-    Node::Ptr const & v0 = nodes_.getEntity(0);
-    Node::Ptr const & v1 = nodes_.getEntity(1);
+    Node::CPtr const & v0 = nodes_.getEntity(0);
+    Node::CPtr const & v1 = nodes_.getEntity(1);
 
     return Math::dist(v0->location(), v1->location());
 }
 
 Vector
 Face::normal() const {
-    Node::Ptr const & v0 = nodes_.getEntity(0);
-    Node::Ptr const & v1 = nodes_.getEntity(1);
+    Node::CPtr const & v0 = nodes_.getEntity(0);
+    Node::CPtr const & v1 = nodes_.getEntity(1);
 
     /* Convention:
      * Normal and direction vector of
@@ -53,8 +53,8 @@ Face::normal() const {
 
 Vertex
 Face::centroid() const {
-    Node::Ptr const & v0 = nodes_.getEntity(0);
-    Node::Ptr const & v1 = nodes_.getEntity(1);
+    Node::CPtr const & v0 = nodes_.getEntity(0);
+    Node::CPtr const & v1 = nodes_.getEntity(1);
 
     /* Convention:
      * Normal and direction vector of
@@ -71,7 +71,7 @@ Face::centroid() const {
 }
 
 Face::Ptr
-Face::create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes) {
+Face::create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node const> const & nodes) {
     Face::Ptr face = Face::Ptr(new Face(face_id, mesh_id, entity_type, nodes));
     return face;
 }

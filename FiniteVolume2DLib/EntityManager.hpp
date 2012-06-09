@@ -29,7 +29,7 @@ public:
         return collection_.end();
     }
 
-    typename Entity::Ptr
+    typename Entity::Ptr &
     getEntity(IGeometricEntity::Id_t mesh_id) {
         return mesh_id_mapping_[mesh_id];
     }

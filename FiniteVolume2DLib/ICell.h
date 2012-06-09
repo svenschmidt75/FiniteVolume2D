@@ -20,10 +20,10 @@ class ICell : public IGeometricEntity {
 public:
     virtual ~ICell() {}
 
-    virtual EntityCollection<Node> const & getNodes() const = 0;
-    virtual EntityCollection<Face> const & getFaces() const = 0;
-    virtual double                         volume() const = 0;
-    virtual Vertex                         centroid() const = 0;
+    virtual EntityCollection<Node const> const & getNodes() const = 0;
+    virtual EntityCollection<Face const> const & getFaces() const = 0;
+    virtual double                               volume() const = 0;
+    virtual Vertex                               centroid() const = 0;
 
-    virtual Vector                         faceNormal(Face::Ptr const & face) const = 0;
+    virtual Vector                               faceNormal(Face::CPtr const & face) const = 0;
 };

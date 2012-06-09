@@ -27,6 +27,9 @@ public:
 private:
     ASCIIMeshReaderBoundaryConditionState(BoundaryConditionCollection & bc);
 
+    // no implicit assignment operator due to reference (bc_)
+    ASCIIMeshReaderBoundaryConditionState & operator=(ASCIIMeshReaderBoundaryConditionState const & in);
+
 private:
     BoundaryConditionCollection & bc_;
 };

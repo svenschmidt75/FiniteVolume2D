@@ -2,6 +2,7 @@
 
 #include "FiniteVolume2DLib/ASCIIMeshReader.h"
 #include "FiniteVolume2DLib/Math.h"
+#include "FiniteVolume2DLib/MeshChecker.h"
 
 #include "FiniteVolume2D/ComputationalMeshBuilder.h"
 #include "FiniteVolume2D/IComputationalGridAccessor.h"
@@ -42,10 +43,13 @@ namespace {
     public:
         DummyFluxEvaluator(unsigned int & count) : count_(count) {}
 
-        bool operator()(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+        bool operator()(IComputationalGridAccessor const & /*cgrid*/, ComputationalCell::Ptr const & /*cell*/, ComputationalFace::Ptr const & /*face*/) {
             count_++;
             return true;
         }
+
+    private:
+        DummyFluxEvaluator & operator=(DummyFluxEvaluator const & in);
 
     private:
         unsigned int & count_;
@@ -75,7 +79,7 @@ ComputationalMeshBuilderTest::evaluateFluxesDummyTest() {
 namespace {
     
     bool
-    dummy_flux_eval(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+    dummy_flux_eval(IComputationalGridAccessor const & /*cgrid*/, ComputationalCell::Ptr const & /*cell*/, ComputationalFace::Ptr const & /*face*/) {
         return true;
     }
 
@@ -153,7 +157,7 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
 
     std::for_each(interior_node_thread.begin(), interior_node_thread.end(), [&](ComputationalNode::Ptr const & cnode) {
         try {
-            ComputationalMolecule & cm = cnode->getComputationalMolecule("node_var");
+            /*ComputationalMolecule & cm =*/ cnode->getComputationalMolecule("node_var");
         }
         catch (std::exception const &) {
             nbad++;
@@ -171,7 +175,7 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
 
     std::for_each(boundary_node_thread.begin(), boundary_node_thread.end(), [&](ComputationalNode::Ptr const & cnode) {
         try {
-            ComputationalMolecule & cm = cnode->getComputationalMolecule("node_var");
+            /*ComputationalMolecule & cm =*/ cnode->getComputationalMolecule("node_var");
         }
         catch (std::exception const &) {
             nbad++;
@@ -200,7 +204,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
     std::for_each(interior_face_thread.begin(), interior_face_thread.end(), [&](ComputationalFace::Ptr const & cface) {
         try {
-            FluxComputationalMolecule & cm = cface->getComputationalMolecule("face_var");
+            /*FluxComputationalMolecule & cm =*/ cface->getComputationalMolecule("face_var");
         }
         catch (std::exception const &) {
             nbad++;
@@ -218,7 +222,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
     std::for_each(boundary_face_thread.begin(), boundary_face_thread.end(), [&](ComputationalFace::Ptr const & cface) {
         try {
-            FluxComputationalMolecule & cm = cface->getComputationalMolecule("face_var");
+            /*FluxComputationalMolecule & cm =*/ cface->getComputationalMolecule("face_var");
         }
         catch (std::exception const &) {
             nbad++;
@@ -247,7 +251,7 @@ ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
 
     std::for_each(cell_thread.begin(), cell_thread.end(), [&](ComputationalCell::Ptr const & ccell) {
         try {
-            ComputationalMolecule & cm = ccell->getComputationalMolecule("cell_var");
+            /*ComputationalMolecule & cm =*/ ccell->getComputationalMolecule("cell_var");
         }
         catch (std::exception const &) {
             nbad++;
@@ -276,10 +280,10 @@ ComputationalMeshBuilderTest::addCellVarsTest() {
 
     std::for_each(cell_thread.begin(), cell_thread.end(), [&](ComputationalCell::Ptr const & ccell) {
         try {
-            ComputationalMolecule & cm1 = ccell->getComputationalMolecule("Temperature");
+            /*ComputationalMolecule & cm1 =*/ ccell->getComputationalMolecule("Temperature");
             ngood++;
 
-            ComputationalMolecule & cm2 = ccell->getComputationalMolecule("cell_var");
+            /*ComputationalMolecule & cm2 =*/ ccell->getComputationalMolecule("cell_var");
             ngood++;
         }
         catch (std::exception const &) {
@@ -321,9 +325,6 @@ namespace {
         BoundaryCondition::Ptr const & bc = cface->getBoundaryCondition();
 
         if (bc) {
-            // get cell node variable
-            ComputationalMolecule & cell_molecule = ccell->getComputationalMolecule("Temperature");
-
             if (bc->type() == BoundaryConditionCollection::DIRICHLET) {
                 /* The boundary condition is of type Dirichlet. Compute the
                  * face flux using the half-cell approximation.
@@ -515,11 +516,16 @@ ComputationalMeshBuilderTest::initMesh() {
         init = true;
         ASCIIMeshReader reader(mesh_filename_, mesh_builder_);
         CPPUNIT_ASSERT_MESSAGE("Failed to read mesh file!", reader.read());
+
         boost::optional<Mesh::Ptr> mesh = mesh_builder_.getMesh();
         if (mesh)
             mesh_ = *mesh;
         CPPUNIT_ASSERT_MESSAGE("Failed to build mesh!", mesh);
+
         bc_ = reader.getBoundaryConditions();
+
+        bool success = MeshChecker::checkMesh(*mesh, bc_);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Mesh check failed!", true, success);
     }
 }
 

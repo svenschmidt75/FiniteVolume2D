@@ -18,7 +18,7 @@ ComputationalVariableManagerTest::tearDown() {
 }
 
 namespace {
-    bool dummy(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & cell, ComputationalFace::Ptr const & face) {
+    bool dummy(IComputationalGridAccessor const & /*cgrid*/, ComputationalCell::Ptr const &/*cell*/, ComputationalFace::Ptr const & /*face*/) {
         return false;
     }
 
@@ -132,9 +132,9 @@ ComputationalVariableManagerTest::iteratorTest() {
 
     while (it != cvar_mgr.end()) {
         std::string const & cvar_name = it->name;
-        ComputationalVariableManager::FluxEvaluator_t const & flux_eval = it->flux_eval;
+//        ComputationalVariableManager::FluxEvaluator_t const & flux_eval = it->flux_eval;
 
-        ComputationalVariableManager::Iterator_t::Item_t const & item = *it;
+//        ComputationalVariableManager::Iterator_t::Item_t const & item = *it;
 
         var_map[cvar_name] = 1;
 

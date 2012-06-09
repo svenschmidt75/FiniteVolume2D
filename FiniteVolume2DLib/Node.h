@@ -26,7 +26,8 @@ class DECL_SYMBOLS_2DLIB Node : public INode {
     friend class NodeManager;
 
 public:
-    typedef std::shared_ptr<Node> Ptr;
+    typedef std::shared_ptr<Node>       Ptr;
+    typedef std::shared_ptr<Node const> CPtr;
 
 public:
     // FROM IGeometricEntity

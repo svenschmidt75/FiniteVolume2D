@@ -7,7 +7,7 @@
 
 FaceManager::FaceManager() {}
 
-Face::Ptr FaceManager::createFace(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes)
+Face::Ptr FaceManager::createFace(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node const> const & nodes)
 {
     if (findEntity(mesh_id)) {
         boost::format format = boost::format("FaceManager::create: Face with mesh id %1% already created!\n") % mesh_id;

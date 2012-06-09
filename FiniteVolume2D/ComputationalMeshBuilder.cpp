@@ -130,7 +130,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
     Thread<Node> const & interior_node_thread = geometrical_mesh_->getNodeThread(IGeometricEntity::INTERIOR);
     for (Thread<Node>::size_type i = 0; i < interior_node_thread.size(); ++i) {
         Node::Ptr const & node = interior_node_thread.getEntityAt(i);
-        ComputationalNode::Ptr & cnode = std::make_shared<ComputationalNode>(node);
+        ComputationalNode::Ptr cnode = std::make_shared<ComputationalNode>(node);
 
         // set all applicable (passive) computational variables
         setComputationalVariables(cnode);
@@ -141,7 +141,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
     Thread<Node> const & boundary_node_thread = geometrical_mesh_->getNodeThread(IGeometricEntity::BOUNDARY);
     for (Thread<Node>::size_type i = 0; i < boundary_node_thread.size(); ++i) {
         Node::Ptr const & node = boundary_node_thread.getEntityAt(i);
-        ComputationalNode::Ptr & cnode = std::make_shared<ComputationalNode>(node);
+        ComputationalNode::Ptr cnode = std::make_shared<ComputationalNode>(node);
 
         // set all applicable (passive) computational variables
         setComputationalVariables(cnode);
@@ -159,16 +159,16 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
         Face::Ptr const & face = interior_face_thread.getEntityAt(i);
 
         // convert geometric nodes into computational nodes
-        EntityCollection<Node> const & nodes = face->getNodes();
-        EntityCollection<ComputationalNode> cnodes;
+        EntityCollection<Node const> const & nodes = face->getNodes();
+        EntityCollection<ComputationalNode const> cnodes;
 
-        std::for_each(nodes.begin(), nodes.end(), [&](Node::Ptr const & node) {
-            ComputationalNode::Ptr const & cnode = mapper.getComputationalNode(node);
+        std::for_each(nodes.begin(), nodes.end(), [&](Node::CPtr const & node) {
+            ComputationalNode::CPtr const & cnode = mapper.getComputationalNode(node);
             assert(cnode != std::nullptr_t());
             cnodes.insert(cnode);
         });
 
-        ComputationalFace::Ptr & cface = ComputationalFace::Ptr(new ComputationalFace(face, cnodes));
+        ComputationalFace::Ptr cface = std::make_shared<ComputationalFace>(face, cnodes);
 
         // set all applicable (passive) computational variables
         setComputationalVariables(cface);
@@ -185,11 +185,11 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
 
         // convert geometric nodes into computational nodes
-        EntityCollection<Node> const & nodes = face->getNodes();
-        EntityCollection<ComputationalNode> cnodes;
+        EntityCollection<Node const> const & nodes = face->getNodes();
+        EntityCollection<ComputationalNode const> cnodes;
 
-        std::for_each(nodes.begin(), nodes.end(), [&](Node::Ptr const & node) {
-            ComputationalNode::Ptr const & cnode = mapper.getComputationalNode(node);
+        std::for_each(nodes.begin(), nodes.end(), [&](Node::CPtr const & node) {
+            ComputationalNode::CPtr const & cnode = mapper.getComputationalNode(node);
             assert(cnode != std::nullptr_t());
             cnodes.insert(cnode);
         });
@@ -215,7 +215,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
      * Build computational cells
      */
 
-    Thread<Cell> const & cell_thread = geometrical_mesh_->getCellThread();
+    Thread<Cell const> const & cell_thread = geometrical_mesh_->getCellThread();
     for (Thread<Cell>::size_type i = 0; i < cell_thread.size(); ++i) {
         Cell::Ptr const & cell = cell_thread.getEntityAt(i);
 

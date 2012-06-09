@@ -48,6 +48,9 @@ private:
     void setComputationalVariables(ComputationalFace::Ptr & cface) const;
     bool setComputationalVariables(ComputationalCell::Ptr & ccell) const;
 
+    // no implicit assignment operator due to reference (bc_)
+    ComputationalMeshBuilder & operator=(ComputationalMeshBuilder const & in);
+
 private:
     typedef std::set<std::string> PassiveNodeVars_t;
     typedef std::set<std::string> PassiveFaceVars_t;

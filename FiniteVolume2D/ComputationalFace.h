@@ -28,45 +28,46 @@ class FluxComputationalMolecule;
 
 class DECL_SYMBOLS_2D ComputationalFace : public IFace {
 public:
-    typedef std::shared_ptr<ComputationalFace> Ptr;
+    typedef std::shared_ptr<ComputationalFace>       Ptr;
+    typedef std::shared_ptr<ComputationalFace const> CPtr;
 
 public:
-    explicit ComputationalFace(Face::Ptr const & geometric_face, EntityCollection<ComputationalNode> const & cnodes);
+    explicit ComputationalFace(Face::CPtr const & geometric_face, EntityCollection<ComputationalNode const> const & cnodes);
 
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
     IGeometricEntity::Id_t meshId() const;
 
     // FROM IFace
-    IGeometricEntity::Entity_t     getEntityType() const;
-    EntityCollection<Node> const & getNodes() const;
-    double                         area() const;
-    Vector                         normal() const;
-    Vertex                         centroid() const;
+    IGeometricEntity::Entity_t           getEntityType() const;
+    EntityCollection<Node const> const & getNodes() const;
+    double                               area() const;
+    Vector                               normal() const;
+    Vertex                               centroid() const;
 
 
     // getComputationalNodes is certainly not necessary for a face that
     // can only have two nodes, but for polygonal faces, it is.
-    EntityCollection<ComputationalNode> const & getComputationalNodes() const;
-    ComputationalNode const &                   startNode() const;
-    ComputationalNode const &                   endNode() const;
+    EntityCollection<ComputationalNode const> const & getComputationalNodes() const;
+    ComputationalNode const &                         startNode() const;
+    ComputationalNode const &                         endNode() const;
 
-    Face::Ptr const &                           geometricEntity() const;
+    Face::CPtr const &              geometricEntity() const;
 
-    BoundaryCondition::Ptr const &              getBoundaryCondition() const;
-    void                                        setBoundaryCondition(BoundaryCondition::Ptr const & bc);
+    BoundaryCondition::CPtr const & getBoundaryCondition() const;
+    void                            setBoundaryCondition(BoundaryCondition::CPtr const & bc);
 
-    FluxComputationalMolecule &                 getComputationalMolecule(std::string const & name);
-    void                                        addComputationalMolecule(std::string const & name);
+    FluxComputationalMolecule &     getComputationalMolecule(std::string const & name);
+    void                            addComputationalMolecule(std::string const & name);
 
 private:
     typedef std::map<std::string, FluxComputationalMolecule> FluxComputationalMoleculeManager_t;
 
 private:
     // the geometric partner face
-    Face::Ptr                           geometric_face_;
+    Face::CPtr                                geometric_face_;
 
-    EntityCollection<ComputationalNode> cnodes_;
+    EntityCollection<ComputationalNode const> cnodes_;
 
     /* A computational face may have a set of molecules,
      * but does not have to.
@@ -74,7 +75,7 @@ private:
     FluxComputationalMoleculeManager_t  cm_;
 
     // boundary conditions, in case this is a boundary face
-    BoundaryCondition::Ptr              bc_;
+    BoundaryCondition::CPtr             bc_;
 };
 
 #pragma warning(default:4275)

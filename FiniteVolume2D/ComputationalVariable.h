@@ -26,7 +26,8 @@ class DECL_SYMBOLS_2D ComputationalVariable {
     friend class ComputationalVariableManager;
 
 public:
-    typedef std::shared_ptr<ComputationalVariable> Ptr;
+    typedef std::shared_ptr<ComputationalVariable>       Ptr;
+    typedef std::shared_ptr<ComputationalVariable const> CPtr;
     typedef unsigned long long int Id_t;
 
 public:

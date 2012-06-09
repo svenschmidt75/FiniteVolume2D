@@ -35,7 +35,7 @@ MeshBuilder::buildFace(IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_
 
     NodeManager::Ptr & node_mgr = entity_mgr_->getNodeManager();
 
-    EntityCollection<Node> nodes;
+    EntityCollection<Node const> nodes;
 
     BOOST_FOREACH (IGeometricEntity::Id_t node_id, node_ids) {
         Node::Ptr & v = node_mgr->getEntity(node_id);
@@ -54,7 +54,7 @@ bool
 MeshBuilder::buildCell(IGeometricEntity::Id_t mesh_id, std::vector<IGeometricEntity::Id_t> const & face_ids) {
     FaceManager::Ptr & face_mgr = entity_mgr_->getFaceManager();
 
-    EntityCollection<Face> faces;
+    EntityCollection<Face const> faces;
 
     BOOST_FOREACH (IGeometricEntity::Id_t face_id, face_ids) {
         Face::Ptr & f = face_mgr->getEntity(face_id);

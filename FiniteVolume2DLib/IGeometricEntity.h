@@ -13,6 +13,9 @@
 #include <boost/limits.hpp>
 
 
+#pragma warning(disable:4480)
+
+
 class DECL_SYMBOLS_2DLIB IGeometricEntity {
 public:
     typedef unsigned long long Id_t;
@@ -29,3 +32,5 @@ public:
 
     static Id_t undef() { return std::numeric_limits<Id_t>::max(); }
 };
+
+#pragma warning(default:4480)

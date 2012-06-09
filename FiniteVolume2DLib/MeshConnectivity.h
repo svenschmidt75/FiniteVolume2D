@@ -32,13 +32,13 @@
 class MeshConnectivity : public IMeshConnectivity {
 public:
     // FROM IMeshConnectivity
-    void                                    insert(Face::Ptr const & face);
-    void                                    insert(Cell::Ptr const & cell);
-    boost::optional<EntityCollection<Node>> getNodeNeighbors(Node::Ptr const & node) const;
-    boost::optional<EntityCollection<Face>> getFacesAttachedToNode(Node::Ptr const & node) const;
-    boost::optional<EntityCollection<Cell>> getCellsAttachedToNode(Node::Ptr const & node) const;
-    boost::optional<EntityCollection<Cell>> getCellsAttachedToFace(Face::Ptr const & face) const;
-    Cell::Ptr                               getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const;
+    void                                          insert(Face::CPtr const & face);
+    void                                          insert(Cell::CPtr const & cell);
+    boost::optional<EntityCollection<Node const>> getNodeNeighbors(Node::CPtr const & node) const;
+    boost::optional<EntityCollection<Face const>> getFacesAttachedToNode(Node::CPtr const & node) const;
+    boost::optional<EntityCollection<Cell const>> getCellsAttachedToNode(Node::CPtr const & node) const;
+    boost::optional<EntityCollection<Cell const>> getCellsAttachedToFace(Face::CPtr const & face) const;
+    Cell::CPtr                                    getOtherCell(Face::CPtr const & face, Cell::CPtr const & cell) const;
 
 private:
     NodeConnectivity node_connectivity_;

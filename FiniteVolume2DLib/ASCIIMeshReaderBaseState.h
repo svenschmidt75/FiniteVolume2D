@@ -31,6 +31,9 @@ private:
      */
     ASCIIMeshReaderBaseState(IMeshBuilder & mesh_builder);
 
+    // no implicit assignment operator due to reference (mesh_builder_)
+    ASCIIMeshReaderBaseState & operator=(ASCIIMeshReaderBaseState const & in);
+
 private:
     IMeshBuilder & mesh_builder_;
 };
