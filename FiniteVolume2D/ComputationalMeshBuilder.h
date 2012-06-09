@@ -33,7 +33,7 @@ public:
     typedef ComputationalVariableManager::FluxEvaluator_t FluxEvaluator_t;
 
 public:
-    explicit ComputationalMeshBuilder(Mesh::CPtr const & mesh, BoundaryConditionCollection const & bc);
+    explicit ComputationalMeshBuilder(Mesh::Ptr const & mesh, BoundaryConditionCollection const & bc);
 
     bool                   addComputationalVariable(std::string const & var_name, FluxEvaluator_t const & flux_evaluator);
     bool                   addPassiveComputationalNodeVariable(std::string const & var_name);

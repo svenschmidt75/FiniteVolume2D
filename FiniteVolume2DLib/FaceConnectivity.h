@@ -17,13 +17,13 @@
 
 class FaceConnectivity {
 public:
-    void                                          insert(Cell::CPtr const & cell);
-    boost::optional<EntityCollection<Cell const>> getCellsAttachedToFace(Face::CPtr const & face) const;
-    Cell::CPtr                                    getOtherCell(Face::CPtr const & face, Cell::CPtr const & cell) const;
+    void                                    insert(Cell::Ptr const & cell);
+    boost::optional<EntityCollection<Cell>> getCellsAttachedToFace(Face::Ptr const & face) const;
+    Cell::Ptr                               getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const;
 
 private:
-    typedef std::map<IGeometricEntity::Id_t, EntityCollection<Cell const>> FaceCells_t;
-    typedef std::map<IGeometricEntity::Id_t, EntityCollection<Cell const>>::const_iterator const_iterator;
+    typedef std::map<IGeometricEntity::Id_t, EntityCollection<Cell>> FaceCells_t;
+    typedef std::map<IGeometricEntity::Id_t, EntityCollection<Cell>>::const_iterator const_iterator;
 
 private:
     // attached cells

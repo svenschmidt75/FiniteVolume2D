@@ -7,7 +7,7 @@
 #include <boost/format.hpp>
 
 
-ComputationalNode::ComputationalNode(Node::CPtr const & geometric_node) : geometric_node_(geometric_node) {}
+ComputationalNode::ComputationalNode(Node::Ptr const & geometric_node) : geometric_node_(geometric_node) {}
 
 IGeometricEntity::Id_t
 ComputationalNode::id() const {
@@ -25,7 +25,7 @@ ComputationalNode::getEntityType() const {
     return geometric_node_->getEntityType();
 }
 
-Node::CPtr const &
+Node::Ptr const &
 ComputationalNode::geometricEntity() const {
     return geometric_node_;
 }

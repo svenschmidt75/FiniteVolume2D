@@ -31,21 +31,21 @@ private:
     template<typename GEOMETRICAL_ENTITY, typename COMPUTATIONAL_ENTITY>
     struct Link {
         Link() : gentity_(NULL), centity_(NULL) {}
-        explicit Link(typename GEOMETRICAL_ENTITY::CPtr const & gentity, typename COMPUTATIONAL_ENTITY::CPtr const & centity) : gentity_(gentity), centity_(centity) {}
+        explicit Link(typename GEOMETRICAL_ENTITY::Ptr const & gentity, typename COMPUTATIONAL_ENTITY::Ptr const & centity) : gentity_(gentity), centity_(centity) {}
 
-        typename GEOMETRICAL_ENTITY::CPtr   gentity_;
-        typename COMPUTATIONAL_ENTITY::CPtr centity_;
+        typename GEOMETRICAL_ENTITY::Ptr   gentity_;
+        typename COMPUTATIONAL_ENTITY::Ptr centity_;
 
     };
 
 public:
-    void addNode(Node::CPtr const & node, ComputationalNode::CPtr const & cnode);
-    void addFace(Face::CPtr const & face, ComputationalFace::CPtr const & cface);
-    void addCell(Cell::CPtr const & cell, ComputationalCell::CPtr const & ccell);
+    void addNode(Node::Ptr const & node, ComputationalNode::Ptr const & cnode);
+    void addFace(Face::Ptr const & face, ComputationalFace::Ptr const & cface);
+    void addCell(Cell::Ptr const & cell, ComputationalCell::Ptr const & ccell);
 
-    ComputationalNode::CPtr const & getComputationalNode(Node::CPtr const & node) const;
-    ComputationalFace::CPtr const & getComputationalFace(Face::CPtr const & face) const;
-    ComputationalCell::CPtr const & getComputationalCell(Cell::CPtr const & cell) const;
+    ComputationalNode::Ptr const & getComputationalNode(Node::Ptr const & node) const;
+    ComputationalFace::Ptr const & getComputationalFace(Face::Ptr const & face) const;
+    ComputationalCell::Ptr const & getComputationalCell(Cell::Ptr const & cell) const;
 
 private:
     typedef std::map<IGeometricEntity::Id_t, Link<Node, ComputationalNode>> ComputationalNodeMap_t;

@@ -7,17 +7,17 @@
 #include <boost/format.hpp>
 
 
-ComputationalCell::ComputationalCell(Cell::CPtr const & geometric_cell, EntityCollection<ComputationalFace const> const & faces)
+ComputationalCell::ComputationalCell(Cell::Ptr const & geometric_cell, EntityCollection<ComputationalFace> const & faces)
     :
     geometric_cell_(geometric_cell), faces_(faces) {
 
     // extract nodes
-    std::for_each(faces.begin(), faces.end(), [this](ComputationalFace::CPtr const & cface) {
+    std::for_each(faces.begin(), faces.end(), [this](ComputationalFace::Ptr const & cface) {
         // Extract and check all nodes before inserting into v
-        EntityCollection<ComputationalNode const> const & nodes = cface->getComputationalNodes();
+        EntityCollection<ComputationalNode> const & nodes = cface->getComputationalNodes();
 
-        for (EntityCollection<ComputationalNode const>::size_type i = 0; i < nodes.size(); ++i) {
-            ComputationalNode::CPtr const & vert = nodes.getEntity(i);
+        for (EntityCollection<ComputationalNode>::size_type i = 0; i < nodes.size(); ++i) {
+            ComputationalNode::Ptr const & vert = nodes.getEntity(i);
             nodes_.insertUnique(vert);
         }
     });
@@ -35,12 +35,12 @@ ComputationalCell::meshId() const {
     return IGeometricEntity::undef();
 }
 
-EntityCollection<Node const> const &
+EntityCollection<Node> const &
 ComputationalCell::getNodes() const {
     return geometric_cell_->getNodes();
 }
 
-EntityCollection<Face const> const &
+EntityCollection<Face> const &
 ComputationalCell::getFaces() const {
     return geometric_cell_->getFaces();
 }
@@ -56,26 +56,26 @@ ComputationalCell::centroid() const {
 }
 
 Vector
-ComputationalCell::faceNormal(Face::CPtr const & face) const {
+ComputationalCell::faceNormal(Face::Ptr const & face) const {
     return geometric_cell_->faceNormal(face);
 }
 
-Cell::CPtr const &
+Cell::Ptr const &
 ComputationalCell::geometricEntity() const {
     return geometric_cell_;
 }
 
-EntityCollection<ComputationalNode const> const &
+EntityCollection<ComputationalNode> const &
 ComputationalCell::getComputationalNodes() const {
     return nodes_;
 }
 
-EntityCollection<ComputationalFace const> const &
+EntityCollection<ComputationalFace> const &
 ComputationalCell::getComputationalFaces() const {
     return faces_;
 }
 
-ComputationalVariable::CPtr const
+ComputationalVariable::Ptr const
 ComputationalCell::getComputationalVariable(std::string const & name) const {
     /* cell-centered variables, will be solved for */
     auto it = cvars_.find(name);
@@ -85,7 +85,7 @@ ComputationalCell::getComputationalVariable(std::string const & name) const {
 }
 
 void
-ComputationalCell::addComputationalVariable(ComputationalVariable::CPtr const & cvar) {
+ComputationalCell::addComputationalVariable(ComputationalVariable::Ptr const & cvar) {
     cvars_[cvar->getName()] = cvar;
 
     // also insert the corr. computational molecule

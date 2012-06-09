@@ -19,11 +19,11 @@ class IMeshConnectivity {
 public:
     virtual ~IMeshConnectivity() {}
 
-    virtual void                                          insert(Face::CPtr const & face) = 0;
-    virtual void                                          insert(Cell::CPtr const & cell) = 0;
-    virtual boost::optional<EntityCollection<Node const>> getNodeNeighbors(Node::CPtr const & node) const = 0;
-    virtual boost::optional<EntityCollection<Face const>> getFacesAttachedToNode(Node::CPtr const & node) const = 0;
-    virtual boost::optional<EntityCollection<Cell const>> getCellsAttachedToNode(Node::CPtr const & node) const = 0;
-    virtual boost::optional<EntityCollection<Cell const>> getCellsAttachedToFace(Face::CPtr const & face) const = 0;
-    virtual Cell::CPtr                                    getOtherCell(Face::CPtr const & face, Cell::CPtr const & cell) const = 0;
+    virtual void                                    insert(Face::Ptr const & face) = 0;
+    virtual void                                    insert(Cell::Ptr const & cell) = 0;
+    virtual boost::optional<EntityCollection<Node>> getNodeNeighbors(Node::Ptr const & node) const = 0;
+    virtual boost::optional<EntityCollection<Face>> getFacesAttachedToNode(Node::Ptr const & node) const = 0;
+    virtual boost::optional<EntityCollection<Cell>> getCellsAttachedToNode(Node::Ptr const & node) const = 0;
+    virtual boost::optional<EntityCollection<Cell>> getCellsAttachedToFace(Face::Ptr const & face) const = 0;
+    virtual Cell::Ptr                               getOtherCell(Face::Ptr const & face, Cell::Ptr const & cell) const = 0;
 };

@@ -11,7 +11,7 @@
 #include <boost/format.hpp>
 
 
-ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::CPtr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
+ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
 
 bool
 ComputationalMeshBuilder::addComputationalVariable(std::string const & var_name, FluxEvaluator_t const & flux_evaluator) {
@@ -106,7 +106,7 @@ ComputationalMeshBuilder::build() const {
         return std::nullptr_t();
     }
 
-    ComputationalMesh::Ptr cmesh(new ComputationalMesh(geometrical_mesh_->getMeshConnectivity()));
+    ComputationalMesh::Ptr cmesh = std::make_shared<ComputationalMesh>(geometrical_mesh_->getMeshConnectivity());
 
     /* Create ComputationalNodes, ComputationalFaces and ComputationalCells.
      * Also, insert computational variables and boundary conditions.
@@ -159,11 +159,11 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
         Face::Ptr const & face = interior_face_thread.getEntityAt(i);
 
         // convert geometric nodes into computational nodes
-        EntityCollection<Node const> const & nodes = face->getNodes();
-        EntityCollection<ComputationalNode const> cnodes;
+        EntityCollection<Node> const & nodes = face->getNodes();
+        EntityCollection<ComputationalNode> cnodes;
 
-        std::for_each(nodes.begin(), nodes.end(), [&](Node::CPtr const & node) {
-            ComputationalNode::CPtr const & cnode = mapper.getComputationalNode(node);
+        std::for_each(nodes.begin(), nodes.end(), [&](Node::Ptr const & node) {
+            ComputationalNode::Ptr const & cnode = mapper.getComputationalNode(node);
             assert(cnode != std::nullptr_t());
             cnodes.insert(cnode);
         });
@@ -185,16 +185,16 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
 
         // convert geometric nodes into computational nodes
-        EntityCollection<Node const> const & nodes = face->getNodes();
-        EntityCollection<ComputationalNode const> cnodes;
+        EntityCollection<Node> const & nodes = face->getNodes();
+        EntityCollection<ComputationalNode> cnodes;
 
-        std::for_each(nodes.begin(), nodes.end(), [&](Node::CPtr const & node) {
-            ComputationalNode::CPtr const & cnode = mapper.getComputationalNode(node);
+        std::for_each(nodes.begin(), nodes.end(), [&](Node::Ptr const & node) {
+            ComputationalNode::Ptr const & cnode = mapper.getComputationalNode(node);
             assert(cnode != std::nullptr_t());
             cnodes.insert(cnode);
         });
 
-        ComputationalFace::Ptr cface(new ComputationalFace(face, cnodes));
+        ComputationalFace::Ptr cface = std::make_shared<ComputationalFace>(face, cnodes);
 
 
         // extract boundary conditions
@@ -215,7 +215,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
      * Build computational cells
      */
 
-    Thread<Cell const> const & cell_thread = geometrical_mesh_->getCellThread();
+    Thread<Cell> const & cell_thread = geometrical_mesh_->getCellThread();
     for (Thread<Cell>::size_type i = 0; i < cell_thread.size(); ++i) {
         Cell::Ptr const & cell = cell_thread.getEntityAt(i);
 

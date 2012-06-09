@@ -34,23 +34,23 @@ public:
     IGeometricEntity::Id_t meshId() const;
 
     // FROM IFace
-    IGeometricEntity::Entity_t           getEntityType() const;
-    EntityCollection<Node const> const & getNodes() const;
-    double                               area() const;
-    Vector                               normal() const;
-    Vertex                               centroid() const;
+    IGeometricEntity::Entity_t     getEntityType() const;
+    EntityCollection<Node> const & getNodes() const;
+    double                         area() const;
+    Vector                         normal() const;
+    Vertex                         centroid() const;
 
 private:
-    Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node const> const & vertices);
+    Face(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & vertices);
 
     // only called by FaceManager
-    static Ptr create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node const> const & nodes);
+    static Ptr create(IGeometricEntity::Id_t face_id, IGeometricEntity::Id_t mesh_id, IGeometricEntity::Entity_t entity_type, EntityCollection<Node> const & nodes);
 
 private:
-    IGeometricEntity::Id_t       face_id_;
-    IGeometricEntity::Id_t       mesh_id_;
-    IGeometricEntity::Entity_t   entity_type_;
-    EntityCollection<Node const> nodes_;
+    IGeometricEntity::Id_t     face_id_;
+    IGeometricEntity::Id_t     mesh_id_;
+    IGeometricEntity::Entity_t entity_type_;
+    EntityCollection<Node>     nodes_;
 };
 
 #pragma warning(default:4275)

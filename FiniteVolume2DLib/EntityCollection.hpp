@@ -22,20 +22,20 @@ class EntityCollection {
     friend class EntityManager;
 
 private:
-    typedef typename std::vector<typename Entity::CPtr> EntityCollection_t;
+    typedef typename std::vector<typename Entity::Ptr> EntityCollection_t;
     typedef typename Entity EntityType;
-    typedef typename std::vector<typename Entity::CPtr>::iterator iterator;
-    typedef typename std::vector<typename Entity::CPtr>::const_iterator const_iterator;
+    typedef typename std::vector<typename Entity::Ptr>::iterator iterator;
+    typedef typename std::vector<typename Entity::Ptr>::const_iterator const_iterator;
 
 public:
     typedef typename EntityCollection_t::size_type size_type;
 
 public:
-    void insert(typename Entity::CPtr const & entity) {
+    void insert(typename Entity::Ptr const & entity) {
         data_.push_back(entity);
     }
 
-    void insertUnique(typename Entity::CPtr const & entity) {
+    void insertUnique(typename Entity::Ptr const & entity) {
         if (!find(entity->meshId()))
             data_.push_back(entity);
     }
@@ -76,29 +76,29 @@ public:
         return data_[index];
     }
 
-    typename Entity::CPtr getEntity(size_type index) const {
+    typename Entity::Ptr getEntity(size_type index) const {
         if (index >= size())
             throw std::out_of_range("EntityCollection::getEntity: Out of range!");
 
         return data_[index];
     }
 
-    typename Entity::CPtr operator[](size_type index) const {
+    typename Entity::Ptr operator[](size_type index) const {
         if (index >= size())
             throw std::out_of_range("EntityCollection::getEntity: Out of range!");
 
         return data_[index];
     }
 
-    typename boost::optional<typename Entity::CPtr> find(IGeometricEntity::Id_t id) const {
-        const_iterator it = std::find_if(data_.begin(), data_.end(), [id](typename Entity::CPtr const & entity){
+    typename boost::optional<typename Entity::Ptr> find(IGeometricEntity::Id_t id) const {
+        const_iterator it = std::find_if(data_.begin(), data_.end(), [id](typename Entity::Ptr const & entity){
             return entity->meshId() == id;
         });
 
         if (it != data_.end())
             return *it;
 
-        return boost::optional<Entity::CPtr>();
+        return boost::optional<Entity::Ptr>();
     }
 
 private:

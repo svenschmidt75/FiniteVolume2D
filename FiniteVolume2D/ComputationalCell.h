@@ -30,53 +30,52 @@
 class DECL_SYMBOLS_2D ComputationalCell : public ICell {
 public:
     typedef std::shared_ptr<ComputationalCell>       Ptr;
-    typedef std::shared_ptr<ComputationalCell const> CPtr;
 
 public:
-    explicit ComputationalCell(Cell::CPtr const & geometric_cell, EntityCollection<ComputationalFace const> const & faces);
+    explicit ComputationalCell(Cell::Ptr const & geometric_cell, EntityCollection<ComputationalFace> const & faces);
 
     // FROM IGeometricEntity
     IGeometricEntity::Id_t id() const;
     IGeometricEntity::Id_t meshId() const;
 
     // FROM ICell
-    EntityCollection<Node const> const & getNodes() const;
-    EntityCollection<Face const> const & getFaces() const;
-    double                               volume() const;
-    Vertex                               centroid() const;
+    EntityCollection<Node> const & getNodes() const;
+    EntityCollection<Face> const & getFaces() const;
+    double                         volume() const;
+    Vertex                         centroid() const;
 
-    Vector                               faceNormal(Face::CPtr const & face) const;
+    Vector                         faceNormal(Face::Ptr const & face) const;
 
-    Cell::CPtr const &                   geometricEntity() const;
+    Cell::Ptr const &              geometricEntity() const;
 
 
-    EntityCollection<ComputationalNode const> const & getComputationalNodes() const;
-    EntityCollection<ComputationalFace const> const & getComputationalFaces() const;
+    EntityCollection<ComputationalNode> const & getComputationalNodes() const;
+    EntityCollection<ComputationalFace> const & getComputationalFaces() const;
 
-    ComputationalVariable::CPtr const getComputationalVariable(std::string const & name) const;
-    void                              addComputationalVariable(ComputationalVariable::CPtr const & cvar);
+    ComputationalVariable::Ptr const getComputationalVariable(std::string const & name) const;
+    void                              addComputationalVariable(ComputationalVariable::Ptr const & cvar);
 
     ComputationalMolecule &           getComputationalMolecule(std::string const & name);
     void                              addComputationalMolecule(std::string const & name);
 
 private:
-    typedef std::map<std::string, ComputationalVariable::CPtr> ComputationalVariables_t;
+    typedef std::map<std::string, ComputationalVariable::Ptr> ComputationalVariables_t;
     typedef std::map<std::string, ComputationalMolecule> ComputationalMolecules_t;
 
 private:
     // the geometric partner cell
-    Cell::CPtr                                geometric_cell_;
+    Cell::Ptr                           geometric_cell_;
 
-    EntityCollection<ComputationalNode const> nodes_;
-    EntityCollection<ComputationalFace const> faces_;
+    EntityCollection<ComputationalNode> nodes_;
+    EntityCollection<ComputationalFace> faces_;
 
     // all variables that will be solved for
-    ComputationalVariables_t                  cvars_;
+    ComputationalVariables_t            cvars_;
 
     /* All computational molecules for this cell,
      * for both active and passive variables.
      */
-    ComputationalMolecules_t                  cm_;
+    ComputationalMolecules_t            cm_;
 };
 
 #pragma warning(default:4275)

@@ -21,7 +21,7 @@ public:
     typedef std::shared_ptr<CellManager> Ptr;
 
 public:
-    Cell::Ptr createCell(IGeometricEntity::Id_t mesh_id, EntityCollection<Face const> const & faces);
+    Cell::Ptr createCell(IGeometricEntity::Id_t mesh_id, EntityCollection<Face> const & faces);
 
     static Ptr create();
 

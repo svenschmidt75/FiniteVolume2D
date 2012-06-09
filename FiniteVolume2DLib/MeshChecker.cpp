@@ -19,7 +19,7 @@ MeshChecker::checkMesh(Mesh::CPtr const & mesh, BoundaryConditionCollection cons
     bool check = true;
 
     Thread<Face> const & bface_thread = mesh->getFaceThread(IGeometricEntity::BOUNDARY);
-    std::for_each(bface_thread.begin(), bface_thread.end(), [&](Face::CPtr const & face) {
+    std::for_each(bface_thread.begin(), bface_thread.end(), [&](Face::Ptr const & face) {
         boost::optional<BoundaryConditionCollection::Pair> const & item = bc.find(face->meshId());
         if (!item) {
             boost::format format = boost::format("MeshChecker::checkMesh: No boundary condition specified \
@@ -37,7 +37,7 @@ MeshChecker::checkMesh(Mesh::CPtr const & mesh, BoundaryConditionCollection cons
     check = true;
 
     Thread<Face> const & iface_thread = mesh->getFaceThread(IGeometricEntity::INTERIOR);
-    std::for_each(iface_thread.begin(), iface_thread.end(), [&](Face::CPtr const & face) {
+    std::for_each(iface_thread.begin(), iface_thread.end(), [&](Face::Ptr const & face) {
         boost::optional<BoundaryConditionCollection::Pair> const & item = bc.find(face->meshId());
         if (item) {
             boost::format format = boost::format("MeshChecker::checkMesh: Boundary condition specified \

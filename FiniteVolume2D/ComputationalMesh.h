@@ -29,7 +29,8 @@ class DECL_SYMBOLS_2D ComputationalMesh {
     friend class ComputationalMeshBuilder;
 
 public:
-    typedef std::shared_ptr<ComputationalMesh> Ptr;
+    typedef std::shared_ptr<ComputationalMesh>       Ptr;
+    typedef std::shared_ptr<ComputationalMesh const> CPtr;
 
 public:
     explicit ComputationalMesh(IMeshConnectivity const & mesh_connectivity);
