@@ -406,10 +406,10 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
 
 
     ComputationalMolecule m = ccother->getComputationalMolecule("Temperature");
-    m.print();
+    m.print(*ccother, cmesh->getComputationalVariableManager());
 
     m = ccell->getComputationalMolecule("Temperature");
-    m.print();
+    m.print(*ccell, cmesh->getComputationalVariableManager());
 }
 
 void

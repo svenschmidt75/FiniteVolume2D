@@ -63,20 +63,20 @@ private:
 
 private:
     // geometric mesh to convert to a computational one
-    Mesh::CPtr const                      geometrical_mesh_;
+    Mesh::CPtr const                              geometrical_mesh_;
 
     // all face boundary conditions
-    BoundaryConditionCollection const &   bc_;
+    BoundaryConditionCollection const &           bc_;
 
     // all variables to solve for
-    mutable ComputationalVariableManager  cvar_mgr_;
+    std::shared_ptr<ComputationalVariableManager> cvar_mgr_;
 
     // user-defined node/face/cell variables
-    PassiveNodeVars_t                     node_vars_;
-    PassiveFaceVars_t                     face_vars_;
-    PassiveCellVars_t                     cell_vars_;
+    PassiveNodeVars_t                             node_vars_;
+    PassiveFaceVars_t                             face_vars_;
+    PassiveCellVars_t                             cell_vars_;
 
-    CellMoleculeEvaluator_t               cell_molecule_evaluator_;
+    CellMoleculeEvaluator_t                       cell_molecule_evaluator_;
 };
 
 #pragma warning(default:4251)

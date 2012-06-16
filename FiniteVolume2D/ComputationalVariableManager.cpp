@@ -75,6 +75,11 @@ ComputationalVariableManager::getComputationalVariableHolder() const {
     return cvar_holder_;
 }
 
+ComputationalVariable::Ptr const &
+ComputationalVariableManager::getComputationalVariable(ComputationalVariable::Id_t id) const {
+    return cvar_holder_->get(id);
+}
+
 short
 ComputationalVariableManager::getBaseIndex(std::string const & cvar_name) const {
     auto it = variables_.find(cvar_name);

@@ -23,6 +23,7 @@
 
 
 class ComputationalVariableHolder;
+class ComputationalVariableManager;
 
 
 #pragma warning(disable:4251)
@@ -36,8 +37,10 @@ public:
 
 public:
     // FROM IComputationalMolecule
-    void                    print() const;
-
+    void                    print(ComputationalNode const & cnode, ComputationalVariableManager const & cvar_mgr) const;
+    void                    print(ComputationalFace const & cface, ComputationalVariableManager const & cvar_mgr) const;
+    void                    print(ComputationalCell const & ccell, ComputationalVariableManager const & cvar_mgr) const;
+    void                    print(ComputationalCell const & ccell, ComputationalVariableManager const & cvar_mgr) const;
 
     std::string const &     name() const;
 
@@ -61,6 +64,8 @@ protected:
 
 private:
     SourceTerm const &      getSourceTerm() const;
+
+    void                    printMolecule(ComputationalVariableManager const & cvar_mgr) const;
 
 private:
     std::string                                  name_;

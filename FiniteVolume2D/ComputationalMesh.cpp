@@ -1,5 +1,7 @@
 #include "ComputationalMesh.h"
 
+#include "ComputationalVariableManager.h"
+
 #include <cassert>
 
 
@@ -12,11 +14,19 @@ template class Thread<Face>;
 template class Thread<Cell>;
 
 
-ComputationalMesh::ComputationalMesh(IMeshConnectivity const & mesh_connectivity) : mesh_connectivity_(mesh_connectivity) {}
+ComputationalMesh::ComputationalMesh(IMeshConnectivity const & mesh_connectivity, ComputationalVariableManager::Ptr const & cvar_mgr)
+    :
+    mesh_connectivity_(mesh_connectivity),
+    cvar_mgr_(cvar_mgr) {}
 
 IMeshConnectivity const &
 ComputationalMesh::getMeshConnectivity() const {
     return mesh_connectivity_;
+}
+
+ComputationalVariableManager const &
+ComputationalMesh::getComputationalVariableManager() const {
+    return *cvar_mgr_;
 }
 
 Thread<ComputationalNode> &

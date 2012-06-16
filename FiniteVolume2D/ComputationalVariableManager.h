@@ -67,7 +67,8 @@ public:
 
     bool                                   registerVariable(std::string const & name, FluxEvaluator_t const & flux_eval);
 
-    std::shared_ptr<ComputationalVariableHolder> const &    getComputationalVariableHolder() const;
+    std::shared_ptr<ComputationalVariableHolder> const & getComputationalVariableHolder() const;
+    std::shared_ptr<ComputationalVariable> const &       getComputationalVariable(ComputationalVariable::Id_t id) const;
 
     short                                  getBaseIndex(std::string const & cvar_name) const;
 

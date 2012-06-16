@@ -11,7 +11,11 @@
 #include <boost/format.hpp>
 
 
-ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh, BoundaryConditionCollection const & bc) : geometrical_mesh_(geometrical_mesh), bc_(bc) {}
+ComputationalMeshBuilder::ComputationalMeshBuilder(Mesh::Ptr const & geometrical_mesh, BoundaryConditionCollection const & bc)
+    :
+    geometrical_mesh_(geometrical_mesh),
+    bc_(bc),
+    cvar_mgr_(std::make_shared<ComputationalVariableManager>()) {}
 
 bool
 ComputationalMeshBuilder::addComputationalVariable(std::string const & var_name, FluxEvaluator_t const & flux_evaluator) {
@@ -33,7 +37,7 @@ ComputationalMeshBuilder::addComputationalVariable(std::string const & var_name,
      * flux_evaluator: Callback, called for each cell face to compute
      *                 flux through face.
      */
-    return cvar_mgr_.registerVariable(var_name, flux_evaluator);
+    return cvar_mgr_->registerVariable(var_name, flux_evaluator);
 }
 
 void
@@ -58,7 +62,7 @@ namespace {
          */
 
         // check that there is no active variables with the same name
-        if (vars.getBaseIndex(var_name) >= 0) {
+        if (vars->getBaseIndex(var_name) >= 0) {
             boost::format format = boost::format("ComputationalMeshBuilder::addPassiveComputationalNodeVariable: User-defined node variable \
                                                  %1% cannot have the same name as computational variable!\n") % var_name;
             Util::error(format.str());
@@ -111,7 +115,7 @@ ComputationalMeshBuilder::addPassiveComputationalCellVariable(std::string const 
 
 ComputationalMesh::Ptr
 ComputationalMeshBuilder::build() const {
-    if (cvar_mgr_.size() == 0) {
+    if (cvar_mgr_->size() == 0) {
         boost::format format = boost::format("ComputationalMeshBuilder::build: No computational variables defined!\n");
         Util::error(format.str());
         throw std::logic_error(format.str().c_str());
@@ -124,7 +128,7 @@ ComputationalMeshBuilder::build() const {
     }
 
     // TODO: Pass in ComputationalVariableManager
-    ComputationalMesh::Ptr cmesh = std::make_shared<ComputationalMesh>(geometrical_mesh_->getMeshConnectivity());
+    ComputationalMesh::Ptr cmesh = std::make_shared<ComputationalMesh>(geometrical_mesh_->getMeshConnectivity(), cvar_mgr_);
 
     /* Create ComputationalNodes, ComputationalFaces and ComputationalCells.
      * Also, insert computational variables and boundary conditions.
@@ -268,7 +272,7 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalNode::Ptr & cno
      * with "addComputationalVariable".
      */
     std::for_each(node_vars_.begin(), node_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
-        cnode->addComputationalMolecule(var_name, cvar_mgr_.getComputationalVariableHolder());
+        cnode->addComputationalMolecule(var_name, cvar_mgr_->getComputationalVariableHolder());
     });
 }
 
@@ -289,18 +293,18 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cfa
      * the ComputationalMolecules of the cell-centered variables.
      */
 
-    ComputationalVariableManager::Iterator_t it = cvar_mgr_.begin();
-    ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
+    ComputationalVariableManager::Iterator_t it = cvar_mgr_->begin();
+    ComputationalVariableManager::Iterator_t it_end = cvar_mgr_->end();
 
     for (; it != it_end; ++it) {
-        cface->addComputationalMolecule(it->name, cvar_mgr_.getComputationalVariableHolder());
+        cface->addComputationalMolecule(it->name, cvar_mgr_->getComputationalVariableHolder());
     }
 
 
     // add the user-defined face variables
 
     std::for_each(face_vars_.begin(), face_vars_.end(), [&](PassiveFaceVars_t::value_type const & var_name) {
-        cface->addComputationalMolecule(var_name, cvar_mgr_.getComputationalVariableHolder());
+        cface->addComputationalMolecule(var_name, cvar_mgr_->getComputationalVariableHolder());
     });
 }
 
@@ -316,12 +320,12 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & cce
      * Add the cell-centered variables
      */
 
-    ComputationalVariableManager::Iterator_t it = cvar_mgr_.begin();
-    ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
+    ComputationalVariableManager::Iterator_t it = cvar_mgr_->begin();
+    ComputationalVariableManager::Iterator_t it_end = cvar_mgr_->end();
 
     for (; it != it_end; ++it) {
         // create and add the comp. variable to the comp. cell
-        if (!cvar_mgr_.create(ccell, it->name)) {
+        if (!cvar_mgr_->create(ccell, it->name)) {
             boost::format format = boost::format("ComputationalMeshBuilder::setComputationalVariables: Error creating computational variable \
                                                  %1% on cell with cell id %2%!\n") % it->name % ccell->id();
             Util::error(format.str());
@@ -334,7 +338,7 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & cce
      * Add all user-defined cell variables
      */
     std::for_each(cell_vars_.begin(), cell_vars_.end(), [&](PassiveCellVars_t::value_type const & var_name) {
-        ccell->addComputationalMolecule(var_name, cvar_mgr_.getComputationalVariableHolder());
+        ccell->addComputationalMolecule(var_name, cvar_mgr_->getComputationalVariableHolder());
     });
 
     return true;
@@ -357,8 +361,8 @@ ComputationalMeshBuilder::computeFaceFluxes(ComputationalMesh::Ptr & cmesh) cons
              * for all cell-centered variables. Each such
              * variable should have its own flux-evaluator.
              */ 
-            ComputationalVariableManager::Iterator_t it     = cvar_mgr_.begin();
-            ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
+            ComputationalVariableManager::Iterator_t it     = cvar_mgr_->begin();
+            ComputationalVariableManager::Iterator_t it_end = cvar_mgr_->end();
 
             for (; it != it_end; ++it) {
                 // compute flux through face

@@ -21,6 +21,9 @@
 #include <memory>
 
 
+class ComputationalVariableManager;
+
+
 #pragma warning(disable:4251)
 
 
@@ -33,9 +36,10 @@ public:
     typedef std::shared_ptr<ComputationalMesh const> CPtr;
 
 public:
-    explicit ComputationalMesh(IMeshConnectivity const & mesh_connectivity);
+    explicit ComputationalMesh(IMeshConnectivity const & mesh_connectivity, std::shared_ptr<ComputationalVariableManager> const & cvar_mgr);
 
-    IMeshConnectivity const & getMeshConnectivity() const;
+    IMeshConnectivity const &            getMeshConnectivity() const;
+    ComputationalVariableManager const & getComputationalVariableManager() const;
 
     /* Computational entities are stored in threads, so
      * they can easily be queried. Also, this is used
@@ -59,6 +63,8 @@ private:
     void addCell(Cell::Ptr const & cell, ComputationalCell::Ptr const & ccell);
 
 private:
+    std::shared_ptr<ComputationalVariableManager> cvar_mgr_;
+
     /* The computational entities hold a reference to their geometrical
      * counterparts. The mesh connectivity is given in terms of the
      * geometrical entities. This mapper allows the mapping from

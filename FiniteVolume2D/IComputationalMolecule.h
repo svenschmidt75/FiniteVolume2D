@@ -8,9 +8,18 @@
 #pragma once
 
 
+class ComputationalNode;
+class ComputationalFace;
+class ComputationalCell;
+class ComputationalVariableManager;
+
+
 class IComputationalMolecule {
 public:
     virtual ~IComputationalMolecule() {}
 
-    virtual void print() const = 0;
+    virtual void print(ComputationalVariableManager const & cvar_mgr) const = 0;
+    virtual void print(ComputationalNode const & cnode, ComputationalVariableManager const & cvar_mgr) const = 0;
+    virtual void print(ComputationalFace const & cface, ComputationalVariableManager const & cvar_mgr) const = 0;
+    virtual void print(ComputationalCell const & ccell, ComputationalVariableManager const & cvar_mgr) const = 0;
 };

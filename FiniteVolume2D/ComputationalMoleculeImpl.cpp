@@ -2,6 +2,7 @@
 
 #include "ComputationalVariableHolder.h"
 #include "ComputationalCell.h"
+#include "ComputationalVariableManager.h"
 
 
 ComputationalMoleculeImpl::ComputationalMoleculeImpl(std::string const & name, ComputationalVariableHolder::Ptr const & cvar_holder)
@@ -9,25 +10,34 @@ ComputationalMoleculeImpl::ComputationalMoleculeImpl(std::string const & name, C
     name_(name), cvar_holder_(cvar_holder) {}
 
 void
-ComputationalMoleculeImpl::print() const {
+ComputationalMoleculeImpl::printMolecule(ComputationalVariableManager const & cvar_mgr) const {
     // print computational molecule
 
     std::cout << std::endl << "Molecule name: " << name() << std::endl;
 
-    std::for_each(data_.begin(), data_.end(), [this](ComputationalMolecule_t::value_type const & item) {
+    std::for_each(data_.begin(), data_.end(), [this, &cvar_mgr](ComputationalMolecule_t::value_type const & item) {
         // item.first  : ComputationalVariable::Id_t
         // item.second : weight
         // find this contribution in "in"
         ComputationalVariable::Id_t const & cvar_id = item.first;
         double const & weight = item.second;
 
-        ComputationalVariable::Ptr cvar = cvar_holder_->get(cvar_id);
+        ComputationalVariable::Ptr cvar = cvar_mgr.getComputationalVariable(cvar_id);
         ComputationalCell::Ptr const & ccell = cvar->getCell();
 
         std::cout << "(Cell id, var name, weight) = (" << ccell->id() << ", " << cvar->getName() << ", " << weight << ")" << std::endl;
     });
 
     std::cout << "Source term: " << source_term_.value() << std::endl;
+}
+
+void
+ComputationalMoleculeImpl::print(ComputationalCell const & cell, ComputationalVariableManager const & cvar_mgr) const {
+    // print computational molecule
+
+    std::cout << std::endl << "(Cell, molecule) = (" << cell.id() << ", " << name() << std::endl;
+
+    printMolecule(cvar_mgr);
 }
 
 std::string const &
