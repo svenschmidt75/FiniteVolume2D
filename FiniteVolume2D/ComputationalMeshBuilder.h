@@ -32,10 +32,13 @@ class DECL_SYMBOLS_2D ComputationalMeshBuilder {
 public:
     typedef ComputationalVariableManager::FluxEvaluator_t FluxEvaluator_t;
 
+    typedef std::function<bool (std::shared_ptr<ComputationalCell> const & cell)> CellMoleculeEvaluator_t;
+
 public:
     explicit ComputationalMeshBuilder(Mesh::Ptr const & mesh, BoundaryConditionCollection const & bc);
 
     bool                   addComputationalVariable(std::string const & var_name, FluxEvaluator_t const & flux_evaluator);
+    void                   addEvaluateCellMolecules(CellMoleculeEvaluator_t const & cell_molecule_evaluator);
     bool                   addPassiveComputationalNodeVariable(std::string const & var_name);
     bool                   addPassiveComputationalFaceVariable(std::string const & var_name);
     bool                   addPassiveComputationalCellVariable(std::string const & var_name);
@@ -44,6 +47,7 @@ public:
 private:
     void insertComputationalEntities(ComputationalMesh::Ptr & cmesh) const;
     void computeFaceFluxes(ComputationalMesh::Ptr & cmesh) const;
+    void evaluateCellMolecules(ComputationalMesh::Ptr & cmesh) const;
     void setComputationalVariables(ComputationalNode::Ptr & cnode) const;
     void setComputationalVariables(ComputationalFace::Ptr & cface) const;
     bool setComputationalVariables(ComputationalCell::Ptr & ccell) const;
@@ -71,6 +75,8 @@ private:
     PassiveNodeVars_t                     node_vars_;
     PassiveFaceVars_t                     face_vars_;
     PassiveCellVars_t                     cell_vars_;
+
+    CellMoleculeEvaluator_t               cell_molecule_evaluator_;
 };
 
 #pragma warning(default:4251)

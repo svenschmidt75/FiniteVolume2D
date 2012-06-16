@@ -20,14 +20,14 @@ FaceConnectivity::insert(Cell::Ptr const & cell) {
             boost::format format = boost::format("FaceConnectivity::insert: Boundary face %1% has more than 1 cell neighbor \
                                                  when inserting cell %2%!\n") % face->meshId() % cell->meshId();
             Util::error(format.str());
-            throw std::exception(format.str().c_str());
+            throw std::logic_error(format.str().c_str());
         }
 
         if (face->getEntityType() == IGeometricEntity::INTERIOR && face_cells_[face->id()].size() > 2) {
             boost::format format = boost::format("FaceConnectivity::insert: Interior face %1% has more than 2 cell neighbors \
                                                  when inserting cell %2%!\n") % face->meshId() % cell->meshId();
             Util::error(format.str());
-            throw std::exception(format.str().c_str());
+            throw std::logic_error(format.str().c_str());
         }
     }
 }

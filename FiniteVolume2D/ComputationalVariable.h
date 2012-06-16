@@ -35,9 +35,9 @@ public:
 
     bool operator==(ComputationalVariable const & in) const;
 
-    std::string const & getName() const;
-    Id_t                id() const;
-
+    std::string const &                        getName() const;
+    Id_t                                       id() const;
+    std::shared_ptr<ComputationalCell> const & getCell() const;
 
     /* By using "std::shared_ptr<ComputationalCell>' instead of
      * ComputationalCell::Ptr, we are not required to include
@@ -46,13 +46,13 @@ public:
     static Ptr create(std::shared_ptr<ComputationalCell> const & cell, std::string const & name, Id_t unique_id);
 
 private:
-    // restrict creation to ComputationalCellManager only
+    // restrict creation to ComputationalMeshBuilder only
     ComputationalVariable();
 
 private:
     // the computational cell this variable is tied to
     std::shared_ptr<ComputationalCell> cell_;
-    
+
     // the name of this variable, that will be solved for
     std::string                        name_;
     

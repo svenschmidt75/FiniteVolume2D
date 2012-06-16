@@ -21,6 +21,9 @@
 #include <map>
 
 
+class ComputationalVariableHolder;
+
+
 #pragma warning(disable:4251)
 #pragma warning(disable:4275)
 
@@ -43,7 +46,7 @@ public:
     Node::Ptr const &         geometricEntity() const;
 
     ComputationalMolecule &    getComputationalMolecule(std::string const & var_name);
-    void                       addComputationalMolecule(std::string const & var_name);
+    void                       addComputationalMolecule(std::string const & var_name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
 
 private:
     typedef std::map<std::string, ComputationalMolecule> ComputationalMoleculeManager_t;

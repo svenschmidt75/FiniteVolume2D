@@ -30,14 +30,12 @@ Deal with errors there?
 ----------------------------------------------------
 TO-DO
 
-ICell: Node/ComputationalNode => covariant return types
+----------------------------------------------------
 
 ----------------------------------------------------
 
-Face flux according to the one cell or the other negates sign
 
-----------------------------------------------------
-Operators for CompMolecule
+
 
 ----------------------------------------------------
 Own iterator:
@@ -49,34 +47,8 @@ This way, FluxEvaluator can have state?
 
 
 ----------------------------------------------------
-Check that every b.f. has a b.c.!!
 
 ----------------------------------------------------
-
-
-
-xcopy /F /Y $(CPPUNIT_DIR)\cppunit\lib\cppunitd_dll.dll $(OutputPath)
-
-
-echo $(SolutionDir)$(Configuration)\$(ProjectName)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ----------------------------------------------------
 

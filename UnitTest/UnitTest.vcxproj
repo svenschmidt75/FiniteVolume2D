@@ -110,7 +110,10 @@
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MeshBoundaryConditionReaderTest.cpp" />
-    <ClCompile Include="MeshCheckerTest.cpp" />
+    <ClCompile Include="MeshCheckerTest.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
+      <PreprocessKeepComments Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessKeepComments>
+    </ClCompile>
     <ClCompile Include="MeshConnectivityTest.cpp" />
     <ClCompile Include="VersteegMalalasekeraTest.cpp" />
   </ItemGroup>

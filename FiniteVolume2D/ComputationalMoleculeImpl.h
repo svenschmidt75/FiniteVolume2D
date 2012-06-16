@@ -19,6 +19,10 @@
 
 #include <string>
 #include <unordered_map>
+#include <memory>
+
+
+class ComputationalVariableHolder;
 
 
 #pragma warning(disable:4251)
@@ -51,16 +55,23 @@ public:
 protected:
     // protected constructor: class should only be used to derive
     //                        from it
-    explicit ComputationalMoleculeImpl(std::string const & name);
+    explicit ComputationalMoleculeImpl(std::string const & name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
+
+    bool addMolecule(ComputationalMoleculeImpl & in) const;
 
 private:
-    std::string             name_;
+    SourceTerm const &      getSourceTerm() const;
+
+private:
+    std::string                                  name_;
 
     // Pair: Computational variable id, weight
-    ComputationalMolecule_t data_;
+    ComputationalMolecule_t                      data_;
 
     // Source term, i.e. the constant value
-    SourceTerm              source_term_;
+    SourceTerm                                   source_term_;
+
+    std::shared_ptr<ComputationalVariableHolder> cvar_holder_;
 };
 
 #pragma warning(default:4275)

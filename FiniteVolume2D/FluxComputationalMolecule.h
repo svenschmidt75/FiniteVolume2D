@@ -15,18 +15,23 @@
 
 
 class ComputationalCell;
+class ComputationalMolecule;
+class ComputationalVariableHolder;
 
 
 #pragma warning(disable:4251)
 
 
 class DECL_SYMBOLS_2D FluxComputationalMolecule : public ComputationalMoleculeImpl {
+
 public:
     FluxComputationalMolecule();
-    explicit FluxComputationalMolecule(std::string const & name);
+    explicit FluxComputationalMolecule(std::string const & name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
 
     void                                       setCell(std::shared_ptr<ComputationalCell> const & ccell);
     std::shared_ptr<ComputationalCell> const & getCell() const;
+
+    bool addMolecule(ComputationalMolecule & in) const;
 
 private:
     /* Flux through non-boundary faces involves two cells.

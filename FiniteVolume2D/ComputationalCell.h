@@ -12,15 +12,17 @@
 #include "ComputationalNode.h"
 #include "ComputationalFace.h"
 #include "ComputationalVariable.h"
+#include "ComputationalMolecule.h"
 
 #include "FiniteVolume2DLib/ICell.h"
 #include "FiniteVolume2DLib/Cell.h"
 #include "FiniteVolume2DLib/Face.h"
 
-#include "FiniteVolume2D/ComputationalMolecule.h"
-
 #include <memory>
 #include <map>
+
+
+class ComputationalVariableHolder;
 
 
 #pragma warning(disable:4251)
@@ -52,15 +54,15 @@ public:
     EntityCollection<ComputationalNode> const & getComputationalNodes() const;
     EntityCollection<ComputationalFace> const & getComputationalFaces() const;
 
-    ComputationalVariable::Ptr const getComputationalVariable(std::string const & name) const;
-    void                              addComputationalVariable(ComputationalVariable::Ptr const & cvar);
+    ComputationalVariable::Ptr getComputationalVariable(std::string const & name) const;
+    void                       addComputationalVariable(ComputationalVariable::Ptr const & cvar, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
 
-    ComputationalMolecule &           getComputationalMolecule(std::string const & name);
-    void                              addComputationalMolecule(std::string const & name);
+    ComputationalMolecule &    getComputationalMolecule(std::string const & name);
+    void                       addComputationalMolecule(std::string const & name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
 
 private:
     typedef std::map<std::string, ComputationalVariable::Ptr> ComputationalVariables_t;
-    typedef std::map<std::string, ComputationalMolecule> ComputationalMolecules_t;
+    typedef std::map<std::string, ComputationalMolecule>      ComputationalMolecules_t;
 
 private:
     // the geometric partner cell

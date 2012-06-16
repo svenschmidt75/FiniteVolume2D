@@ -1,5 +1,7 @@
 #include "ComputationalVariable.h"
 
+#include "ComputationalCell.h"
+
 
 ComputationalVariable::ComputationalVariable(std::shared_ptr<ComputationalCell> const & cell, std::string const & name, Id_t unique_id)
     : cell_(cell), name_(name), unique_id_(unique_id) {}
@@ -17,6 +19,11 @@ ComputationalVariable::getName() const {
 ComputationalVariable::Id_t
 ComputationalVariable::id() const {
     return unique_id_;
+}
+
+ComputationalCell::Ptr const &
+ComputationalVariable::getCell() const {
+    return cell_;
 }
 
 ComputationalVariable::Ptr

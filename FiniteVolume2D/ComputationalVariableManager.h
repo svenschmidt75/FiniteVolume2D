@@ -10,7 +10,7 @@
 #include "DeclSpec.h"
 
 #include "ComputationalCell.h"
-#include "ComputationalFace.h"
+#include "ComputationalVariableHolder.h"
 #include "internal/ComputationalVariableManagerTypes.h"
 
 /* We include this file here although a forward-declaration would suffice.
@@ -39,6 +39,8 @@ class DECL_SYMBOLS_2D ComputationalVariableManager {
     friend class ComputationalVariableManagerIterator;
 
 public:
+    typedef std::shared_ptr<ComputationalVariableManager> Ptr;
+
     /* The following types are defined in ComputationalVariableManagerTypes.h as they also need
      * to be known to ComputationalVariableManagerIterator. Introduce them as "native" to this
      * class via typedefs.
@@ -65,6 +67,8 @@ public:
 
     bool                                   registerVariable(std::string const & name, FluxEvaluator_t const & flux_eval);
 
+    std::shared_ptr<ComputationalVariableHolder> const &    getComputationalVariableHolder() const;
+
     short                                  getBaseIndex(std::string const & cvar_name) const;
 
     size_type                              size() const;
@@ -73,6 +77,8 @@ public:
     Iterator_t                             end() const;
 
 private:
+    std::shared_ptr<ComputationalVariableHolder> cvar_holder_;
+
     /* Each computational variable has a unique index.
      * This index is used in the computational molecules
      * and also in the sparse linear system.

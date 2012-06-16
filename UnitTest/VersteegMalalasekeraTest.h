@@ -17,7 +17,8 @@
 class VersteegMalalasekeraTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(VersteegMalalasekeraTest);
     CPPUNIT_TEST(testMeshFileExists);
-    CPPUNIT_TEST(evaluateFluxesTest);
+    CPPUNIT_TEST(evaluateFluxesCell1Test);
+    CPPUNIT_TEST(evaluateFluxesCell3Test);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -26,7 +27,8 @@ public:
 
 protected:
     void testMeshFileExists();
-    void evaluateFluxesTest();
+    void evaluateFluxesCell1Test();
+    void evaluateFluxesCell3Test();
 
 private:
     void initMesh();

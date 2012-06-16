@@ -1,15 +1,21 @@
 #include "ComputationalVariableManager.h"
 
-
 #include "ComputationalVariable.h"
 #include "internal/ComputationalVariableManagerIterator.h"
 
 #include "FiniteVolume2DLib/Util.h"
 
+
+#include <memory>
+
 #include <boost/format.hpp>
 
 
-ComputationalVariableManager::ComputationalVariableManager() : index_(0), is_finialized_(false) {}
+ComputationalVariableManager::ComputationalVariableManager()
+    :
+    index_(0),
+    is_finialized_(false),
+    cvar_holder_(std::make_shared<ComputationalVariableHolder>()) {}
 
 
 ComputationalVariable::Ptr
@@ -35,7 +41,8 @@ ComputationalVariableManager::create(ComputationalCell::Ptr const & cell, std::s
     ComputationalVariable::Id_t cvar_id = cell->id() + getBaseIndex(name);
 
     ComputationalVariable::Ptr cvar = ComputationalVariable::create(cell, name, cvar_id);
-    cell->addComputationalVariable(cvar);
+    cvar_holder_->add(cvar);
+    cell->addComputationalVariable(cvar, cvar_holder_);
     return cvar;
 }
 
@@ -61,6 +68,11 @@ ComputationalVariableManager::registerVariable(std::string const & name, FluxEva
     cvar_item.flux_eval = flux_eval;
 
     return true;
+}
+
+ComputationalVariableHolder::Ptr const &
+ComputationalVariableManager::getComputationalVariableHolder() const {
+    return cvar_holder_;
 }
 
 short

@@ -36,6 +36,17 @@ ComputationalMeshBuilder::addComputationalVariable(std::string const & var_name,
     return cvar_mgr_.registerVariable(var_name, flux_evaluator);
 }
 
+void
+ComputationalMeshBuilder::addEvaluateCellMolecules(CellMoleculeEvaluator_t const & cell_molecule_evaluator) {
+    if (!cell_molecule_evaluator) {
+        boost::format format = boost::format("ComputationalMeshBuilder::addEvaluateCellMolecules: Empty comp. cell evaluator set!\n");
+        Util::error(format.str());
+        throw std::logic_error(format.str().c_str());
+    }
+
+    cell_molecule_evaluator_ = cell_molecule_evaluator;
+}
+
 namespace {
 
     template<typename VAR_TYPE, typename DATA_TYPE>
@@ -103,9 +114,16 @@ ComputationalMeshBuilder::build() const {
     if (cvar_mgr_.size() == 0) {
         boost::format format = boost::format("ComputationalMeshBuilder::build: No computational variables defined!\n");
         Util::error(format.str());
-        return std::nullptr_t();
+        throw std::logic_error(format.str().c_str());
     }
 
+    if (!cell_molecule_evaluator_) {
+        boost::format format = boost::format("ComputationalMeshBuilder::build: No comp. cell evaluator set!\n");
+        Util::error(format.str());
+        throw std::logic_error(format.str().c_str());
+    }
+
+    // TODO: Pass in ComputationalVariableManager
     ComputationalMesh::Ptr cmesh = std::make_shared<ComputationalMesh>(geometrical_mesh_->getMeshConnectivity());
 
     /* Create ComputationalNodes, ComputationalFaces and ComputationalCells.
@@ -115,6 +133,9 @@ ComputationalMeshBuilder::build() const {
     
     // compute the face fluxes
     computeFaceFluxes(cmesh);
+
+    // add face fluxes to the cell molecule
+    evaluateCellMolecules(cmesh);
 
     return cmesh;
 }
@@ -247,7 +268,7 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalNode::Ptr & cno
      * with "addComputationalVariable".
      */
     std::for_each(node_vars_.begin(), node_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
-        cnode->addComputationalMolecule(var_name);
+        cnode->addComputationalMolecule(var_name, cvar_mgr_.getComputationalVariableHolder());
     });
 }
 
@@ -272,14 +293,14 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cfa
     ComputationalVariableManager::Iterator_t it_end = cvar_mgr_.end();
 
     for (; it != it_end; ++it) {
-        cface->addComputationalMolecule(it->name);
+        cface->addComputationalMolecule(it->name, cvar_mgr_.getComputationalVariableHolder());
     }
 
 
     // add the user-defined face variables
 
     std::for_each(face_vars_.begin(), face_vars_.end(), [&](PassiveFaceVars_t::value_type const & var_name) {
-        cface->addComputationalMolecule(var_name);
+        cface->addComputationalMolecule(var_name, cvar_mgr_.getComputationalVariableHolder());
     });
 }
 
@@ -313,7 +334,7 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & cce
      * Add all user-defined cell variables
      */
     std::for_each(cell_vars_.begin(), cell_vars_.end(), [&](PassiveCellVars_t::value_type const & var_name) {
-        ccell->addComputationalMolecule(var_name);
+        ccell->addComputationalMolecule(var_name, cvar_mgr_.getComputationalVariableHolder());
     });
 
     return true;
@@ -344,5 +365,20 @@ ComputationalMeshBuilder::computeFaceFluxes(ComputationalMesh::Ptr & cmesh) cons
                 (it->flux_eval)(grid_accessor, ccell, cface);
             }
         });
+    }
+}
+
+void
+ComputationalMeshBuilder::evaluateCellMolecules(ComputationalMesh::Ptr & cmesh) const {
+    /* Add up all face fluxes to the cell comp. molecule.
+     * Also, take account of a possibly non-zero r.h.s.
+     * (see for example p. 331, eq. 11.59, in Versteeg and
+     * Malalasekera, where the r.h.s. is zero.
+     */
+    Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
+    for (Thread<ComputationalCell>::size_type i = 0; i < cell_thread.size(); ++i) {
+        ComputationalCell::Ptr const & ccell = cell_thread.getEntityAt(i);
+
+        cell_molecule_evaluator_(ccell);
     }
 }
