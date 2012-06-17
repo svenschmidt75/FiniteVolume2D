@@ -145,7 +145,7 @@ namespace {
         std::for_each(cface_coll.begin(), cface_coll.end(), [&cmolecule](ComputationalFace::Ptr const & cface) {
             // Get face flux molecules for "Temperature"
             FluxComputationalMolecule & flux_molecule = cface->getComputationalMolecule("Temperature");
-
+            
             cmolecule.addMolecule(flux_molecule);
         });
 
@@ -168,8 +168,8 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
     ComputationalMesh::Ptr cmesh(builder.build());
 
 
-    auto boundary_face_thread_ = cmesh->getFaceThread(IGeometricEntity::Entity_t::BOUNDARY);
-    auto internal_face_thread_ = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
+    auto boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::BOUNDARY);
+    auto internal_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
 
 
     /* 
@@ -177,12 +177,12 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
      */
 
     /* check the flux of boundary face 2 */
-    auto it = std::find_if(boundary_face_thread_.begin(), boundary_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+    auto it = std::find_if(boundary_face_thread.begin(), boundary_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
         return face->meshId() == 2ull;
     });
 
-    CPPUNIT_ASSERT_MESSAGE("Face 2 not found", it != boundary_face_thread_.end());
+    CPPUNIT_ASSERT_MESSAGE("Face 2 not found", it != boundary_face_thread.end());
     ComputationalFace::Ptr cface = *it;
 
     BoundaryCondition::Ptr bc = cface->getBoundaryCondition();
@@ -208,12 +208,12 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
 
 
     /* check the flux of internal face 0 */
-    it = std::find_if(internal_face_thread_.begin(), internal_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
         return face->meshId() == 0ull;
     });
 
-    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread_.end());
+    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread.end());
     cface = *it;
 
     bc = cface->getBoundaryCondition();
@@ -247,12 +247,12 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
 
 
     /* check the flux of internal face 1 */
-    it = std::find_if(internal_face_thread_.begin(), internal_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
         return face->meshId() == 1ull;
     });
 
-    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread_.end());
+    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread.end());
     cface = *it;
 
     bc = cface->getBoundaryCondition();
@@ -293,8 +293,8 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
     ComputationalMesh::Ptr cmesh(builder.build());
 
 
-    auto boundary_face_thread_ = cmesh->getFaceThread(IGeometricEntity::Entity_t::BOUNDARY);
-    auto internal_face_thread_ = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
+    auto boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::BOUNDARY);
+    auto internal_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
 
 
     /* 
@@ -302,12 +302,12 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
      */
 
     /* check the flux of boundary face 7 */
-    auto it = std::find_if(boundary_face_thread_.begin(), boundary_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+    auto it = std::find_if(boundary_face_thread.begin(), boundary_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
         return face->meshId() == 7ull;
     });
 
-    CPPUNIT_ASSERT_MESSAGE("Face 7 not found", it != boundary_face_thread_.end());
+    CPPUNIT_ASSERT_MESSAGE("Face 7 not found", it != boundary_face_thread.end());
     ComputationalFace::Ptr cface = *it;
 
     BoundaryCondition::Ptr bc = cface->getBoundaryCondition();
@@ -330,12 +330,12 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
 
 
     /* check the flux of internal face 8 */
-    it = std::find_if(internal_face_thread_.begin(), internal_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
         return face->meshId() == 8ull;
     });
 
-    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread_.end());
+    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread.end());
     cface = *it;
 
     bc = cface->getBoundaryCondition();
@@ -369,12 +369,12 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
 
 
     /* check the flux of internal face 5 */
-    it = std::find_if(internal_face_thread_.begin(), internal_face_thread_.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
         Face::Ptr const & face = cface->geometricEntity();
         return face->meshId() == 5ull;
     });
 
-    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread_.end());
+    CPPUNIT_ASSERT_MESSAGE("Face not found", it != internal_face_thread.end());
     cface = *it;
 
     bc = cface->getBoundaryCondition();
@@ -410,6 +410,160 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
 
     m = ccell->getComputationalMolecule("Temperature");
     m.print(*ccell, cmesh->getComputationalVariableManager());
+}
+
+namespace {
+    ComputationalCell::Ptr getComputationalCell(Thread<ComputationalCell> const & cell_thread, IGeometricEntity::Id_t cell_id) {
+        auto it = std::find_if(cell_thread.begin(), cell_thread.end(), [&cell_id](ComputationalCell::Ptr const & ccell) -> bool {
+            Cell::Ptr const & cell = ccell->geometricEntity();
+            return cell->meshId() == cell_id;
+        });
+
+        if (it == cell_thread.end())
+            return nullptr;
+        return *it;
+    }
+
+}
+
+void
+VersteegMalalasekeraTest::evaluateCell5ComputationalMoleculeTest() {
+    /* Cell 5 has an outer Dirichlet b.c. face */
+
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::Ptr cmesh(builder.build());
+
+
+    auto cell_thread = cmesh->getCellThread();
+
+
+    /* 
+     * Check the computational molecule of cell 5.
+     * This cell has two internal faces and one
+     * boundary face. Hence, it should have three
+     * items in its comp. molecule.
+     */
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 4ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell.get() != nullptr);
+
+    ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3u, comp_molecule.size());
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term", 1858.5210188381266, comp_molecule.getSourceTerm().value(), 1E-10);
+
+    // get the ComputationalVariable from neighboring cell 4 that we
+    // expect to be in the ComputationalMolecule of cell 5.
+    // This contribution comes from the internal face 8 that both cells
+    // 4 and 5 share.
+    ComputationalCell::Ptr ccell_nbr = getComputationalCell(cell_thread, 3ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 4 not found", ccell_nbr.get() != nullptr);
+    ComputationalVariable::Ptr cvar_nbr = ccell_nbr->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 4", cvar_nbr.get() != nullptr);
+
+    boost::optional<double> weight_opt = comp_molecule.getWeight(*cvar_nbr);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 4 to cell 5 in cell 4's computational molecule", bool(weight_opt) == true);
+    double weight = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -1.8605210188381265, weight, 1E-10);
+
+
+    // get the ComputationalVariables from neighboring cell 6 that we
+    // expect to be in the ComputationalMolecule of cell 5.
+    // This contribution comes from the internal face 11 that both cells
+    // 5 and 6 share.
+    ccell_nbr = getComputationalCell(cell_thread, 5ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell_nbr.get() != nullptr);
+    cvar_nbr = ccell_nbr->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 6", cvar_nbr.get() != nullptr);
+
+    weight_opt = comp_molecule.getWeight(*cvar_nbr);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 6 to cell 5 in cell 5's computational molecule", bool(weight_opt) == true);
+    weight = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", 1.5, weight, 1E-10);
+
+
+    // The last contribution in cell 5's computational molecule comes
+    // from the boundary face 9.
+    cvar_nbr = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 5", cvar_nbr.get() != nullptr);
+
+    weight_opt = comp_molecule.getWeight(*cvar_nbr);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 5 to itself (Dirichlet b.c. face contribution)", bool(weight_opt) == true);
+    weight = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -3.3605210188381265, weight, 1E-10);
+}
+
+void
+VersteegMalalasekeraTest::evaluateCell2ComputationalMoleculeTest() {
+    /* Cell 2 has an outer von Neumann b.c. face */
+
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::Ptr cmesh(builder.build());
+
+
+    auto cell_thread = cmesh->getCellThread();
+
+
+    /* 
+     * Check the computational molecule of cell 2.
+     * This cell has two internal faces and one
+     * boundary face. Hence, it should have three
+     * items in its comp. molecule.
+     */
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 1ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 2 not found", ccell.get() != nullptr);
+
+    ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 2", 3u, comp_molecule.size());
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term", -2.0, comp_molecule.getSourceTerm().value(), 1E-10);
+    
+    // get the ComputationalVariable from neighboring cell 1 that we
+    // expect to be in the ComputationalMolecule of cell 2.
+    // This contribution comes from the internal face 0 that both cells
+    // 1 and 2 share.
+    ComputationalCell::Ptr ccell_nbr = getComputationalCell(cell_thread, 0ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell_nbr.get() != nullptr);
+    ComputationalVariable::Ptr cvar_nbr = ccell_nbr->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 1", cvar_nbr.get() != nullptr);
+
+    boost::optional<double> weight_opt = comp_molecule.getWeight(*cvar_nbr);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 1 to cell 2 in cell 2's computational molecule", bool(weight_opt) == true);
+    double weight = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -1.8605210188381265, weight, 1E-10);
+
+
+    // get the ComputationalVariables from neighboring cell 3 that we
+    // expect to be in the ComputationalMolecule of cell 2.
+    // This contribution comes from the internal face 4 that both cells
+    // 2 and 3 share.
+    ccell_nbr = getComputationalCell(cell_thread, 2ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 3 not found", ccell_nbr.get() != nullptr);
+    cvar_nbr = ccell_nbr->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 3", cvar_nbr.get() != nullptr);
+
+    weight_opt = comp_molecule.getWeight(*cvar_nbr);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 3 to cell 2 in cell 2's computational molecule", bool(weight_opt) == true);
+    weight = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", 1.8605210188381265, weight, 1E-10);
+
+
+    // The last contribution in cell 2's computational molecule comes
+    // from the boundary face 3.
+    cvar_nbr = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 2", cvar_nbr.get() != nullptr);
+
+    weight_opt = comp_molecule.getWeight(*cvar_nbr);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 2 to itself (b.f. contribution) computational molecule", bool(weight_opt) == true);
+    weight = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", 0, weight, 1E-10);
 }
 
 void

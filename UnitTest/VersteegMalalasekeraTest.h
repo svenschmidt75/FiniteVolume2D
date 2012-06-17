@@ -19,6 +19,8 @@ class VersteegMalalasekeraTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(testMeshFileExists);
     CPPUNIT_TEST(evaluateFluxesCell1Test);
     CPPUNIT_TEST(evaluateFluxesCell3Test);
+    CPPUNIT_TEST(evaluateCell5ComputationalMoleculeTest);
+    CPPUNIT_TEST(evaluateCell2ComputationalMoleculeTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -29,6 +31,8 @@ protected:
     void testMeshFileExists();
     void evaluateFluxesCell1Test();
     void evaluateFluxesCell3Test();
+    void evaluateCell5ComputationalMoleculeTest();
+    void evaluateCell2ComputationalMoleculeTest();
 
 private:
     void initMesh();
