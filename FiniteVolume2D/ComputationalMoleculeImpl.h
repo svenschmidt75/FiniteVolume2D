@@ -30,9 +30,6 @@ class ComputationalVariableManager;
 
 
 class DECL_SYMBOLS_2D ComputationalMoleculeImpl : public IComputationalMolecule {
-
-    friend DECL_SYMBOLS_2D ComputationalMoleculeImpl operator-(ComputationalMoleculeImpl const & in);
-
 public:
     typedef std::unordered_map<ComputationalVariable::Id_t, double> ComputationalMolecule_t;
     typedef ComputationalMolecule_t::size_type                      size_type;
@@ -83,5 +80,3 @@ private:
 
 #pragma warning(default:4275)
 #pragma warning(default:4251)
-
-#include "internal/ComputationalMoleculeOperators.h"

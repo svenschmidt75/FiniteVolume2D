@@ -146,6 +146,9 @@ namespace {
             // Get face flux molecules for "Temperature"
             FluxComputationalMolecule & flux_molecule = cface->getComputationalMolecule("Temperature");
 
+            /* negate the weights if they were calculated with the neighboring
+             * cell
+             */
             ComputationalCell::Ptr const & ccell_ref = flux_molecule.getCell();
             if (ccell_ref != ccell)
                 flux_molecule = -flux_molecule;
@@ -464,7 +467,7 @@ VersteegMalalasekeraTest::evaluateCell5ComputationalMoleculeTest() {
     boost::optional<double> weight_opt = comp_molecule.getWeight(*cvar_nbr);
     CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 4 to cell 5 in cell 4's computational molecule", bool(weight_opt) == true);
     double weight = *weight_opt;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -1.8605210188381265, weight, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", 1.8605210188381265, weight, 1E-10);
 
 
     // get the ComputationalVariables from neighboring cell 6 that we
@@ -490,7 +493,7 @@ VersteegMalalasekeraTest::evaluateCell5ComputationalMoleculeTest() {
     weight_opt = comp_molecule.getWeight(*cvar_nbr);
     CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 5 to itself (Dirichlet b.c. face contribution)", bool(weight_opt) == true);
     weight = *weight_opt;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -3.3605210188381265, weight, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -7.0815630565143799, weight, 1E-10);
 }
 
 void
@@ -534,7 +537,7 @@ VersteegMalalasekeraTest::evaluateCell2ComputationalMoleculeTest() {
     boost::optional<double> weight_opt = comp_molecule.getWeight(*cvar_nbr);
     CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 1 to cell 2 in cell 2's computational molecule", bool(weight_opt) == true);
     double weight = *weight_opt;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -1.8605210188381265, weight, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", 1.8605210188381265, weight, 1E-10);
 
 
     // get the ComputationalVariables from neighboring cell 3 that we
@@ -560,13 +563,14 @@ VersteegMalalasekeraTest::evaluateCell2ComputationalMoleculeTest() {
     weight_opt = comp_molecule.getWeight(*cvar_nbr);
     CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 2 to itself (b.f. contribution) computational molecule", bool(weight_opt) == true);
     weight = *weight_opt;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", 0, weight, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", -3.7210420376762530, weight, 1E-10);
 }
 
 void
 VersteegMalalasekeraTest::compMoleculeCell1AndCell5SimilarTest() {
-
-    
+    /* Check that cells 1 and 5 have similar comp. molecules.
+     * see book, page 332 (Node 1) and 333 (Node 5).
+     */
     ComputationalMeshBuilder builder(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
@@ -578,37 +582,363 @@ VersteegMalalasekeraTest::compMoleculeCell1AndCell5SimilarTest() {
     auto cell_thread = cmesh->getCellThread();
 
 
-    /* 
-     * Check the computational molecule of cell 2.
-     * This cell has two internal faces and one
-     * boundary face. Hence, it should have three
-     * items in its comp. molecule.
+    // get the ComputationalMolecules of both cells
+    ComputationalCell::Ptr ccell_1 = getComputationalCell(cell_thread, 0ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell_1.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_1 = ccell_1->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 1", 3u, comp_molecule_1.size());
+
+
+    ComputationalCell::Ptr ccell_5 = getComputationalCell(cell_thread, 4ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell_5.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_5 = ccell_5->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3u, comp_molecule_5.size());
+
+
+    /* contribution of cell 2 to cell 1 == contribution of cell 4 to cell 5 */
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 1ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 2 not found", ccell.get() != nullptr);
+    ComputationalVariable::Ptr cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 2", cvar.get() != nullptr);
+    boost::optional<double> weight_opt = comp_molecule_1.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 2 to cell 1 in cell 1's computational molecule", bool(weight_opt) == true);
+    double weight_1 = *weight_opt;
+
+    ccell = getComputationalCell(cell_thread, 3ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 4 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 4", cvar.get() != nullptr);
+    weight_opt = comp_molecule_5.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 4 to cell 5 in cell 5's computational molecule", bool(weight_opt) == true);
+    double weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+
+    /* contribution of cell 8 to cell 1 == contribution of cell 6 to cell 5 */
+    ccell = getComputationalCell(cell_thread, 7ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 8", cvar.get() != nullptr);
+    weight_opt = comp_molecule_1.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 8 to cell 1 in cell 1's computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
+
+    ccell = getComputationalCell(cell_thread, 5ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 6", cvar.get() != nullptr);
+    weight_opt = comp_molecule_5.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 6 to cell 5 in cell 5's computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+
+    /* contribution of cell 1 to cell 1 == contribution of cell 5 to cell 5 */
+    cvar = ccell_1->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 1", cvar.get() != nullptr);
+    weight_opt = comp_molecule_1.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 1 to itself in computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
+
+    cvar = ccell_5->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 5", cvar.get() != nullptr);
+    weight_opt = comp_molecule_5.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 5 to itself in computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Source term error", comp_molecule_1.getSourceTerm().value(), comp_molecule_5.getSourceTerm().value(), 1E-10);
+}
+
+void
+VersteegMalalasekeraTest::compMoleculeCell6AndCell8SimilarTest() {
+    /* Check that cells 6 and 8 have similar comp. molecules.
+     * see book, page 333 (Node 6 and 8).
      */
-    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 0ull);
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::Ptr cmesh(builder.build());
+
+
+    auto cell_thread = cmesh->getCellThread();
+
+
+    // get the ComputationalMolecules of both cells
+    ComputationalCell::Ptr ccell_6 = getComputationalCell(cell_thread, 5ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell_6.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_6 = ccell_6->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 6", 3u, comp_molecule_6.size());
+
+
+    ComputationalCell::Ptr ccell_8 = getComputationalCell(cell_thread, 7ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell_8.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_8 = ccell_8->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3u, comp_molecule_8.size());
+
+
+    /* contribution of cell 9 to cell 8 == contribution of cell 7 to cell 6 */
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 8ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 9 not found", ccell.get() != nullptr);
+    ComputationalVariable::Ptr cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 9", cvar.get() != nullptr);
+    boost::optional<double> weight_opt = comp_molecule_8.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 9 to cell 8 in cell 8's computational molecule", bool(weight_opt) == true);
+    double weight_1 = *weight_opt;
+
+    ccell = getComputationalCell(cell_thread, 6ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 7 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 7", cvar.get() != nullptr);
+    weight_opt = comp_molecule_6.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 7 to cell 6 in cell 6's computational molecule", bool(weight_opt) == true);
+    double weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+
+    /* contribution of cell 1 to cell 8 == contribution of cell 5 to cell 6 */
+    ccell = getComputationalCell(cell_thread, 0ull);
     CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 1", cvar.get() != nullptr);
+    weight_opt = comp_molecule_8.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 1 to cell 8 in cell 8's computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
 
-    ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 1", 3u, comp_molecule.size());
-
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term", -2.0, comp_molecule.getSourceTerm().value(), 1E-10);
-    
-    // get the ComputationalVariable from neighboring cell 1 that we
-    // expect to be in the ComputationalMolecule of cell 2.
-    // This contribution comes from the internal face 0 that both cells
-    // 1 and 2 share.
-    ComputationalCell::Ptr ccell_nbr = getComputationalCell(cell_thread, 4ull);
-    CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell_nbr.get() != nullptr);
-    ComputationalVariable::Ptr cvar_nbr = ccell_nbr->getComputationalVariable("Temperature");
-    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 5", cvar_nbr.get() != nullptr);
+    ccell = getComputationalCell(cell_thread, 4ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 5", cvar.get() != nullptr);
+    weight_opt = comp_molecule_6.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 5 to cell 6 in cell 6's computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
 
 
 
-    ComputationalMolecule m = ccell->getComputationalMolecule("Temperature");
-    m.print(*ccell, cmesh->getComputationalVariableManager());
+    /* contribution of cell 8 to cell 8 == contribution of cell 6 to cell 6 */
+    cvar = ccell_8->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 8", cvar.get() != nullptr);
+    weight_opt = comp_molecule_8.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 8 to itself in computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
 
-    m = ccell_nbr->getComputationalMolecule("Temperature");
-    m.print(*ccell_nbr, cmesh->getComputationalVariableManager());
+    cvar = ccell_6->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 6", cvar.get() != nullptr);
+    weight_opt = comp_molecule_6.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 6 to itself in computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
 
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Source term error", comp_molecule_8.getSourceTerm().value(), comp_molecule_6.getSourceTerm().value(), 1E-10);
+}
+
+void
+VersteegMalalasekeraTest::compMoleculeCell7AndCell9SimilarTest() {
+    /* Check that cells 7 and 9 have similar comp. molecules.
+     * see book, page 333 (Node 7 and 9).
+     */
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::Ptr cmesh(builder.build());
+
+
+    auto cell_thread = cmesh->getCellThread();
+
+
+    // get the ComputationalMolecules of both cells
+    ComputationalCell::Ptr ccell_7 = getComputationalCell(cell_thread, 6ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell_7.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_7 = ccell_7->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 7", 3u, comp_molecule_7.size());
+
+
+    ComputationalCell::Ptr ccell_9 = getComputationalCell(cell_thread, 8ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell_9.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_9 = ccell_9->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 9", 3u, comp_molecule_9.size());
+
+    /* contribution of cell 9' to cell 9 == contribution of cell 7' to cell 7 */
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 17ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 9' not found", ccell.get() != nullptr);
+    ComputationalVariable::Ptr cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 9'", cvar.get() != nullptr);
+    boost::optional<double> weight_opt = comp_molecule_9.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 9' to cell 9 in cell 9's computational molecule", bool(weight_opt) == true);
+    double weight_1 = *weight_opt;
+
+    ccell = getComputationalCell(cell_thread, 15ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 7' not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 7'", cvar.get() != nullptr);
+    weight_opt = comp_molecule_7.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 7' to cell 7 in cell 7's computational molecule", bool(weight_opt) == true);
+    double weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+
+    /* contribution of cell 8 to cell 9 == contribution of cell 6 to cell 7 */
+    ccell = getComputationalCell(cell_thread, 7ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 8", cvar.get() != nullptr);
+    weight_opt = comp_molecule_9.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 8 to cell 9 in cell 9's computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
+
+    ccell = getComputationalCell(cell_thread, 5ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 6", cvar.get() != nullptr);
+    weight_opt = comp_molecule_7.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 6 to cell 7 in cell 7's computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+
+    /* contribution of cell 8 to cell 8 == contribution of cell 6 to cell 6 */
+    cvar = ccell_9->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 9", cvar.get() != nullptr);
+    weight_opt = comp_molecule_9.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 8 to itself in computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
+
+    cvar = ccell_7->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 7", cvar.get() != nullptr);
+    weight_opt = comp_molecule_7.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 6 to itself in computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Source term error", comp_molecule_9.getSourceTerm().value(), comp_molecule_7.getSourceTerm().value(), 1E-10);
+
+#if 1
+    ComputationalMolecule m = ccell_9->getComputationalMolecule("Temperature");
+    m.print(*ccell_9, cmesh->getComputationalVariableManager());
+
+    m = ccell_7->getComputationalMolecule("Temperature");
+    m.print(*ccell_7, cmesh->getComputationalVariableManager());
+#endif
+}
+
+void
+VersteegMalalasekeraTest::variousRelationsTest() {
+    /* Check that the weight of
+     * 
+     * 
+     * 
+     * 
+     * Check that cells 7 and 9 have similar comp. molecules.
+     * see book, page 333 (Node 7 and 9).
+     */
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::Ptr cmesh(builder.build());
+
+
+    auto cell_thread = cmesh->getCellThread();
+
+
+    // get the ComputationalMolecules of both cells
+    ComputationalCell::Ptr ccell_7 = getComputationalCell(cell_thread, 6ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell_7.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_7 = ccell_7->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 7", 3u, comp_molecule_7.size());
+
+
+    ComputationalCell::Ptr ccell_9 = getComputationalCell(cell_thread, 8ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell_9.get() != nullptr);
+
+    ComputationalMolecule comp_molecule_9 = ccell_9->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 9", 3u, comp_molecule_9.size());
+
+    /* contribution of cell 9' to cell 9 == contribution of cell 7' to cell 7 */
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 17ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 9' not found", ccell.get() != nullptr);
+    ComputationalVariable::Ptr cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 9'", cvar.get() != nullptr);
+    boost::optional<double> weight_opt = comp_molecule_9.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 9' to cell 9 in cell 9's computational molecule", bool(weight_opt) == true);
+    double weight_1 = *weight_opt;
+
+    ccell = getComputationalCell(cell_thread, 15ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 7' not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 7'", cvar.get() != nullptr);
+    weight_opt = comp_molecule_7.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 7' to cell 7 in cell 7's computational molecule", bool(weight_opt) == true);
+    double weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+
+    /* contribution of cell 8 to cell 9 == contribution of cell 6 to cell 7 */
+    ccell = getComputationalCell(cell_thread, 7ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 8", cvar.get() != nullptr);
+    weight_opt = comp_molecule_9.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 8 to cell 9 in cell 9's computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
+
+    ccell = getComputationalCell(cell_thread, 5ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell.get() != nullptr);
+    cvar = ccell->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 6", cvar.get() != nullptr);
+    weight_opt = comp_molecule_7.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 6 to cell 7 in cell 7's computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+
+    /* contribution of cell 8 to cell 8 == contribution of cell 6 to cell 6 */
+    cvar = ccell_9->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 9", cvar.get() != nullptr);
+    weight_opt = comp_molecule_9.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 8 to itself in computational molecule", bool(weight_opt) == true);
+    weight_1 = *weight_opt;
+
+    cvar = ccell_7->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 7", cvar.get() != nullptr);
+    weight_opt = comp_molecule_7.getWeight(*cvar);
+    CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 6 to itself in computational molecule", bool(weight_opt) == true);
+    weight_2 = *weight_opt;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Weight error", weight_1, weight_2, 1E-10);
+
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Source term error", comp_molecule_9.getSourceTerm().value(), comp_molecule_7.getSourceTerm().value(), 1E-10);
+
+#if 1
+    ComputationalMolecule m = ccell_9->getComputationalMolecule("Temperature");
+    m.print(*ccell_9, cmesh->getComputationalVariableManager());
+
+    m = ccell_7->getComputationalMolecule("Temperature");
+    m.print(*ccell_7, cmesh->getComputationalVariableManager());
+#endif
 }
 
 void

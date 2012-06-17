@@ -22,6 +22,9 @@ class VersteegMalalasekeraTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(evaluateCell5ComputationalMoleculeTest);
     CPPUNIT_TEST(evaluateCell2ComputationalMoleculeTest);
     CPPUNIT_TEST(compMoleculeCell1AndCell5SimilarTest);
+    CPPUNIT_TEST(compMoleculeCell6AndCell8SimilarTest);
+    CPPUNIT_TEST(compMoleculeCell7AndCell9SimilarTest);
+    CPPUNIT_TEST(variousRelationsTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -35,6 +38,9 @@ protected:
     void evaluateCell5ComputationalMoleculeTest();
     void evaluateCell2ComputationalMoleculeTest();
     void compMoleculeCell1AndCell5SimilarTest();
+    void compMoleculeCell6AndCell8SimilarTest();
+    void compMoleculeCell7AndCell9SimilarTest();
+    void variousRelationsTest();
 
 private:
     void initMesh();

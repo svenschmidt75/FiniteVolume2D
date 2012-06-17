@@ -1,5 +1,5 @@
 /*
- * Name  : FluxComputationalOperators
+ * Name  : FluxComputationalMoleculeOperators
  * Path  : 
  * Use   : Some operators on FluxComputationalMolecules.
  *         NOT to be included from outside FluxComputationalMolecule.h!!!
