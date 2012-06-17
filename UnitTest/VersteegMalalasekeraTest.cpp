@@ -142,10 +142,14 @@ namespace {
         // Get cell computational molecule for "Temperature"
         ComputationalMolecule & cmolecule = ccell->getComputationalMolecule("Temperature");
 
-        std::for_each(cface_coll.begin(), cface_coll.end(), [&cmolecule](ComputationalFace::Ptr const & cface) {
+        std::for_each(cface_coll.begin(), cface_coll.end(), [&](ComputationalFace::Ptr const & cface) {
             // Get face flux molecules for "Temperature"
             FluxComputationalMolecule & flux_molecule = cface->getComputationalMolecule("Temperature");
-            
+
+            ComputationalCell::Ptr const & ccell_ref = flux_molecule.getCell();
+            if (ccell_ref != ccell)
+                flux_molecule = -flux_molecule;
+
             cmolecule.addMolecule(flux_molecule);
         });
 
@@ -403,13 +407,6 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
 
     // check that the source term is correct
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term value", 0.0, fm.getSourceTerm().value(), 1E-10);
-
-
-    ComputationalMolecule m = ccother->getComputationalMolecule("Temperature");
-    m.print(*ccother, cmesh->getComputationalVariableManager());
-
-    m = ccell->getComputationalMolecule("Temperature");
-    m.print(*ccell, cmesh->getComputationalVariableManager());
 }
 
 namespace {
@@ -564,6 +561,54 @@ VersteegMalalasekeraTest::evaluateCell2ComputationalMoleculeTest() {
     CPPUNIT_ASSERT_MESSAGE("Expected to find contribution from cell 2 to itself (b.f. contribution) computational molecule", bool(weight_opt) == true);
     weight = *weight_opt;
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong weight", 0, weight, 1E-10);
+}
+
+void
+VersteegMalalasekeraTest::compMoleculeCell1AndCell5SimilarTest() {
+
+    
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::Ptr cmesh(builder.build());
+
+
+    auto cell_thread = cmesh->getCellThread();
+
+
+    /* 
+     * Check the computational molecule of cell 2.
+     * This cell has two internal faces and one
+     * boundary face. Hence, it should have three
+     * items in its comp. molecule.
+     */
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 0ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell.get() != nullptr);
+
+    ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 1", 3u, comp_molecule.size());
+
+//    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term", -2.0, comp_molecule.getSourceTerm().value(), 1E-10);
+    
+    // get the ComputationalVariable from neighboring cell 1 that we
+    // expect to be in the ComputationalMolecule of cell 2.
+    // This contribution comes from the internal face 0 that both cells
+    // 1 and 2 share.
+    ComputationalCell::Ptr ccell_nbr = getComputationalCell(cell_thread, 4ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell_nbr.get() != nullptr);
+    ComputationalVariable::Ptr cvar_nbr = ccell_nbr->getComputationalVariable("Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Computational variable \"Temperature\" not found in cell 5", cvar_nbr.get() != nullptr);
+
+
+
+    ComputationalMolecule m = ccell->getComputationalMolecule("Temperature");
+    m.print(*ccell, cmesh->getComputationalVariableManager());
+
+    m = ccell_nbr->getComputationalMolecule("Temperature");
+    m.print(*ccell_nbr, cmesh->getComputationalVariableManager());
+
 }
 
 void

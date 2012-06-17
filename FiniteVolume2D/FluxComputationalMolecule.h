@@ -23,6 +23,8 @@ class ComputationalMolecule;
 
 class DECL_SYMBOLS_2D FluxComputationalMolecule : public ComputationalMoleculeImpl {
 
+    friend DECL_SYMBOLS_2D FluxComputationalMolecule operator-(FluxComputationalMolecule const & in);
+
 public:
     FluxComputationalMolecule();
     explicit FluxComputationalMolecule(std::string const & name);
@@ -30,7 +32,10 @@ public:
     void                                       setCell(std::shared_ptr<ComputationalCell> const & ccell);
     std::shared_ptr<ComputationalCell> const & getCell() const;
 
-    bool addMolecule(ComputationalMolecule & in) const;
+    bool                                       addMolecule(ComputationalMolecule & in) const;
+
+private:
+    void negate();
 
 private:
     /* Flux through non-boundary faces involves two cells.
@@ -43,3 +48,6 @@ private:
 };
 
 #pragma warning(default:4251)
+
+// common operator overloads for FluxComputationalMolecule
+#include "internal/FluxComputationalMoleculeOperators.h"

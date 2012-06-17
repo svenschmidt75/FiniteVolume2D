@@ -115,7 +115,9 @@
     <ClCompile Include="FluxComputationalMolecule.cpp" />
     <ClCompile Include="GeometricalEntityMapper.cpp" />
     <ClCompile Include="IComputationalGridAccessor.cpp" />
+    <ClCompile Include="internal\ComputationalMoleculeOperators.cpp" />
     <ClCompile Include="internal\ComputationalVariableManagerIterator.cpp" />
+    <ClCompile Include="internal\FluxComputationalMoleculeOperators.cpp" />
     <ClCompile Include="SourceTerm.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,8 +141,10 @@
     <ClInclude Include="GeometricalEntityMapper.h" />
     <ClInclude Include="IComputationalGridAccessor.h" />
     <ClInclude Include="IComputationalMolecule.h" />
+    <ClInclude Include="internal\ComputationalMoleculeOperators.h" />
     <ClInclude Include="internal\ComputationalVariableManagerIterator.h" />
     <ClInclude Include="internal\ComputationalVariableManagerTypes.h" />
+    <ClInclude Include="internal\FluxComputationalMoleculeOperators.h" />
     <ClInclude Include="SourceTerm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

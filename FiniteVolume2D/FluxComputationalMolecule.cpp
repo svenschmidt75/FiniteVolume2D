@@ -26,3 +26,8 @@ bool
 FluxComputationalMolecule::addMolecule(ComputationalMolecule & in) const {
     return ComputationalMoleculeImpl::addMolecule(in);
 }
+
+void
+FluxComputationalMolecule::negate() {
+    ComputationalMoleculeImpl::negate();
+}

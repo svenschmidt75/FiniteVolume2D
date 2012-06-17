@@ -24,10 +24,21 @@ ComputationalMoleculeImpl::printMolecule(ComputationalVariableManager const & cv
         ComputationalVariable::Ptr cvar = cvar_mgr.getComputationalVariable(cvar_id);
         ComputationalCell::Ptr const & ccell = cvar->getCell();
 
-        std::cout << "(Cell id, var name, weight) = (" << ccell->id() << ", " << cvar->getName() << ", " << weight << ")" << std::endl;
+        std::cout << "(Cell id, var name, weight) = (" << ccell->geometricEntity()->meshId() << ", " << cvar->getName() << ", " << weight << ")" << std::endl;
     });
 
     std::cout << "Source term: " << source_term_.value() << std::endl;
+}
+
+void
+ComputationalMoleculeImpl::negate() {
+    std::for_each(data_.begin(), data_.end(), [](ComputationalMolecule_t::value_type & item) {
+        // item.first  : ComputationalVariable::Id_t
+        // item.second : weight
+        // find this contribution in "in"
+        double & weight = item.second;
+        weight *= -1.0;
+    });
 }
 
 void
@@ -36,12 +47,11 @@ ComputationalMoleculeImpl::print(ComputationalVariableManager const & cvar_mgr) 
     printMolecule(cvar_mgr);
 }
 
-
 void
 ComputationalMoleculeImpl::print(ComputationalNode const & cnode, ComputationalVariableManager const & cvar_mgr) const {
     // print computational molecule
 
-    std::cout << std::endl << "(Node, molecule) = (" << cnode.id() << ", " << name() << std::endl;
+    std::cout << std::endl << "(Node, molecule) = (" << cnode.geometricEntity()->meshId() << ", " << name() << ")" << std::endl;
 
     printMolecule(cvar_mgr);
 }
@@ -50,7 +60,7 @@ void
 ComputationalMoleculeImpl::print(ComputationalFace const & cface, ComputationalVariableManager const & cvar_mgr) const {
     // print computational molecule
 
-    std::cout << std::endl << "(Face, molecule) = (" << cface.id() << ", " << name() << std::endl;
+    std::cout << std::endl << "(Face, molecule) = (" << cface.geometricEntity()->meshId() << ", " << name() << ")" << std::endl;
 
     printMolecule(cvar_mgr);
 }
@@ -59,7 +69,7 @@ void
 ComputationalMoleculeImpl::print(ComputationalCell const & ccell, ComputationalVariableManager const & cvar_mgr) const {
     // print computational molecule
 
-    std::cout << std::endl << "(Cell, molecule) = (" << ccell.id() << ", " << name() << std::endl;
+    std::cout << std::endl << "(Cell, molecule) = (" << ccell.geometricEntity()->meshId() << ", " << name() << ")" << std::endl;
 
     printMolecule(cvar_mgr);
 }
