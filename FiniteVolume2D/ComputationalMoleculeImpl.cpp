@@ -1,13 +1,12 @@
 #include "ComputationalMoleculeImpl.h"
 
-#include "ComputationalVariableHolder.h"
 #include "ComputationalCell.h"
 #include "ComputationalVariableManager.h"
 
 
-ComputationalMoleculeImpl::ComputationalMoleculeImpl(std::string const & name, ComputationalVariableHolder::Ptr const & cvar_holder)
+ComputationalMoleculeImpl::ComputationalMoleculeImpl(std::string const & name)
     :
-    name_(name), cvar_holder_(cvar_holder) {}
+    name_(name) {}
 
 void
 ComputationalMoleculeImpl::printMolecule(ComputationalVariableManager const & cvar_mgr) const {
@@ -32,10 +31,35 @@ ComputationalMoleculeImpl::printMolecule(ComputationalVariableManager const & cv
 }
 
 void
-ComputationalMoleculeImpl::print(ComputationalCell const & cell, ComputationalVariableManager const & cvar_mgr) const {
+ComputationalMoleculeImpl::print(ComputationalVariableManager const & cvar_mgr) const {
+    // print computational molecule
+    printMolecule(cvar_mgr);
+}
+
+
+void
+ComputationalMoleculeImpl::print(ComputationalNode const & cnode, ComputationalVariableManager const & cvar_mgr) const {
     // print computational molecule
 
-    std::cout << std::endl << "(Cell, molecule) = (" << cell.id() << ", " << name() << std::endl;
+    std::cout << std::endl << "(Node, molecule) = (" << cnode.id() << ", " << name() << std::endl;
+
+    printMolecule(cvar_mgr);
+}
+
+void
+ComputationalMoleculeImpl::print(ComputationalFace const & cface, ComputationalVariableManager const & cvar_mgr) const {
+    // print computational molecule
+
+    std::cout << std::endl << "(Face, molecule) = (" << cface.id() << ", " << name() << std::endl;
+
+    printMolecule(cvar_mgr);
+}
+
+void
+ComputationalMoleculeImpl::print(ComputationalCell const & ccell, ComputationalVariableManager const & cvar_mgr) const {
+    // print computational molecule
+
+    std::cout << std::endl << "(Cell, molecule) = (" << ccell.id() << ", " << name() << std::endl;
 
     printMolecule(cvar_mgr);
 }

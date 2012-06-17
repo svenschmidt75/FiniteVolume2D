@@ -20,7 +20,6 @@
 
 
 class FluxComputationalMolecule;
-class ComputationalVariableHolder;
 
 
 #pragma warning(disable:4251)
@@ -59,7 +58,7 @@ public:
     void                           setBoundaryCondition(BoundaryCondition::Ptr const & bc);
 
     FluxComputationalMolecule &    getComputationalMolecule(std::string const & name);
-    void                           addComputationalMolecule(std::string const & name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
+    void                           addComputationalMolecule(std::string const & name);
 
 private:
     typedef std::map<std::string, FluxComputationalMolecule> FluxComputationalMoleculeManager_t;

@@ -30,7 +30,8 @@ ASCIIMeshReader::ASCIIMeshReader(std::string const & mesh_filename, IMeshBuilder
 bool
 ASCIIMeshReader::read() const {
     if (!FS::exists(mesh_filename_)) {
-        boost::format format = boost::format("ASCIIMeshReader::read: Mesh file %1% not found!\n") % mesh_filename_;
+        FS::path p = FS::initial_path();
+        boost::format format = boost::format("ASCIIMeshReader::read: Mesh file %1% not found!\nCurrent path: %2%\n") % mesh_filename_ % p;
         return Util::error(format.str());
     }
 

@@ -1,7 +1,6 @@
 #include "ComputationalCell.h"
 
 #include "FiniteVolume2DLib/Util.h"
-#include "ComputationalVariableHolder.h"
 
 #include <exception>
 
@@ -86,11 +85,11 @@ ComputationalCell::getComputationalVariable(std::string const & name) const {
 }
 
 void
-ComputationalCell::addComputationalVariable(ComputationalVariable::Ptr const & cvar, ComputationalVariableHolder::Ptr const & cvar_holder) {
+ComputationalCell::addComputationalVariable(ComputationalVariable::Ptr const & cvar) {
     cvars_[cvar->getName()] = cvar;
 
     // also insert the corr. computational molecule
-    addComputationalMolecule(cvar->getName(), cvar_holder);
+    addComputationalMolecule(cvar->getName());
 }
 
 ComputationalMolecule &
@@ -112,6 +111,6 @@ ComputationalCell::getComputationalMolecule(std::string const & name) {
 }
 
 void
-ComputationalCell::addComputationalMolecule(std::string const & var_name, ComputationalVariableHolder::Ptr const & cvar_holder) {
-    cm_[var_name] = ComputationalMolecule(var_name, cvar_holder);
+ComputationalCell::addComputationalMolecule(std::string const & var_name) {
+    cm_[var_name] = ComputationalMolecule(var_name);
 }

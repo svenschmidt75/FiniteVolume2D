@@ -1,7 +1,6 @@
 #include "ComputationalFace.h"
 
 #include "FluxComputationalMolecule.h"
-#include "ComputationalVariableHolder.h"
 
 #include "FiniteVolume2DLib/Util.h"
 
@@ -98,6 +97,6 @@ ComputationalFace::getComputationalMolecule(std::string const & name) {
 }
 
 void
-ComputationalFace::addComputationalMolecule(std::string const & name, ComputationalVariableHolder::Ptr const & cvar_holder) {
-    cm_[name] = FluxComputationalMolecule(name, cvar_holder);
+ComputationalFace::addComputationalMolecule(std::string const & name) {
+    cm_[name] = FluxComputationalMolecule(name);
 }

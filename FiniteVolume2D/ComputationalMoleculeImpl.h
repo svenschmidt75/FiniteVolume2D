@@ -22,7 +22,6 @@
 #include <memory>
 
 
-class ComputationalVariableHolder;
 class ComputationalVariableManager;
 
 
@@ -37,9 +36,9 @@ public:
 
 public:
     // FROM IComputationalMolecule
+    void                    print(ComputationalVariableManager const & cvar_mgr) const;
     void                    print(ComputationalNode const & cnode, ComputationalVariableManager const & cvar_mgr) const;
     void                    print(ComputationalFace const & cface, ComputationalVariableManager const & cvar_mgr) const;
-    void                    print(ComputationalCell const & ccell, ComputationalVariableManager const & cvar_mgr) const;
     void                    print(ComputationalCell const & ccell, ComputationalVariableManager const & cvar_mgr) const;
 
     std::string const &     name() const;
@@ -58,7 +57,7 @@ public:
 protected:
     // protected constructor: class should only be used to derive
     //                        from it
-    explicit ComputationalMoleculeImpl(std::string const & name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
+    explicit ComputationalMoleculeImpl(std::string const & name);
 
     bool addMolecule(ComputationalMoleculeImpl & in) const;
 
@@ -75,8 +74,6 @@ private:
 
     // Source term, i.e. the constant value
     SourceTerm                                   source_term_;
-
-    std::shared_ptr<ComputationalVariableHolder> cvar_holder_;
 };
 
 #pragma warning(default:4275)

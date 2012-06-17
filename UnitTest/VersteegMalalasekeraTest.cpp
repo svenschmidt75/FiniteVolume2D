@@ -136,7 +136,7 @@ namespace {
         return true;
     }
 
-    bool cell_evatuator(ComputationalCell::Ptr const & ccell) {
+    bool cell_evaluator(ComputationalCell::Ptr const & ccell) {
         EntityCollection<ComputationalFace> const & cface_coll = ccell->getComputationalFaces();
 
         // Get cell computational molecule for "Temperature"
@@ -164,7 +164,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
 
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
-    builder.addEvaluateCellMolecules(cell_evatuator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
     ComputationalMesh::Ptr cmesh(builder.build());
 
 
@@ -289,7 +289,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
 
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
-    builder.addEvaluateCellMolecules(cell_evatuator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
     ComputationalMesh::Ptr cmesh(builder.build());
 
 

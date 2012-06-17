@@ -7,6 +7,8 @@
 #include "FiniteVolume2D/ComputationalMeshBuilder.h"
 #include "FiniteVolume2D/IComputationalGridAccessor.h"
 
+#include <exception>
+
 #include <boost/filesystem.hpp>
 
 namespace FS = boost::filesystem;
@@ -55,6 +57,10 @@ namespace {
         unsigned int & count_;
     };
 
+    bool cell_evaluator(ComputationalCell::Ptr const & /*ccell*/) {
+        return false;
+    }
+
 }
 
 void
@@ -66,6 +72,7 @@ ComputationalMeshBuilderTest::evaluateFluxesDummyTest() {
 
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_eval);
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
     ComputationalMesh::Ptr cmesh(builder.build());
 
@@ -87,70 +94,83 @@ namespace {
 
 void
 ComputationalMeshBuilderTest::noActiveVarsTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
-    ComputationalMesh::Ptr mesh(cmesh.build());
-    bool is_null = mesh == std::nullptr_t();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Computational mesh build failure", true, is_null);
+    ComputationalMeshBuilder builder(mesh_, bc_);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+
+    CPPUNIT_ASSERT_THROW_MESSAGE("Computational mesh build should fail", builder.build(), std::logic_error);
+}
+
+void
+ComputationalMeshBuilderTest::noCellEvaluatorTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
+
+    CPPUNIT_ASSERT_THROW_MESSAGE("Computational mesh build should fail", builder.build(), std::logic_error);
 }
 
 void
 ComputationalMeshBuilderTest::addPassiveVarSameAsActiveVarTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMeshBuilder builder(mesh_, bc_);
 
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
-    bool success = cmesh.addPassiveComputationalNodeVariable("Temperature");
+    bool success = builder.addPassiveComputationalNodeVariable("Temperature");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
 
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
 
-    success = cmesh.addPassiveComputationalCellVariable("Temperature");
+    success = builder.addPassiveComputationalCellVariable("Temperature");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add a passive variable with same name as cell-centered variable", false, success);
 }
 
 void
 ComputationalMeshBuilderTest::addPassiveVarTwiceTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMeshBuilder builder(mesh_, bc_);
 
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
-    bool success = cmesh.addPassiveComputationalNodeVariable("Pressure");
+    bool success = builder.addPassiveComputationalNodeVariable("Pressure");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
 
-    success = cmesh.addPassiveComputationalNodeVariable("Pressure");
+    success = builder.addPassiveComputationalNodeVariable("Pressure");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cannot add the same passive variable twice", false, success);
 }
 
 void
 ComputationalMeshBuilderTest::addPassiveVarForSeveralDifferentEntitiesTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMeshBuilder builder(mesh_, bc_);
 
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
-    bool success = cmesh.addPassiveComputationalNodeVariable("Pressure");
+    bool success = builder.addPassiveComputationalNodeVariable("Pressure");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
 
-    success = cmesh.addPassiveComputationalFaceVariable("Pressure");
+    success = builder.addPassiveComputationalFaceVariable("Pressure");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
 
-    success = cmesh.addPassiveComputationalCellVariable("Pressure");
+    success = builder.addPassiveComputationalCellVariable("Pressure");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding a user-defined variable failed", true, success);
 }
 
 void
 ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMeshBuilder builder(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined node variable
-    cmesh.addPassiveComputationalNodeVariable("node_var");
+    builder.addPassiveComputationalNodeVariable("node_var");
 
-    ComputationalMesh::Ptr mesh = cmesh.build();
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
-    Thread<ComputationalNode> & interior_node_thread = mesh->getNodeThread(IGeometricEntity::INTERIOR);
+    ComputationalMesh::Ptr cmesh = builder.build();
+
+    Thread<ComputationalNode> & interior_node_thread = cmesh->getNodeThread(IGeometricEntity::INTERIOR);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior nodes", 1u, interior_node_thread.size());
 
     Thread<ComputationalNode>::iterator::difference_type nbad = 0;
@@ -168,7 +188,7 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
 
 
 
-    Thread<ComputationalNode> & boundary_node_thread = mesh->getNodeThread(IGeometricEntity::BOUNDARY);
+    Thread<ComputationalNode> & boundary_node_thread = cmesh->getNodeThread(IGeometricEntity::BOUNDARY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary nodes", 8u, boundary_node_thread.size());
 
     nbad = 0;
@@ -187,17 +207,19 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
 
 void
 ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMeshBuilder builder(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined face variable
-    cmesh.addPassiveComputationalFaceVariable("face_var");
+    builder.addPassiveComputationalFaceVariable("face_var");
 
-    ComputationalMesh::Ptr mesh = cmesh.build();
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
-    Thread<ComputationalFace> & interior_face_thread = mesh->getFaceThread(IGeometricEntity::INTERIOR);
+    ComputationalMesh::Ptr cmesh = builder.build();
+
+    Thread<ComputationalFace> & interior_face_thread = cmesh->getFaceThread(IGeometricEntity::INTERIOR);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior faces", 8u, interior_face_thread.size());
 
     Thread<ComputationalFace>::iterator::difference_type nbad = 0;
@@ -215,7 +237,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
 
 
-    Thread<ComputationalFace> & boundary_face_thread = mesh->getFaceThread(IGeometricEntity::BOUNDARY);
+    Thread<ComputationalFace> & boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::BOUNDARY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary faces", 8u, boundary_face_thread.size());
 
     nbad = 0;
@@ -234,17 +256,19 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
 void
 ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMeshBuilder builder(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined cell variable
-    cmesh.addPassiveComputationalCellVariable("cell_var");
+    builder.addPassiveComputationalCellVariable("cell_var");
 
-    ComputationalMesh::Ptr mesh = cmesh.build();
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
-    Thread<ComputationalCell> & cell_thread = mesh->getCellThread();
+    ComputationalMesh::Ptr cmesh = builder.build();
+
+    Thread<ComputationalCell> & cell_thread = cmesh->getCellThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
 
     Thread<ComputationalCell>::iterator::difference_type nbad = 0;
@@ -263,17 +287,19 @@ ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
 
 void
 ComputationalMeshBuilderTest::addCellVarsTest() {
-    ComputationalMeshBuilder cmesh(mesh_, bc_);
+    ComputationalMeshBuilder builder(mesh_, bc_);
 
     // Temperature as cell-centered variable, will be solved for
-    cmesh.addComputationalVariable("Temperature", dummy_flux_eval);
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
 
     // add user-defined cell variable
-    cmesh.addPassiveComputationalCellVariable("cell_var");
+    builder.addPassiveComputationalCellVariable("cell_var");
 
-    ComputationalMesh::Ptr mesh = cmesh.build();
+    builder.addEvaluateCellMolecules(cell_evaluator);
 
-    Thread<ComputationalCell> & cell_thread = mesh->getCellThread();
+    ComputationalMesh::Ptr cmesh = builder.build();
+
+    Thread<ComputationalCell> & cell_thread = cmesh->getCellThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
 
     Thread<ComputationalCell>::iterator::difference_type ngood = 0;
@@ -399,6 +425,7 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
 
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
     ComputationalMesh::Ptr cmesh(builder.build());
 
 

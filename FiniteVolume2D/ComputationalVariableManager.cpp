@@ -41,8 +41,11 @@ ComputationalVariableManager::create(ComputationalCell::Ptr const & cell, std::s
     ComputationalVariable::Id_t cvar_id = cell->id() + getBaseIndex(name);
 
     ComputationalVariable::Ptr cvar = ComputationalVariable::create(cell, name, cvar_id);
+
+    // add ComputationalVariable to bucket
     cvar_holder_->add(cvar);
-    cell->addComputationalVariable(cvar, cvar_holder_);
+
+    cell->addComputationalVariable(cvar);
     return cvar;
 }
 
@@ -68,11 +71,6 @@ ComputationalVariableManager::registerVariable(std::string const & name, FluxEva
     cvar_item.flux_eval = flux_eval;
 
     return true;
-}
-
-ComputationalVariableHolder::Ptr const &
-ComputationalVariableManager::getComputationalVariableHolder() const {
-    return cvar_holder_;
 }
 
 ComputationalVariable::Ptr const &

@@ -63,19 +63,18 @@ public:
     ComputationalVariableManager();
 
     // insert a computational variable into a cell
-    std::shared_ptr<ComputationalVariable> create(std::shared_ptr<ComputationalCell> const & cell, std::string const & name);
+    std::shared_ptr<ComputationalVariable>         create(std::shared_ptr<ComputationalCell> const & cell, std::string const & name);
 
-    bool                                   registerVariable(std::string const & name, FluxEvaluator_t const & flux_eval);
+    bool                                           registerVariable(std::string const & name, FluxEvaluator_t const & flux_eval);
 
-    std::shared_ptr<ComputationalVariableHolder> const & getComputationalVariableHolder() const;
-    std::shared_ptr<ComputationalVariable> const &       getComputationalVariable(ComputationalVariable::Id_t id) const;
+    std::shared_ptr<ComputationalVariable> const & getComputationalVariable(ComputationalVariable::Id_t id) const;
 
-    short                                  getBaseIndex(std::string const & cvar_name) const;
+    short                                          getBaseIndex(std::string const & cvar_name) const;
 
-    size_type                              size() const;
+    size_type                                      size() const;
 
-    Iterator_t                             begin() const;
-    Iterator_t                             end() const;
+    Iterator_t                                     begin() const;
+    Iterator_t                                     end() const;
 
 private:
     std::shared_ptr<ComputationalVariableHolder> cvar_holder_;

@@ -272,7 +272,7 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalNode::Ptr & cno
      * with "addComputationalVariable".
      */
     std::for_each(node_vars_.begin(), node_vars_.end(), [&](PassiveNodeVars_t::value_type const & var_name) {
-        cnode->addComputationalMolecule(var_name, cvar_mgr_->getComputationalVariableHolder());
+        cnode->addComputationalMolecule(var_name);
     });
 }
 
@@ -297,14 +297,14 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalFace::Ptr & cfa
     ComputationalVariableManager::Iterator_t it_end = cvar_mgr_->end();
 
     for (; it != it_end; ++it) {
-        cface->addComputationalMolecule(it->name, cvar_mgr_->getComputationalVariableHolder());
+        cface->addComputationalMolecule(it->name);
     }
 
 
     // add the user-defined face variables
 
     std::for_each(face_vars_.begin(), face_vars_.end(), [&](PassiveFaceVars_t::value_type const & var_name) {
-        cface->addComputationalMolecule(var_name, cvar_mgr_->getComputationalVariableHolder());
+        cface->addComputationalMolecule(var_name);
     });
 }
 
@@ -338,7 +338,7 @@ ComputationalMeshBuilder::setComputationalVariables(ComputationalCell::Ptr & cce
      * Add all user-defined cell variables
      */
     std::for_each(cell_vars_.begin(), cell_vars_.end(), [&](PassiveCellVars_t::value_type const & var_name) {
-        ccell->addComputationalMolecule(var_name, cvar_mgr_->getComputationalVariableHolder());
+        ccell->addComputationalMolecule(var_name);
     });
 
     return true;

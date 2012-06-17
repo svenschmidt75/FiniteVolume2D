@@ -13,7 +13,6 @@
 
 
 class FluxComputationalMolecule;
-class ComputationalVariableHolder;
 
 
 class DECL_SYMBOLS_2D ComputationalMolecule : public ComputationalMoleculeImpl {
@@ -23,7 +22,7 @@ public:
      * if one cannot be found.
      */
     ComputationalMolecule();
-    explicit ComputationalMolecule(std::string const & var_name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
+    explicit ComputationalMolecule(std::string const & var_name);
 
     // add the contributions of flux molecules to this one
     bool addMolecule(FluxComputationalMolecule const & in);

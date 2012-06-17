@@ -1,7 +1,6 @@
 #include "ComputationalNode.h"
 
 #include "FiniteVolume2DLib/Util.h"
-#include "ComputationalVariableHolder.h"
 
 
 #include <exception>
@@ -52,6 +51,6 @@ ComputationalNode::getComputationalMolecule(std::string const & name) {
 }
 
 void
-ComputationalNode::addComputationalMolecule(std::string const & name, ComputationalVariableHolder::Ptr const & cvar_holder) {
-    cm_[name] = ComputationalMolecule(name, cvar_holder);
+ComputationalNode::addComputationalMolecule(std::string const & name) {
+    cm_[name] = ComputationalMolecule(name);
 }

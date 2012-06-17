@@ -2,16 +2,15 @@
 
 #include "ComputationalCell.h"
 #include "ComputationalMolecule.h"
-#include "ComputationalVariableHolder.h"
 
 
 FluxComputationalMolecule::FluxComputationalMolecule()
     :
-    ComputationalMoleculeImpl("undef", nullptr) {}
+    ComputationalMoleculeImpl("undef") {}
 
-FluxComputationalMolecule::FluxComputationalMolecule(std::string const & name, ComputationalVariableHolder::Ptr const & cvar_holder)
+FluxComputationalMolecule::FluxComputationalMolecule(std::string const & name)
     :
-    ComputationalMoleculeImpl(name, cvar_holder) {}
+    ComputationalMoleculeImpl(name) {}
 
 void
 FluxComputationalMolecule::setCell(ComputationalCell::Ptr const & ccell) {

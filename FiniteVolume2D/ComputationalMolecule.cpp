@@ -1,16 +1,15 @@
 #include "ComputationalMolecule.h"
 
 #include "FluxComputationalMolecule.h"
-#include "ComputationalVariableHolder.h"
 
 
 ComputationalMolecule::ComputationalMolecule()
     :
-    ComputationalMoleculeImpl("undef", nullptr) {}
+    ComputationalMoleculeImpl("undef") {}
 
-ComputationalMolecule::ComputationalMolecule(std::string const & var_name, ComputationalVariableHolder::Ptr const & cvar_holder)
+ComputationalMolecule::ComputationalMolecule(std::string const & var_name)
     :
-    ComputationalMoleculeImpl(var_name, cvar_holder) {}
+    ComputationalMoleculeImpl(var_name) {}
 
 bool
 ComputationalMolecule::addMolecule(FluxComputationalMolecule const & in) {

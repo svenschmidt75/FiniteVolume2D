@@ -22,9 +22,6 @@
 #include <map>
 
 
-class ComputationalVariableHolder;
-
-
 #pragma warning(disable:4251)
 #pragma warning(disable:4275)
 
@@ -55,10 +52,10 @@ public:
     EntityCollection<ComputationalFace> const & getComputationalFaces() const;
 
     ComputationalVariable::Ptr getComputationalVariable(std::string const & name) const;
-    void                       addComputationalVariable(ComputationalVariable::Ptr const & cvar, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
+    void                       addComputationalVariable(ComputationalVariable::Ptr const & cvar);
 
     ComputationalMolecule &    getComputationalMolecule(std::string const & name);
-    void                       addComputationalMolecule(std::string const & name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
+    void                       addComputationalMolecule(std::string const & name);
 
 private:
     typedef std::map<std::string, ComputationalVariable::Ptr> ComputationalVariables_t;

@@ -16,7 +16,6 @@
 
 class ComputationalCell;
 class ComputationalMolecule;
-class ComputationalVariableHolder;
 
 
 #pragma warning(disable:4251)
@@ -26,7 +25,7 @@ class DECL_SYMBOLS_2D FluxComputationalMolecule : public ComputationalMoleculeIm
 
 public:
     FluxComputationalMolecule();
-    explicit FluxComputationalMolecule(std::string const & name, std::shared_ptr<ComputationalVariableHolder> const & cvar_holder);
+    explicit FluxComputationalMolecule(std::string const & name);
 
     void                                       setCell(std::shared_ptr<ComputationalCell> const & ccell);
     std::shared_ptr<ComputationalCell> const & getCell() const;
