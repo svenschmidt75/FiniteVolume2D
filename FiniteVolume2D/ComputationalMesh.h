@@ -51,7 +51,7 @@ public:
     Thread<ComputationalFace> const & getFaceThread(IGeometricEntity::Entity_t entity_type) const;
     Thread<ComputationalCell> const & getCellThread() const;
 
-    GeometricalEntityMapper const & getMapper() const;
+    GeometricalEntityMapper const &   getMapper() const;
 
 private:
     ComputationalMesh();

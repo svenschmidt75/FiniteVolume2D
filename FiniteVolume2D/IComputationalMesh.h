@@ -7,5 +7,18 @@
  */
 #pragma once
 
+#include "ComputationalCell.h"
 
-class IComputationalMesh {};
+#include "FiniteVolume2DLib/Thread.hpp"
+
+
+class ComputationalVariableManager ;
+
+
+class IComputationalMesh {
+public:
+    ~IComputationalMesh() {}
+
+    virtual Thread<ComputationalCell> const &    getCellThread() const = 0;
+    virtual ComputationalVariableManager const & getComputationalVariableManager() const = 0;
+};
