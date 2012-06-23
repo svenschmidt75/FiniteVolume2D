@@ -32,6 +32,7 @@ class ComputationalVariableManager;
 class DECL_SYMBOLS_2D ComputationalMoleculeImpl : public IComputationalMolecule {
 public:
     typedef std::unordered_map<ComputationalVariable::Id_t, double> ComputationalMolecule_t;
+    typedef ComputationalMolecule_t::const_iterator                 Iterator_t;
     typedef ComputationalMolecule_t::size_type                      size_type;
 
 public:
@@ -53,6 +54,10 @@ public:
     bool                    empty() const;
 
     SourceTerm &            getSourceTerm();
+
+    // iterator support
+    Iterator_t              begin() const;
+    Iterator_t              end() const;
 
 protected:
     // protected constructor: class should only be used to derive

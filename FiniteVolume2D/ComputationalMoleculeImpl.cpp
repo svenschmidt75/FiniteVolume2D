@@ -112,6 +112,16 @@ ComputationalMoleculeImpl::getSourceTerm() const {
     return source_term_;
 }
 
+ComputationalMoleculeImpl::Iterator_t
+ComputationalMoleculeImpl::begin() const {
+    return data_.begin();
+}
+
+ComputationalMoleculeImpl::Iterator_t
+ComputationalMoleculeImpl::end() const {
+    return data_.end();
+}
+
 bool
 ComputationalMoleculeImpl::addMolecule(ComputationalMoleculeImpl & in) const {
     std::for_each(data_.begin(), data_.end(), [&in](ComputationalMolecule_t::value_type const & item) {
