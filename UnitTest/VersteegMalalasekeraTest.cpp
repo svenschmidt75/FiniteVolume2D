@@ -172,7 +172,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::BOUNDARY);
@@ -297,7 +297,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::BOUNDARY);
@@ -435,7 +435,7 @@ VersteegMalalasekeraTest::evaluateCell5ComputationalMoleculeTest() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto cell_thread = cmesh->getCellThread();
@@ -505,7 +505,7 @@ VersteegMalalasekeraTest::evaluateCell2ComputationalMoleculeTest() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto cell_thread = cmesh->getCellThread();
@@ -576,7 +576,7 @@ VersteegMalalasekeraTest::compMoleculeCell1AndCell5SimilarTest() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto cell_thread = cmesh->getCellThread();
@@ -665,7 +665,7 @@ VersteegMalalasekeraTest::compMoleculeCell6AndCell8SimilarTest() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto cell_thread = cmesh->getCellThread();
@@ -754,7 +754,7 @@ VersteegMalalasekeraTest::compMoleculeCell7AndCell9SimilarTest() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto cell_thread = cmesh->getCellThread();
@@ -839,7 +839,7 @@ VersteegMalalasekeraTest::variousRelationsTest() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
     auto cell_thread = cmesh->getCellThread();

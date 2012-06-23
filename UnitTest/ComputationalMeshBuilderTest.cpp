@@ -168,9 +168,9 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
 
     builder.addEvaluateCellMolecules(cell_evaluator);
 
-    ComputationalMesh::Ptr cmesh = builder.build();
+    ComputationalMesh::CPtr const & cmesh = builder.build();
 
-    Thread<ComputationalNode> & interior_node_thread = cmesh->getNodeThread(IGeometricEntity::INTERIOR);
+    Thread<ComputationalNode> const & interior_node_thread = cmesh->getNodeThread(IGeometricEntity::INTERIOR);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior nodes", 1u, interior_node_thread.size());
 
     Thread<ComputationalNode>::iterator::difference_type nbad = 0;
@@ -188,7 +188,7 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
 
 
 
-    Thread<ComputationalNode> & boundary_node_thread = cmesh->getNodeThread(IGeometricEntity::BOUNDARY);
+    Thread<ComputationalNode> const & boundary_node_thread = cmesh->getNodeThread(IGeometricEntity::BOUNDARY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary nodes", 8u, boundary_node_thread.size());
 
     nbad = 0;
@@ -217,9 +217,9 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
     builder.addEvaluateCellMolecules(cell_evaluator);
 
-    ComputationalMesh::Ptr cmesh = builder.build();
+    ComputationalMesh::CPtr cmesh = builder.build();
 
-    Thread<ComputationalFace> & interior_face_thread = cmesh->getFaceThread(IGeometricEntity::INTERIOR);
+    Thread<ComputationalFace> const & interior_face_thread = cmesh->getFaceThread(IGeometricEntity::INTERIOR);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior faces", 8u, interior_face_thread.size());
 
     Thread<ComputationalFace>::iterator::difference_type nbad = 0;
@@ -237,7 +237,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
 
 
 
-    Thread<ComputationalFace> & boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::BOUNDARY);
+    Thread<ComputationalFace> const & boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::BOUNDARY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary faces", 8u, boundary_face_thread.size());
 
     nbad = 0;
@@ -266,9 +266,9 @@ ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
 
     builder.addEvaluateCellMolecules(cell_evaluator);
 
-    ComputationalMesh::Ptr cmesh = builder.build();
+    ComputationalMesh::CPtr cmesh = builder.build();
 
-    Thread<ComputationalCell> & cell_thread = cmesh->getCellThread();
+    Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
 
     Thread<ComputationalCell>::iterator::difference_type nbad = 0;
@@ -297,9 +297,9 @@ ComputationalMeshBuilderTest::addCellVarsTest() {
 
     builder.addEvaluateCellMolecules(cell_evaluator);
 
-    ComputationalMesh::Ptr cmesh = builder.build();
+    ComputationalMesh::CPtr cmesh = builder.build();
 
-    Thread<ComputationalCell> & cell_thread = cmesh->getCellThread();
+    Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
 
     Thread<ComputationalCell>::iterator::difference_type ngood = 0;
@@ -426,7 +426,7 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
     // Temperature as cell-centered variable, will be solved for
     builder.addComputationalVariable("Temperature", flux_evaluator);
     builder.addEvaluateCellMolecules(cell_evaluator);
-    ComputationalMesh::Ptr cmesh(builder.build());
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
 

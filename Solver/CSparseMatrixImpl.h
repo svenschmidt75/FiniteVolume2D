@@ -25,8 +25,8 @@ public:
     // FROM IMatrix2D
     int            getRows() const;
     int            getCols() const;
-    double const & operator()(int row, int col) const;
-    double &       operator()(int row, int col);
+    double const & operator()(unsigned int row, unsigned int col) const;
+    double &       operator()(unsigned int row, unsigned int col);
     void           solve(Vec const & b, Vec & x) const;
 
     // Local methods

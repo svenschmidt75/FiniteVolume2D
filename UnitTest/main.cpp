@@ -8,6 +8,7 @@
 #include <cppunit/BriefTestProgressListener.h>
 
 
+#include "ComputationalMeshSolverHelperTest.h"
 #include "ASCIIMeshReaderTest.h"
 #include "MeshConnectivityTest.h"
 #include "EntityTest.h"
@@ -19,6 +20,7 @@
 #include "VersteegMalalasekeraTest.h"
 
 
+CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalMeshSolverHelperTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ASCIIMeshReaderTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshConnectivityTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(EntityTest);

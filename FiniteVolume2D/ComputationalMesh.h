@@ -1,6 +1,6 @@
 /*
  * Name  : ComputationalMesh
- * Path  : 
+ * Path  : IComputationalMesh
  * Use   : Computational mesh
  * Author: Sven Schmidt
  * Date  : 04/07/2012
@@ -13,6 +13,7 @@
 #include "FiniteVolume2DLib/Thread.hpp"
 #include "FiniteVolume2DLib/IMeshConnectivity.h"
 
+#include "IComputationalMesh.h"
 #include "GeometricalEntityMapper.h"
 #include "ComputationalCell.h"
 #include "ComputationalFace.h"
@@ -27,7 +28,7 @@ class ComputationalVariableManager;
 #pragma warning(disable:4251)
 
 
-class DECL_SYMBOLS_2D ComputationalMesh {
+class DECL_SYMBOLS_2D ComputationalMesh : public IComputationalMesh {
 
     friend class ComputationalMeshBuilder;
 
@@ -46,9 +47,9 @@ public:
      * to construct the various computational grids for
      * the multigrid method.
      */
-    Thread<ComputationalNode> &     getNodeThread(IGeometricEntity::Entity_t entity_type);
-    Thread<ComputationalFace> &     getFaceThread(IGeometricEntity::Entity_t entity_type);
-    Thread<ComputationalCell> &     getCellThread();
+    Thread<ComputationalNode> const & getNodeThread(IGeometricEntity::Entity_t entity_type) const;
+    Thread<ComputationalFace> const & getFaceThread(IGeometricEntity::Entity_t entity_type) const;
+    Thread<ComputationalCell> const & getCellThread() const;
 
     GeometricalEntityMapper const & getMapper() const;
 
@@ -56,6 +57,11 @@ private:
     ComputationalMesh();
     ComputationalMesh(ComputationalMesh const & in);
     ComputationalMesh & operator=(ComputationalMesh const & in);
+
+    // make the non-const access routines private
+    Thread<ComputationalNode> & getNodeThread(IGeometricEntity::Entity_t entity_type);
+    Thread<ComputationalFace> & getFaceThread(IGeometricEntity::Entity_t entity_type);
+    Thread<ComputationalCell> & getCellThread();
 
     // access only from the ComputationalMeshBuilder
     void addNode(Node::Ptr const & node, ComputationalNode::Ptr const & cnode);

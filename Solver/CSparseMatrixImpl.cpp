@@ -16,7 +16,7 @@ CSparseMatrixImpl::getCols() const {
 }
 
 double const &
-CSparseMatrixImpl::operator()(int i, int j) const {
+CSparseMatrixImpl::operator()(unsigned int i, unsigned int j) const {
     // i: x, j: y
 
     if (finalized_)
@@ -27,7 +27,7 @@ CSparseMatrixImpl::operator()(int i, int j) const {
 }
 
 double &
-CSparseMatrixImpl::operator()(int i, int j) {
+CSparseMatrixImpl::operator()(unsigned int i, unsigned int j) {
     // i: x, j: y
 
     if (finalized_)

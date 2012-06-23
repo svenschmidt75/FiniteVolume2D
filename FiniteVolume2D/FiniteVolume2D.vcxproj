@@ -84,16 +84,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="BoundaryCondition.cpp" />
     <ClCompile Include="ComputationalCell.cpp" />
     <ClCompile Include="ComputationalFace.cpp" />
     <ClCompile Include="ComputationalMesh.cpp" />
     <ClCompile Include="ComputationalMeshBuilder.cpp" />
+    <ClCompile Include="ComputationalMeshSolverHelper.cpp" />
     <ClCompile Include="ComputationalMolecule.cpp" />
     <ClCompile Include="ComputationalMoleculeImpl.cpp">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
@@ -127,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="BoundaryCondition.h" />
     <ClInclude Include="ComputationalCell.h" />
+    <ClInclude Include="ComputationalMeshSolverHelper.h" />
     <ClInclude Include="ComputationalVariableHolder.h" />
     <ClInclude Include="ComputationalVariableManager.h" />
     <ClInclude Include="ComputationalFace.h" />
@@ -139,6 +136,7 @@
     <ClInclude Include="FluxComputationalMolecule.h" />
     <ClInclude Include="GeometricalEntityMapper.h" />
     <ClInclude Include="IComputationalGridAccessor.h" />
+    <ClInclude Include="IComputationalMesh.h" />
     <ClInclude Include="IComputationalMolecule.h" />
     <ClInclude Include="internal\ComputationalVariableManagerIterator.h" />
     <ClInclude Include="internal\ComputationalVariableManagerTypes.h" />

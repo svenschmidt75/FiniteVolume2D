@@ -101,6 +101,7 @@
   <ItemGroup>
     <ClCompile Include="ASCIIMeshReaderTest.cpp" />
     <ClCompile Include="ComputationalMeshBuilderTest.cpp" />
+    <ClCompile Include="ComputationalMeshSolverHelperTest.cpp" />
     <ClCompile Include="ComputationalMoleculeTest.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -120,10 +121,12 @@
   <ItemGroup>
     <ClInclude Include="ASCIIMeshReaderTest.h" />
     <ClInclude Include="ComputationalMeshBuilderTest.h" />
+    <ClInclude Include="ComputationalMeshSolverHelperTest.h" />
     <ClInclude Include="ComputationalMoleculeTest.h" />
     <ClInclude Include="ComputationalVariableManagerTest.h" />
     <ClInclude Include="ComputationalVariableTest.h" />
     <ClInclude Include="EntityTest.h" />
+    <ClInclude Include="internal\ComputationalMeshMock.h" />
     <ClInclude Include="internal\MeshBuilderMock.h" />
     <ClInclude Include="MeshBoundaryConditionReaderTest.h" />
     <ClInclude Include="MeshCheckerTest.h" />

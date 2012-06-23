@@ -29,6 +29,13 @@ ComputationalMesh::getComputationalVariableManager() const {
     return *cvar_mgr_;
 }
 
+Thread<ComputationalNode> const &
+ComputationalMesh::getNodeThread(IGeometricEntity::Entity_t entity_type) const {
+    if (entity_type == IGeometricEntity::BOUNDARY)
+        return boundary_node_thread_;
+    return interior_node_thread_;
+}
+
 Thread<ComputationalNode> &
 ComputationalMesh::getNodeThread(IGeometricEntity::Entity_t entity_type) {
     if (entity_type == IGeometricEntity::BOUNDARY)
@@ -36,11 +43,23 @@ ComputationalMesh::getNodeThread(IGeometricEntity::Entity_t entity_type) {
     return interior_node_thread_;
 }
 
+Thread<ComputationalFace> const &
+ComputationalMesh::getFaceThread(IGeometricEntity::Entity_t entity_type) const {
+    if (entity_type == IGeometricEntity::BOUNDARY)
+        return boundary_face_thread_;
+    return interior_face_thread_;
+}
+
 Thread<ComputationalFace> &
 ComputationalMesh::getFaceThread(IGeometricEntity::Entity_t entity_type) {
     if (entity_type == IGeometricEntity::BOUNDARY)
         return boundary_face_thread_;
     return interior_face_thread_;
+}
+
+Thread<ComputationalCell> const &
+ComputationalMesh::getCellThread() const {
+    return cell_thread_;
 }
 
 Thread<ComputationalCell> &
