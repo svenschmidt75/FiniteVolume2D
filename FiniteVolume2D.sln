@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FiniteVolume2DLib", "FiniteVolume2DLib\FiniteVolume2DLib.vcxproj", "{6AF3AA8B-0FE6-489E-B930-9D641A42F71F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Solver", "Solver\Solver.vcxproj", "{A32AF199-69C6-4F64-A376-00C15DA4818A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -25,6 +27,10 @@ Global
 		{6AF3AA8B-0FE6-489E-B930-9D641A42F71F}.Debug|Win32.Build.0 = Debug|Win32
 		{6AF3AA8B-0FE6-489E-B930-9D641A42F71F}.Release|Win32.ActiveCfg = Release|Win32
 		{6AF3AA8B-0FE6-489E-B930-9D641A42F71F}.Release|Win32.Build.0 = Release|Win32
+		{A32AF199-69C6-4F64-A376-00C15DA4818A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A32AF199-69C6-4F64-A376-00C15DA4818A}.Debug|Win32.Build.0 = Debug|Win32
+		{A32AF199-69C6-4F64-A376-00C15DA4818A}.Release|Win32.ActiveCfg = Release|Win32
+		{A32AF199-69C6-4F64-A376-00C15DA4818A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

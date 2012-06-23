@@ -137,6 +137,9 @@
     <ProjectReference Include="..\FiniteVolume2D\FiniteVolume2D.vcxproj">
       <Project>{aaf6ff3c-4cf4-41ea-b488-09f55745caa3}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Solver\Solver.vcxproj">
+      <Project>{a32af199-69c6-4f64-a376-00c15da4818a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
