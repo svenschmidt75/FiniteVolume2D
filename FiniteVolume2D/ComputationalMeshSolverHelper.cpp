@@ -9,6 +9,7 @@
 #include "Solver/CSparseMatrixImpl.h"
 
 #include <string>
+#include <tuple>
 
 
 ComputationalMeshSolverHelper::ComputationalMeshSolverHelper(IComputationalMesh const & cmesh)
@@ -23,7 +24,10 @@ ComputationalMeshSolverHelper::solve() {
      */
     setupMatrix();
 
-//    std::tie(std::ignore, x) = LinearSolver::sparseSOR(sm_sparse, b, 1.05);
+    LinearSolver::RHS_t x;
+    x.resize(rhs_.size());
+
+    std::tie(std::ignore, x) = LinearSolver::sparseSOR(*m_, rhs_, 1.05);
 
 
 
@@ -53,7 +57,6 @@ namespace {
             unsigned int col = cell_index + base_index;
             A(row, col) = weight;
         }
-
     }
 
 }
@@ -74,6 +77,8 @@ ComputationalMeshSolverHelper::setupMatrix() {
     ComputationalVariableManager::size_type nvars = cvar_manager.size();
 
     unsigned int ncols = ncells * nvars;
+
+    rhs_.resize(ncols);
 
 
     // initialize the sparse matrix
@@ -103,11 +108,21 @@ ComputationalMeshSolverHelper::setupMatrix() {
             ComputationalMolecule const & cm = ccell->getComputationalMolecule(cvar_name);
 
             fillRow(row, cm, A, cvar_manager, cmesh_);
+
+            // fill in the r.h.s.
+            rhs_[row] = cm.getSourceTerm().value();
         }
     }
+
+    m_->finalize();
 }
 
 IMatrix2D const &
 ComputationalMeshSolverHelper::getMatrix() const {
     return *(m_.get());
+}
+
+LinearSolver::RHS_t const &
+ComputationalMeshSolverHelper::getRHS() const {
+    return rhs_;
 }

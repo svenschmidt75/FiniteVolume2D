@@ -11,8 +11,10 @@
 #include "DeclSpec.h"
 
 #include "Solver/CSparseMatrixImpl.h"
+#include "Solver/LinearSolver.h"
 
 #include <memory>
+#include <vector>
 
 
 class IComputationalMesh;
@@ -39,12 +41,15 @@ private:
     void              setupMatrix();
 
     // for unit testing
-    IMatrix2D const & getMatrix() const;
+    IMatrix2D const &           getMatrix() const;
+    LinearSolver::RHS_t const & getRHS() const;
 
 private:
     IComputationalMesh const &         cmesh_;
 
     std::unique_ptr<CSparseMatrixImpl> m_;
+
+    LinearSolver::RHS_t                rhs_;
 };
 
 #pragma warning(default:4251)

@@ -30,6 +30,13 @@ Deal with errors there?
 ----------------------------------------------------
 TO-DO
 
+- better unit testing
+  - ComputationalCellMock
+  - ComputationalMeshMock
+  - ComputationalMoleculeMock
+  - etc
+  
+  
 ----------------------------------------------------
 
 ----------------------------------------------------

@@ -535,6 +535,29 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term value", 0.0, fm.getSourceTerm().value(), 1E-10);
 }
 
+
+void
+ComputationalMeshBuilderTest::cellIndexTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", dummy_flux_eval);
+
+    builder.addEvaluateCellMolecules(cell_evaluator);
+
+    ComputationalMesh::CPtr cmesh = builder.build();
+
+    Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
+
+
+    for (size_t i = 0; i < cell_thread.size(); ++i) {
+        ComputationalCell::Ptr const & ccell = cell_thread.getEntityAt(i);
+        size_t cell_index = cmesh->getCellIndex(ccell);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Linear cell index mismatch", i, cell_index);
+    }
+}
+
 void
 ComputationalMeshBuilderTest::initMesh() {
     static bool init = false;

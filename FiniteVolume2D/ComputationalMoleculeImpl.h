@@ -53,6 +53,7 @@ public:
     size_type               size() const;
     bool                    empty() const;
 
+    SourceTerm const &      getSourceTerm() const;
     SourceTerm &            getSourceTerm();
 
     // iterator support
@@ -69,8 +70,6 @@ protected:
     void negate();
 
 private:
-    SourceTerm const &      getSourceTerm() const;
-
     void                    printMolecule(ComputationalVariableManager const & cvar_mgr) const;
 
 private:

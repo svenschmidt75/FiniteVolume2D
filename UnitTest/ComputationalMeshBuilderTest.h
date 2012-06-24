@@ -28,6 +28,7 @@ class ComputationalMeshBuilderTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(addUserDefinedCellVarsTest);
     CPPUNIT_TEST(addCellVarsTest);
     CPPUNIT_TEST(evaluateFluxesTest);
+    CPPUNIT_TEST(cellIndexTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -47,6 +48,7 @@ protected:
     void addUserDefinedCellVarsTest();
     void addCellVarsTest();
     void evaluateFluxesTest();
+    void cellIndexTest();
 
 private:
     void initMesh();
