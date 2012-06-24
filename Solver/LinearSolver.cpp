@@ -197,7 +197,7 @@ LinearSolver::SOR(CMatrix2D const & A, IMatrix2D::Vec const & f, double omega) {
 
             double a_ii = A(i, i);
             if (!a_ii)
-                throw std::exception("LinearSolver::SOR: Matrix singular");
+                throw std::exception("LinearSolver::SOR: Matrix singular. Maybe too few independent equations?");
 
             sigma = (f[i] - sigma) / a_ii;
 
@@ -302,7 +302,7 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
             }
 
             if (!a_ii)
-                throw std::exception("LinearSolver::SOR: Matrix singular");
+                throw std::exception("LinearSolver::SOR: Matrix singular. Maybe too few independent equations?");
 
             sigma = (f[row] - sigma) / a_ii;
 

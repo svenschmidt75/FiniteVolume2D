@@ -1,6 +1,6 @@
 /*
  * Name  : Thread
- * Path  : IThread
+ * Path  : 
  * Use   : Thread class. Contains elements of a certain type
  *         like vertices, faces and cells.
  * Author: Sven Schmidt
@@ -22,8 +22,10 @@ public:
     typedef typename EntityCollection_t::const_iterator iterator;
 
 public:
-    void insert(typename Entity::Ptr const & entity) {
+    size_type insert(typename Entity::Ptr const & entity) {
+        size_type index = size();
         data_.push_back(entity);
+        return index;
     }
 
     typename EntityCollection_t::size_type size() const {

@@ -29,7 +29,7 @@ class DECL_SYMBOLS_2D ComputationalMeshSolverHelper {
 public:
     ComputationalMeshSolverHelper(IComputationalMesh const & cmesh);
 
-    bool solve() const;
+    bool solve();
 
 private:
     ComputationalMeshSolverHelper(ComputationalMeshSolverHelper const & in);

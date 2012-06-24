@@ -39,6 +39,7 @@ CSparseMatrixImpl::operator()(unsigned int i, unsigned int j) {
 
 void
 CSparseMatrixImpl::solve(Vec const & b, Vec & x) const {
+    /* compute A x = b */
     if (!finalized_)
         throw std::exception("CSparseMatrixImpl::solve(): Matrix not yet finalized");
 

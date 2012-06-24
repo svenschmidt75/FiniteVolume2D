@@ -119,6 +119,9 @@
     <ProjectReference Include="..\FiniteVolume2DLib\FiniteVolume2DLib.vcxproj">
       <Project>{6af3aa8b-0fe6-489e-b930-9d641a42f71f}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Solver\Solver.vcxproj">
+      <Project>{a32af199-69c6-4f64-a376-00c15da4818a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoundaryCondition.h" />

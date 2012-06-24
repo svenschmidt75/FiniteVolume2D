@@ -72,6 +72,23 @@ ComputationalMesh::getMapper() const {
     return mapper_;
 }
 
+size_t
+ComputationalMesh::getCellIndex(ComputationalCell::Ptr const & ccell) const {
+    IGeometricEntity::Id_t cell_id = ccell->id();
+
+    /* We cannot use ccell_index_map_[cell_id].
+     * This is because this is a const method,
+     * ccell_index_map_ is const as well.
+     * There is no const version of operator[]
+     * on std::unordered_map because if the
+     * element is not there, it will be created,
+     * hence it must be non-const.
+     */
+//    size_t index = ccell_index_map_[cell_id];
+    size_t index = ccell_index_map_.at(cell_id);
+    return index;
+}
+
 void
 ComputationalMesh::addNode(Node::Ptr const & node, ComputationalNode::Ptr const & cnode) {
     Thread<ComputationalNode> & thread = getNodeThread(cnode->getEntityType());
@@ -91,7 +108,13 @@ ComputationalMesh::addFace(Face::Ptr const & face, ComputationalFace::Ptr const 
 void
 ComputationalMesh::addCell(Cell::Ptr const & cell, ComputationalCell::Ptr const & ccell) {
     Thread<ComputationalCell> & thread = getCellThread();
-    thread.insert(ccell);
+    Thread<ComputationalCell>::size_type cell_index = thread.insert(ccell);
+
+    /* Store the linear index of this ComputationalCell. This will be
+     * needed when the matrix for the linear system is populated in
+     * ComputationalMeshSolverHelper.
+     */
+    ccell_index_map_[ccell->id()] = cell_index;
 
     mapper_.addCell(cell, ccell);
 }

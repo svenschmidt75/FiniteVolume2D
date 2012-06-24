@@ -10,13 +10,20 @@
  */
 #pragma once
 
+#include "DeclSpec.h"
+
 #include "IMatrix2D.h"
 
 #include <map>
 #include <vector>
 
 
-class CSparseMatrixImpl : public IMatrix2D {
+#pragma warning(disable:4251)
+#pragma warning(disable:4275)
+
+
+class DECL_SYMBOLS CSparseMatrixImpl : public IMatrix2D {
+
     friend struct LinearSolver;
 
 public:
@@ -60,3 +67,6 @@ private:
     mutable std::vector<int>    columns_;
     mutable std::vector<int>    nelements_;
 };
+
+#pragma warning(default:4275)
+#pragma warning(default:4251)

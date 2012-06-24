@@ -20,12 +20,14 @@
 #include "ComputationalNode.h"
 
 #include <memory>
+#include <unordered_map>
 
 
 class ComputationalVariableManager;
 
 
 #pragma warning(disable:4251)
+#pragma warning(disable:4275)
 
 
 class DECL_SYMBOLS_2D ComputationalMesh : public IComputationalMesh {
@@ -52,6 +54,8 @@ public:
     Thread<ComputationalCell> const & getCellThread() const;
 
     GeometricalEntityMapper const &   getMapper() const;
+
+    size_t                            getCellIndex(ComputationalCell::Ptr const & ccell) const;
 
 private:
     ComputationalMesh();
@@ -88,6 +92,10 @@ private:
     Thread<ComputationalFace> boundary_face_thread_;
 
     Thread<ComputationalCell> cell_thread_;
+
+    /* for mapping ComputationalCells into linear indices */
+    std::unordered_map<IGeometricEntity::Id_t, size_t> ccell_index_map_;
 };
 
+#pragma warning(default:4275)
 #pragma warning(default:4251)
