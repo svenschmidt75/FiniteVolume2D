@@ -32,7 +32,7 @@ public:
         return data_.size();
     }
 
-    typename Entity::Ptr const getEntityAt(typename EntityCollection_t::size_type index) const {
+    typename Entity::Ptr const getEntityAt(size_type index) const {
         return data_[index];
     }
 

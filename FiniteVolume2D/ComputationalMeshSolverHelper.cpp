@@ -10,6 +10,7 @@
 
 #include <string>
 #include <tuple>
+#include <map>
 
 
 ComputationalMeshSolverHelper::ComputationalMeshSolverHelper(IComputationalMesh const & cmesh)
@@ -17,37 +18,37 @@ ComputationalMeshSolverHelper::ComputationalMeshSolverHelper(IComputationalMesh 
     cmesh_(cmesh) {}
 
 
-namespace {
-    void insertSolutionIntoCMesh(LinearSolver::RHS_t const & x, IComputationalMesh const & cmesh) {
-        /* The format of x is like this:
-         * 
-         * Row 1: Cell 1, Temperature
-         * Row 2: Cell 1, Pressure
-         * Row 3: Cell 3, Temperature
-         * Row 4: Cell 3, Pressure
-         * ...
-         */
+void
+ComputationalMeshSolverHelper::insertSolutionIntoCMesh(LinearSolver::RHS_t const & x) {
+    /* The format of x is like this:
+        * 
+        * Row 1: Cell 1, Temperature
+        * Row 2: Cell 1, Pressure
+        * Row 3: Cell 3, Temperature
+        * Row 4: Cell 3, Pressure
+        * ...
+        */
 
-        // find number of ComputationalVariables to solve for per cell
-        ComputationalVariableManager const & cvar_manager = cmesh.getComputationalVariableManager();
-        ComputationalVariableManager::size_type nvars = cvar_manager.size();
+    // find number of ComputationalVariables to solve for per cell
+    ComputationalVariableManager const & cvar_manager = cmesh_.getComputationalVariableManager();
+    ComputationalVariableManager::size_type nvars = cvar_manager.size();
 
 
-        auto it = x.begin();
-        auto it_end = x.end();
-        for (; it != it_end; ++it) {
-            unsigned int pos = std::distance(x.begin(), it);
+    auto it = x.begin();
+    auto it_end = x.end();
+    for (; it != it_end; ++it) {
+        unsigned int pos = std::distance(x.begin(), it);
 
-            // corresponding ComputationalCell index
-            unsigned int cell_index = pos / nvars;
+        // corresponding ComputationalCell index
+        unsigned int cell_index = pos / nvars;
 
-            // corresponding ComputationalVariable index
-            unsigned int cvar_index = pos % nvars;
+        // corresponding ComputationalVariable index
+        short base_index = short(pos % nvars);
 
-            cmesh.setSolution(cell_index, cvar_index, *it);
-        }
+        unsigned int cvar_index = cvar_mapper_.findIndex(cell_index, base_index);
+
+        cmesh_.setSolution(cell_index, cvar_index, *it);
     }
-
 }
 
 bool
@@ -66,36 +67,36 @@ ComputationalMeshSolverHelper::solve() {
 
     // insert the solution, x, into the ComputationalMolecule
     // of the corresponding ComputationalCell
-    insertSolutionIntoCMesh(x, cmesh_);
+    insertSolutionIntoCMesh(x);
 
     return true;
 }
 
-namespace {
-    void fillRow(unsigned int row, ComputationalMolecule const & cm, CSparseMatrixImpl & A, ComputationalVariableManager const & cvar_manager, IComputationalMesh const & cmesh) {
-        ComputationalMolecule::Iterator_t cm_it  = cm.begin();
-        ComputationalMolecule::Iterator_t cm_end = cm.end();
+void
+ComputationalMeshSolverHelper::fillRow(unsigned int row, ComputationalMolecule const & cm, CSparseMatrixImpl & A, ComputationalVariableManager const & cvar_manager) {
+    ComputationalMolecule::Iterator_t cm_it  = cm.begin();
+    ComputationalMolecule::Iterator_t cm_end = cm.end();
 
-        for (; cm_it != cm_end; ++cm_it) {
-            // get ComputationalVariable and weight
-            ComputationalVariable::Id_t cvar_index = cm_it->first;
-            ComputationalVariable::Ptr const & cvar = cvar_manager.getComputationalVariable(cvar_index);
-            double const weight = cm_it->second;
-
-
-            std::string const & cvar_name = cvar->getName();
-            short base_index = cvar_manager.getBaseIndex(cvar_name);
+    for (; cm_it != cm_end; ++cm_it) {
+        // get ComputationalVariable and weight
+        ComputationalVariable::Id_t cvar_index = cm_it->first;
+        ComputationalVariable::Ptr const & cvar = cvar_manager.getComputationalVariable(cvar_index);
+        double const weight = cm_it->second;
 
 
-            ComputationalCell::Ptr const & c = cvar->getCell();
-            unsigned int cell_index = cmesh.getCellIndex(c);
+        std::string const & cvar_name = cvar->getName();
+        short base_index = cvar_manager.getBaseIndex(cvar_name);
 
 
-            unsigned int col = cell_index + base_index;
-            A(row, col) = weight;
-        }
+        ComputationalCell::Ptr const & c = cvar->getCell();
+        unsigned int cell_index = cmesh_.getCellIndex(c);
+
+        cvar_mapper_.insert(cell_index, base_index, unsigned int(cvar_index));
+
+
+        unsigned int col = cell_index + base_index;
+        A(row, col) = weight;
     }
-
 }
 
 void
@@ -144,7 +145,7 @@ ComputationalMeshSolverHelper::setupMatrix() {
             // get ComputationalMolecule for cell constituting an (independent) equation
             ComputationalMolecule const & cm = ccell->getComputationalMolecule(cvar_name);
 
-            fillRow(row, cm, A, cvar_manager, cmesh_);
+            fillRow(row, cm, A, cvar_manager);
 
             // fill in the r.h.s.
             rhs_[row] = cm.getSourceTerm().value();

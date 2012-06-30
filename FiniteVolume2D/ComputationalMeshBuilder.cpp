@@ -127,7 +127,6 @@ ComputationalMeshBuilder::build() const {
         throw std::logic_error(format.str().c_str());
     }
 
-    // TODO: Pass in ComputationalVariableManager
     ComputationalMesh::Ptr cmesh = std::make_shared<ComputationalMesh>(geometrical_mesh_->getMeshConnectivity(), cvar_mgr_);
 
     /* Create ComputationalNodes, ComputationalFaces and ComputationalCells.
