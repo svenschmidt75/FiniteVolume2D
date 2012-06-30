@@ -35,7 +35,10 @@ TO-DO
   - ComputationalMeshMock
   - ComputationalMoleculeMock
   - etc
-  
+
+- convenience operators for ComputationalMolecules
+ - =+
+ - negate, -
   
 ----------------------------------------------------
 

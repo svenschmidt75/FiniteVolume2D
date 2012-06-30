@@ -15,3 +15,8 @@ bool
 ComputationalMolecule::addMolecule(FluxComputationalMolecule const & in) {
     return in.addMolecule(*this);
 }
+
+void
+ComputationalMolecule::setValue(double value) {
+    value_ = value;
+}

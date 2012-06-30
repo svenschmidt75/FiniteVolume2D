@@ -7,6 +7,7 @@
 
 #include <boost/assert.hpp>
 
+
 CMatrix2D::CMatrix2D(int rows, int cols) : rows_(rows), cols_(cols) {
     // Initialize with 0
     data_.resize(rows_ * cols_, 0);

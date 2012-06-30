@@ -26,4 +26,11 @@ public:
 
     // add the contributions of flux molecules to this one
     bool addMolecule(FluxComputationalMolecule const & in);
+
+    // insert a solution value
+    void setValue(double value);
+
+private:
+    // solution value for this ComputationalVariable (var_name)
+    double value_;
 };

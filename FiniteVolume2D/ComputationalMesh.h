@@ -57,6 +57,8 @@ public:
 
     size_t                            getCellIndex(ComputationalCell::Ptr const & ccell) const;
 
+    bool                              setSolution(unsigned int cell_index, unsigned int cvar_index, double value) const;
+
 private:
     ComputationalMesh();
     ComputationalMesh(ComputationalMesh const & in);

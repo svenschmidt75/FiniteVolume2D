@@ -83,7 +83,7 @@ namespace {
 
                 // get comp. variable to solve for
                 ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
-                flux_molecule.add(*cvar, -cface->area() / dist);
+                flux_molecule.add(*cvar, cface->area() / dist);
             }
             else {
                 // Face b.c. given as von Neumann
@@ -123,8 +123,9 @@ namespace {
         ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
         ComputationalVariable::Ptr const & cvar_nbr = cell_nbr->getComputationalVariable("Temperature");
 
-        flux_molecule.add(*cvar, -weight);
-        flux_molecule.add(*cvar_nbr, weight);
+        // insert with opposite sign
+        flux_molecule.add(*cvar,      weight);
+        flux_molecule.add(*cvar_nbr, -weight);
 
         return true;
     }

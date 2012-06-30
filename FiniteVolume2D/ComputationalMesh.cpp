@@ -1,8 +1,11 @@
 #include "ComputationalMesh.h"
 
 #include "ComputationalVariableManager.h"
+#include "FiniteVolume2DLib/Util.h"
 
 #include <cassert>
+
+#include <boost/format.hpp>
 
 
 /* Explicitly generate code for the below specializations.
@@ -87,6 +90,39 @@ ComputationalMesh::getCellIndex(ComputationalCell::Ptr const & ccell) const {
 //    size_t index = ccell_index_map_[cell_id];
     size_t index = ccell_index_map_.at(cell_id);
     return index;
+}
+
+bool
+ComputationalMesh::setSolution(unsigned int cell_index, unsigned int cvar_index, double value) const {
+    /* Insert a solution of the linear system into the ComputationalCell
+     * for the ComputationaVariable cvar_index.
+     */
+
+    // ComputationalMesh is logically const
+    ComputationalMesh* this_ = const_cast<ComputationalMesh*>(this);
+
+    ComputationalCell::Ptr const & ccell = this_->getCellThread().getEntityAt(cell_index);
+    if (ccell == nullptr) {
+        boost::format format = boost::format("ComputationalMesh::setSolution: ComputationalCell with index %1% not found!\n") % cell_index;
+        Util::error(format.str());
+        return false;
+
+    }
+
+    ComputationalVariable::Ptr const & cvar = this_->cvar_mgr_->getComputationalVariable(cvar_index);
+    if (cvar == nullptr) {
+        boost::format format = boost::format("ComputationalMesh::setSolution: ComputationalVariable with index %1% not found!\n") % cvar_index;
+        Util::error(format.str());
+        return false;
+
+    }
+
+    std::string const & cvar_name = cvar->getName();
+    ComputationalMolecule & cm = ccell->getComputationalMolecule(cvar_name);
+
+    cm.setValue(value);
+
+    return true;
 }
 
 void

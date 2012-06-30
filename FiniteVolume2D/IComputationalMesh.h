@@ -22,4 +22,5 @@ public:
     virtual Thread<ComputationalCell> const &    getCellThread() const = 0;
     virtual ComputationalVariableManager const & getComputationalVariableManager() const = 0;
     virtual size_t                               getCellIndex(ComputationalCell::Ptr const & ccell) const = 0;
+    virtual bool                                 setSolution(unsigned int cell_index, unsigned int cvar_index, double value) const = 0;
 };

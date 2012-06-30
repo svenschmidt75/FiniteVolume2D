@@ -17,6 +17,39 @@ ComputationalMeshSolverHelper::ComputationalMeshSolverHelper(IComputationalMesh 
     cmesh_(cmesh) {}
 
 
+namespace {
+    void insertSolutionIntoCMesh(LinearSolver::RHS_t const & x, IComputationalMesh const & cmesh) {
+        /* The format of x is like this:
+         * 
+         * Row 1: Cell 1, Temperature
+         * Row 2: Cell 1, Pressure
+         * Row 3: Cell 3, Temperature
+         * Row 4: Cell 3, Pressure
+         * ...
+         */
+
+        // find number of ComputationalVariables to solve for per cell
+        ComputationalVariableManager const & cvar_manager = cmesh.getComputationalVariableManager();
+        ComputationalVariableManager::size_type nvars = cvar_manager.size();
+
+
+        auto it = x.begin();
+        auto it_end = x.end();
+        for (; it != it_end; ++it) {
+            unsigned int pos = std::distance(x.begin(), it);
+
+            // corresponding ComputationalCell index
+            unsigned int cell_index = pos / nvars;
+
+            // corresponding ComputationalVariable index
+            unsigned int cvar_index = pos % nvars;
+
+            cmesh.setSolution(cell_index, cvar_index, *it);
+        }
+    }
+
+}
+
 bool
 ComputationalMeshSolverHelper::solve() {
     /* Setup the matrix by inserting the computational
@@ -24,12 +57,16 @@ ComputationalMeshSolverHelper::solve() {
      */
     setupMatrix();
 
+    // allocate right hand side
     LinearSolver::RHS_t x;
     x.resize(rhs_.size());
 
+    // solve using SOR approach
     std::tie(std::ignore, x) = LinearSolver::sparseSOR(*m_, rhs_, 1.05);
 
-
+    // insert the solution, x, into the ComputationalMolecule
+    // of the corresponding ComputationalCell
+    insertSolutionIntoCMesh(x, cmesh_);
 
     return true;
 }
