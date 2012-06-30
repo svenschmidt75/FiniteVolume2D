@@ -40,7 +40,7 @@ namespace {
 
 }
 
-double const &
+double
 CMatrix2D::operator()(unsigned int row, unsigned int col) const {
     unsigned int index = row * cols_ + col;
     bool assert_cond = index >= 0 && index < rows_ * cols_;

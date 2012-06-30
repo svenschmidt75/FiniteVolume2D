@@ -1,5 +1,8 @@
 #include "CSparseMatrixImpl.h"
 
+#include <iostream>
+#include <iomanip>
+
 #include <boost/assert.hpp>
 
 
@@ -15,12 +18,9 @@ CSparseMatrixImpl::getCols() const {
     return 0;
 }
 
-double const &
+double
 CSparseMatrixImpl::operator()(unsigned int i, unsigned int j) const {
     // i: x, j: y
-
-    if (finalized_)
-        throw std::exception("CSparseMatrixImpl::operator(): Matrix already finalized");
 
     Col_t & col = data_[i];
     return col[j];
@@ -107,4 +107,44 @@ CSparseMatrixImpl::finalize() const {
 
     // Matrix has been finalized
     finalized_ = true;
+}
+
+void
+CSparseMatrixImpl::print() const {
+    // Number of rows
+    int nrows = nelements_.size() - 1;
+
+    std::cout << std::endl;
+
+    for (int row = 0; row < nrows; ++row) {
+        // Number of non-zero columns for this row
+        int ncol = nelements_[row + 1] - nelements_[row];
+        int offset = nelements_[row];
+
+        int icol = 0;
+        for (int col = 0; col < nrows; ++col) {
+            // leading zeros
+            if (columns_[offset + icol] > col) {
+                std::cout << std::setw(8) << 0 << " ";
+                continue;
+            }
+
+            double a_ij = elements_[offset + icol];
+            std::cout << std::setw(8) << a_ij << " ";
+
+            ++icol;
+
+            if (icol == ncol) {
+                // trailing zeros
+                int diff = nrows - col;
+
+                while(diff--)
+                    std::cout << std::setw(8) << 0 << " ";
+
+                break;
+            }
+        }
+
+        std::cout << std::endl;
+    }
 }

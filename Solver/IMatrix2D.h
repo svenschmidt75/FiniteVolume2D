@@ -21,7 +21,9 @@ public:
     // Public matrix interface
     virtual int            getRows() const                     = 0;
     virtual int            getCols() const                     = 0;
-    virtual double const & operator()(unsigned int row, unsigned int col) const  = 0;
+    virtual double         operator()(unsigned int row, unsigned int col) const  = 0;
     virtual double &       operator()(unsigned int row, unsigned int col)        = 0;
     virtual void           solve(Vec const & b, Vec & x) const = 0;
+
+    virtual void           print() const = 0;
 };

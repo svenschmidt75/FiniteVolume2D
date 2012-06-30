@@ -32,12 +32,13 @@ public:
     // FROM IMatrix2D
     int            getRows() const;
     int            getCols() const;
-    double const & operator()(unsigned int row, unsigned int col) const;
+    double         operator()(unsigned int row, unsigned int col) const;
     double &       operator()(unsigned int row, unsigned int col);
     void           solve(Vec const & b, Vec & x) const;
 
     // Local methods
     void finalize() const;
+    void print() const;
 
 private:
     typedef std::map<int, double> Col_t;

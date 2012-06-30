@@ -7,9 +7,12 @@
  */
 #pragma once
 
-#include <vector>
+#include "DeclSpec.h"
 
 #include "IMatrix2D.h"
+
+#include <vector>
+
 
 class CMatrix2D : public IMatrix2D {
 public:
@@ -21,7 +24,7 @@ public:
     // FROM IMatrix2D
     int            getRows() const;
     int            getCols() const;
-    double const & operator()(unsigned int row, unsigned int col) const;
+    double         operator()(unsigned int row, unsigned int col) const;
     double&        operator()(unsigned int row, unsigned int col);
     void           solve(Vec const & b, Vec & x) const;
 

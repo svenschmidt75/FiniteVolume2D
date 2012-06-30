@@ -152,7 +152,7 @@ ComputationalMeshSolverHelper::setupMatrix() {
         }
     }
 
-    m_->finalize();
+    A.finalize();
 }
 
 IMatrix2D const &

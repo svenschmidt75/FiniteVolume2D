@@ -249,7 +249,7 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
             double sum = 0;
 
             for (int icol = 0; icol < ncol; ++icol) {
-                if (row == icol) {
+                if (row == A.columns_[offset + icol]) {
                     a_ii = A.elements_[offset + icol];
                     has_diagonal_element = true;
                     continue;

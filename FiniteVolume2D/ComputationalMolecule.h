@@ -28,7 +28,8 @@ public:
     bool addMolecule(FluxComputationalMolecule const & in);
 
     // insert a solution value
-    void setValue(double value);
+    void   setValue(double value);
+    double getValue() const;
 
 private:
     // solution value for this ComputationalVariable (var_name)

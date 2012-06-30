@@ -15,6 +15,8 @@
 class ComputationalMeshSolverHelperTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(ComputationalMeshSolverHelperTest);
     CPPUNIT_TEST(matrixConstructionTest);
+    CPPUNIT_TEST(rhsTest);
+    CPPUNIT_TEST(solutionInMeshTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -23,6 +25,8 @@ public:
 
 protected:
     void matrixConstructionTest();
+    void rhsTest();
+    void solutionInMeshTest();
 
 private:
     void initMesh();

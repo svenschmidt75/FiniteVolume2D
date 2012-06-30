@@ -83,6 +83,8 @@ namespace {
 
                 // get comp. variable to solve for
                 ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
+
+                // insert with opposite sign (convention)
                 flux_molecule.add(*cvar, cface->area() / dist);
             }
             else {
@@ -123,7 +125,7 @@ namespace {
         ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
         ComputationalVariable::Ptr const & cvar_nbr = cell_nbr->getComputationalVariable("Temperature");
 
-        // insert with opposite sign
+        // insert with opposite sign (convention)
         flux_molecule.add(*cvar,      weight);
         flux_molecule.add(*cvar_nbr, -weight);
 
@@ -152,7 +154,7 @@ namespace {
 
         // account for r.h.s.
         SourceTerm & st = cmolecule.getSourceTerm();
-        st  += -2.0;
+        st  += 0.0;
 
         return true;
     }
@@ -170,15 +172,183 @@ ComputationalMeshSolverHelperTest::matrixConstructionTest() {
 
 
     ComputationalMeshSolverHelper helper(*cmesh);
-    helper.solve();
-//    helper.setupMatrix();
+    helper.setupMatrix();
+
     IMatrix2D const & m = helper.getMatrix();
+
+    double const a = 7.0815630565143799;
+    double const b = 1.8605210188381265;
+    double const c = 6.7210420376762539;
+    double const d = 3.7210420376762530;
+    double const e = -1.5;
+    double const zero = 0;
+
+    double value = m(0, 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", a, value, 1E-10);
+
+    value = m(0, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", -b, value, 1E-10);
+
+    value = m(0, 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", zero, value, 1E-10);
+
+    value = m(0, 7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", e, value, 1E-10);
+
+    value = m(1, 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", -b, value, 1E-10);
+
+    value = m(1, 7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", zero, value, 1E-10);
+
+    value = m(2, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", c, value, 1E-10);
+
+    value = m(3, 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", d, value, 1E-10);
+
+    value = m(3, 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", -b, value, 1E-10);
+
+    value = m(7, 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in sparse matrix", e, value, 1E-10);
+
+    // test a few value against expected values
+//    m.print();
+}
+
+void
+ComputationalMeshSolverHelperTest::rhsTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::CPtr cmesh(builder.build());
+
+
+    ComputationalMeshSolverHelper helper(*cmesh);
+    helper.solve();
+
     LinearSolver::RHS_t const & rhs = helper.getRHS();
 
+    double const a = 1860.5210188381266;
+    double const b = 1200.0;
+    double const c = 744.20840753525090;
+    double const zero = 0;
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[0], a, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[1], zero, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[2], b, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[3], zero, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[4], a, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[5], c, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[6], a, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[7], c, 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected coeff. in r.h.s.", rhs[8], a, 1E-10);
+}
+
+
+namespace {
+    ComputationalCell::Ptr getComputationalCell(Thread<ComputationalCell> const & cell_thread, IGeometricEntity::Id_t cell_id) {
+        auto it = std::find_if(cell_thread.begin(), cell_thread.end(), [&cell_id](ComputationalCell::Ptr const & ccell) -> bool {
+            Cell::Ptr const & cell = ccell->geometricEntity();
+            return cell->meshId() == cell_id;
+        });
+
+        if (it == cell_thread.end())
+            return nullptr;
+        return *it;
+    }
+
+}
+
+void
+ComputationalMeshSolverHelperTest::solutionInMeshTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::CPtr cmesh(builder.build());
+
+
+    ComputationalMeshSolverHelper helper(*cmesh);
+    helper.solve();
+
+
+    // check solution value in ComputationalMolecules
+    double T0_T5 = 441.88218927804616;
+    double T1    = 441.88218927804616;
+    double T2_T4 = 428.95697330354824;
+    double T6_T8 = 313.74140205102862;
+    double T7_T9 = 428.95697330354824;
+
+
+    auto cell_thread = cmesh->getCellThread();
+
+
+
+    ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 0ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell.get() != nullptr);
+    ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T0_T5, comp_molecule.getValue(), 1E-10);
+
+    ccell = getComputationalCell(cell_thread, 4ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T0_T5, comp_molecule.getValue(), 1E-10);
 
 
 
 
+
+    ccell = getComputationalCell(cell_thread, 1ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 2 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T2_T4, comp_molecule.getValue(), 1E-10);
+
+    ccell = getComputationalCell(cell_thread, 3ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 4 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T2_T4, comp_molecule.getValue(), 1E-10);
+
+
+
+
+
+    ccell = getComputationalCell(cell_thread, 5ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T6_T8, comp_molecule.getValue(), 1E-10);
+
+    ccell = getComputationalCell(cell_thread, 7ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T6_T8, comp_molecule.getValue(), 1E-10);
+
+
+
+
+
+    ccell = getComputationalCell(cell_thread, 6ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 7 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T7_T9, comp_molecule.getValue(), 1E-10);
+
+    ccell = getComputationalCell(cell_thread, 8ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 9 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T7_T9, comp_molecule.getValue(), 1E-10);
+
+
+
+
+
+    ccell = getComputationalCell(cell_thread, 1ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 2 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T1, comp_molecule.getValue(), 1E-10);
 }
 
 void

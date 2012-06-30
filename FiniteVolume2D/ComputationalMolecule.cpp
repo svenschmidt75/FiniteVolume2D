@@ -20,3 +20,8 @@ void
 ComputationalMolecule::setValue(double value) {
     value_ = value;
 }
+
+double
+ComputationalMolecule::getValue() const {
+    return value_;
+}
