@@ -8,6 +8,7 @@
 #include "FiniteVolume2D/IComputationalGridAccessor.h"
 
 #include <exception>
+#include <algorithm>
 
 #include <boost/filesystem.hpp>
 

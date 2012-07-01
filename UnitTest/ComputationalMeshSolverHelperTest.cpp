@@ -11,6 +11,11 @@
 
 #include <boost/filesystem.hpp>
 
+#include <algorithm>
+
+#include <cmath>
+
+
 namespace FS = boost::filesystem;
 
 
@@ -33,6 +38,51 @@ ComputationalMeshSolverHelperTest::tearDown() {}
 
 namespace {
   
+    double
+    checkFluxBalance(IComputationalMesh const & cmesh, std::string const & cvar_name) {
+        /* Check that the inflow flux is the same as the outflow flux, i.e.
+         * the fluxes have to balance across the boundary.
+         * Note that the internal face fluxes are balanced by construction.
+         * This necessitates a consistent method when evaluating face fluxes!
+         */
+        Thread<ComputationalFace> bf = cmesh.getFaceThread(IGeometricEntity::BOUNDARY);
+
+        // total flux balance
+        double flux = 0;
+
+        std::for_each(bf.begin(), bf.end(), [&flux, &cvar_name](ComputationalFace::Ptr const & cface){
+        
+            FluxComputationalMolecule const & flux_molecule = cface->getComputationalMolecule(cvar_name);
+            ComputationalCell::Ptr const & ccell = flux_molecule.getCell();
+            ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable(cvar_name);
+            BoundaryCondition::Ptr const & bc = cface->getBoundaryCondition();
+
+            if (bc->type() == BoundaryConditionCollection::DIRICHLET) {
+                // compute face mid point
+                Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
+
+                // distance from face midpoint to the cell centroid
+                double dist = Math::dist(ccell->centroid(), midpoint);
+
+                ComputationalMolecule const & cell_molecule = ccell->getComputationalMolecule(cvar_name);
+
+
+                // see Versteeg, Malalasekera, p. 331-334
+                double T_face = bc->getValue();
+                double T_P = cell_molecule.getValue();
+                double face_flux = (T_face - T_P) / dist * cface->area();
+
+                flux += face_flux;
+            }
+            else {
+                // for von Neumann b.c., the face flux is given directly
+                flux += bc->getValue();
+            }
+        });
+
+        return flux;
+    }
+
     bool
     flux_evaluator(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & ccell, ComputationalFace::Ptr const & cface)
     {
@@ -278,11 +328,11 @@ ComputationalMeshSolverHelperTest::solutionInMeshTest() {
 
 
     // check solution value in ComputationalMolecules
-    double T0_T5 = 441.88218927804616;
-    double T1    = 441.88218927804616;
+    double T1_T5 = 441.88218927804616;
     double T2_T4 = 428.95697330354824;
+    double T3    = 416.03175732905044;
     double T6_T8 = 313.74140205102862;
-    double T7_T9 = 428.95697330354824;
+    double T7_T9 = 437.91380068367619;
 
 
     auto cell_thread = cmesh->getCellThread();
@@ -292,12 +342,12 @@ ComputationalMeshSolverHelperTest::solutionInMeshTest() {
     ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 0ull);
     CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell.get() != nullptr);
     ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T0_T5, comp_molecule.getValue(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T1_T5, comp_molecule.getValue(), 1E-10);
 
     ccell = getComputationalCell(cell_thread, 4ull);
     CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell.get() != nullptr);
     comp_molecule = ccell->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T0_T5, comp_molecule.getValue(), 1E-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T1_T5, comp_molecule.getValue(), 1E-10);
 
 
 
@@ -312,6 +362,15 @@ ComputationalMeshSolverHelperTest::solutionInMeshTest() {
     CPPUNIT_ASSERT_MESSAGE("Cell 4 not found", ccell.get() != nullptr);
     comp_molecule = ccell->getComputationalMolecule("Temperature");
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T2_T4, comp_molecule.getValue(), 1E-10);
+
+
+
+    
+
+    ccell = getComputationalCell(cell_thread, 2ull);
+    CPPUNIT_ASSERT_MESSAGE("Cell 3 not found", ccell.get() != nullptr);
+    comp_molecule = ccell->getComputationalMolecule("Temperature");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T3, comp_molecule.getValue(), 1E-10);
 
 
 
@@ -340,15 +399,24 @@ ComputationalMeshSolverHelperTest::solutionInMeshTest() {
     CPPUNIT_ASSERT_MESSAGE("Cell 9 not found", ccell.get() != nullptr);
     comp_molecule = ccell->getComputationalMolecule("Temperature");
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T7_T9, comp_molecule.getValue(), 1E-10);
+}
 
 
+void
+ComputationalMeshSolverHelperTest::checkFluxBalanceTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::CPtr cmesh(builder.build());
 
 
+    ComputationalMeshSolverHelper helper(*cmesh);
+    CPPUNIT_ASSERT_MESSAGE("Could not solve for computational mesh", helper.solve());
 
-    ccell = getComputationalCell(cell_thread, 1ull);
-    CPPUNIT_ASSERT_MESSAGE("Cell 2 not found", ccell.get() != nullptr);
-    comp_molecule = ccell->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T1, comp_molecule.getValue(), 1E-10);
+    double flux_balance = checkFluxBalance(*cmesh, "Temperature");
+    CPPUNIT_ASSERT_MESSAGE("Flux balance error", std::fabs(flux_balance) < 1E-10);
 }
 
 void

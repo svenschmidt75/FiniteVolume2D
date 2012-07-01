@@ -6,6 +6,8 @@
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <algorithm>
+
 
 ASCIIMeshReaderCellState::ASCIIMeshReaderCellState(IMeshBuilder & mesh_builder) : mesh_builder_(mesh_builder) {}
 

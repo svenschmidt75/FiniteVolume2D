@@ -31,6 +31,7 @@
 
 #include <string>
 #include <exception>
+#include <algorithm>
 
 
 

@@ -4,6 +4,8 @@
 
 #include <boost/filesystem.hpp>
 
+#include <algorithm>
+
 namespace FS = boost::filesystem;
 
 

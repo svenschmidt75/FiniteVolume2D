@@ -4,6 +4,10 @@
 #include "ComputationalVariableManager.h"
 
 
+#include <iostream>
+#include <algorithm>
+
+
 ComputationalMoleculeImpl::ComputationalMoleculeImpl(std::string const & name)
     :
     name_(name) {}

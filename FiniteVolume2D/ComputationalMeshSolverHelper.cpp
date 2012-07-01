@@ -11,6 +11,7 @@
 #include <string>
 #include <tuple>
 #include <map>
+#include <algorithm>
 
 
 ComputationalMeshSolverHelper::ComputationalMeshSolverHelper(IComputationalMesh const & cmesh)

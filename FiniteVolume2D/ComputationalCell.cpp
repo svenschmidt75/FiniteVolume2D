@@ -3,6 +3,7 @@
 #include "FiniteVolume2DLib/Util.h"
 
 #include <exception>
+#include <algorithm>
 
 #include <boost/format.hpp>
 
