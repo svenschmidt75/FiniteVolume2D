@@ -59,6 +59,8 @@ public:
 
     bool                              setSolution(unsigned int cell_index, unsigned int cvar_index, double value) const;
 
+    void                              solve() const;
+
 private:
     ComputationalMesh();
     ComputationalMesh(ComputationalMesh const & in);

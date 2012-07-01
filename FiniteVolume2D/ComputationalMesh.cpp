@@ -1,6 +1,8 @@
 #include "ComputationalMesh.h"
 
 #include "ComputationalVariableManager.h"
+#include "ComputationalMeshSolverHelper.h"
+
 #include "FiniteVolume2DLib/Util.h"
 
 #include <cassert>
@@ -114,7 +116,6 @@ ComputationalMesh::setSolution(unsigned int cell_index, unsigned int cvar_index,
         boost::format format = boost::format("ComputationalMesh::setSolution: ComputationalVariable with index %1% not found!\n") % cvar_index;
         Util::error(format.str());
         return false;
-
     }
 
     std::string const & cvar_name = cvar->getName();
@@ -123,6 +124,12 @@ ComputationalMesh::setSolution(unsigned int cell_index, unsigned int cvar_index,
     cm.setValue(value);
 
     return true;
+}
+
+void
+ComputationalMesh::solve() const {
+    ComputationalMeshSolverHelper helper(*this);
+    helper.solve();
 }
 
 void
