@@ -32,11 +32,56 @@
 #include <string>
 #include <exception>
 #include <algorithm>
+#include <cmath>
 
 
 
 namespace {
   
+    double
+    checkFluxBalance(IComputationalMesh const & cmesh, std::string const & cvar_name) {
+        /* Check that the inflow flux is the same as the outflow flux, i.e.
+         * the fluxes have to balance across the boundary.
+         * Note that the internal face fluxes are balanced by construction.
+         * This necessitates a consistent method when evaluating face fluxes!
+         */
+        Thread<ComputationalFace> bf = cmesh.getFaceThread(IGeometricEntity::BOUNDARY);
+
+        // total flux balance
+        double flux = 0;
+
+        std::for_each(bf.begin(), bf.end(), [&flux, &cvar_name](ComputationalFace::Ptr const & cface){
+        
+            FluxComputationalMolecule const & flux_molecule = cface->getComputationalMolecule(cvar_name);
+            ComputationalCell::Ptr const & ccell = flux_molecule.getCell();
+            BoundaryCondition::Ptr const & bc = cface->getBoundaryCondition();
+
+            if (bc->type() == BoundaryConditionCollection::DIRICHLET) {
+                // compute face mid point
+                Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
+
+                // distance from face midpoint to the cell centroid
+                double dist = Math::dist(ccell->centroid(), midpoint);
+
+                ComputationalMolecule const & cell_molecule = ccell->getComputationalMolecule(cvar_name);
+
+
+                // see Versteeg, Malalasekera, p. 331-334
+                double T_face = bc->getValue();
+                double T_P = cell_molecule.getValue();
+                double face_flux = (T_face - T_P) / dist * cface->area();
+
+                flux += face_flux;
+            }
+            else {
+                // for von Neumann b.c., the face flux is given directly
+                flux += bc->getValue();
+            }
+        });
+
+        return flux;
+    }
+
     bool
     flux_evaluator(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & ccell, ComputationalFace::Ptr const & cface)
     {
@@ -236,6 +281,13 @@ int main(int /*argc*/, char* /*argv[]*/)
     helper.solve();
 
 //    cmesh->output("mesh.out");
+
+    double flux_balance = checkFluxBalance(*cmesh, "Temperature");
+    if (std::fabs(flux_balance) > 1E-10) {
+        boost::format format = boost::format("Flux balance %g too big!\n") % flux_balance;
+        Util::error(format.str());
+        return 1;
+    }
 
     return 0;
 }

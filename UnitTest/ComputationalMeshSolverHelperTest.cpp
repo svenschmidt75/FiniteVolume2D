@@ -54,7 +54,6 @@ namespace {
         
             FluxComputationalMolecule const & flux_molecule = cface->getComputationalMolecule(cvar_name);
             ComputationalCell::Ptr const & ccell = flux_molecule.getCell();
-            ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable(cvar_name);
             BoundaryCondition::Ptr const & bc = cface->getBoundaryCondition();
 
             if (bc->type() == BoundaryConditionCollection::DIRICHLET) {
