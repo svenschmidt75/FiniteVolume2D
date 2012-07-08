@@ -44,6 +44,8 @@ public:
         return mesh_builder_->buildCell(cell_id, face_ids);
     }
 
+    void outputReport(std::ostream & target) const {}
+
     boost::optional<Mesh::Ptr> getMesh() const {
         return mesh_builder_->getMesh();
     }

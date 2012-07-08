@@ -14,16 +14,18 @@
 #include "BoundaryConditionCollection.h"
 
 #include <boost/optional.hpp>
+
 #include <vector>
+#include <iosfwd>
 
 
 class DECL_SYMBOLS_2DLIB IMeshBuilder {
 public:
     virtual ~IMeshBuilder() {}
 
-    virtual bool buildNode(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Entity_t entity_type, double x, double y) = 0;
-    virtual bool buildFace(IGeometricEntity::Id_t face_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & vertex_ids) = 0;
-    virtual bool buildCell(IGeometricEntity::Id_t cell_id, std::vector<IGeometricEntity::Id_t> const & face_ids) = 0;
-
+    virtual bool                       buildNode(IGeometricEntity::Id_t vertex_id, IGeometricEntity::Entity_t entity_type, double x, double y) = 0;
+    virtual bool                       buildFace(IGeometricEntity::Id_t face_id, IGeometricEntity::Entity_t entity_type, std::vector<IGeometricEntity::Id_t> const & vertex_ids) = 0;
+    virtual bool                       buildCell(IGeometricEntity::Id_t cell_id, std::vector<IGeometricEntity::Id_t> const & face_ids) = 0;
+    virtual void                       outputReport(std::ostream & target) const = 0;
     virtual boost::optional<Mesh::Ptr> getMesh() const = 0;
 };

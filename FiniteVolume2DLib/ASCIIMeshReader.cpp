@@ -6,6 +6,7 @@
 #include "ASCIIMeshReaderCellState.h"
 #include "ASCIIMeshReaderBoundaryConditionState.h"
 #include "Util.h"
+#include "IMeshBuilder.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
@@ -16,7 +17,7 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <istream>
+#include <iostream>
 
 namespace FS = boost::filesystem;
 
@@ -113,6 +114,8 @@ ASCIIMeshReader::read() const {
             }
         }
     }
+
+    builder_.outputReport(std::cout);
 
     return true;
 }

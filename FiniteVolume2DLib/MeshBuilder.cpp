@@ -10,6 +10,8 @@
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
 
+#include <iostream>
+
 
 MeshBuilder::MeshBuilder(EntityCreatorManager::Ptr & entity_mgr) : entity_mgr_(entity_mgr), mesh_(Mesh::create()) {}
 
@@ -67,6 +69,26 @@ MeshBuilder::buildCell(IGeometricEntity::Id_t mesh_id, std::vector<IGeometricEnt
         return false;
     mesh_->addCell(c);
     return true;
+}
+
+void
+MeshBuilder::outputReport(std::ostream & target) const {
+    Mesh::CPtr cmesh(mesh_);
+
+    auto nboundary_nodes = cmesh->getNodeThread(IGeometricEntity::BOUNDARY).size();
+    auto ninterior_nodes = cmesh->getNodeThread(IGeometricEntity::INTERIOR).size();
+
+    auto nboundary_faces = cmesh->getFaceThread(IGeometricEntity::BOUNDARY).size();
+    auto ninterior_faces = cmesh->getFaceThread(IGeometricEntity::INTERIOR).size();
+
+    auto ncells = cmesh->getCellThread().size();
+
+
+    target << nboundary_nodes << " boundary nodes" << std::endl;
+    target << ninterior_nodes << " interior nodes" << std::endl;
+    target << nboundary_faces << " boundary faces" << std::endl;
+    target << ninterior_faces << " interior faces" << std::endl;
+    target << ncells << " cells read." << std::endl;
 }
 
 boost::optional<Mesh::Ptr>

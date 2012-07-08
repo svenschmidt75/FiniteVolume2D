@@ -72,6 +72,9 @@ private:
             return true;
         }
 
+        void
+        outputReport(std::ostream & target) const {}
+
         boost::optional<Mesh::Ptr>
         getMesh() const {
             return boost::optional<Mesh::Ptr>();
