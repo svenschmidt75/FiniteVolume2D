@@ -22,6 +22,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include <boost/noncopyable.hpp>
+
 
 class ComputationalVariableManager;
 
@@ -30,7 +32,7 @@ class ComputationalVariableManager;
 #pragma warning(disable:4275)
 
 
-class DECL_SYMBOLS_2D ComputationalMesh : public IComputationalMesh {
+class DECL_SYMBOLS_2D ComputationalMesh : public IComputationalMesh, private boost::noncopyable {
 
     friend class ComputationalMeshBuilder;
 
@@ -62,10 +64,6 @@ public:
     void                              solve() const;
 
 private:
-    ComputationalMesh();
-    ComputationalMesh(ComputationalMesh const & in);
-    ComputationalMesh & operator=(ComputationalMesh const & in);
-
     // make the non-const access routines private
     Thread<ComputationalNode> & getNodeThread(IGeometricEntity::Entity_t entity_type);
     Thread<ComputationalFace> & getFaceThread(IGeometricEntity::Entity_t entity_type);
