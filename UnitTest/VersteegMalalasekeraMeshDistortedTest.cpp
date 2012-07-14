@@ -87,6 +87,38 @@ namespace {
         return flux;
     }
 
+    double
+    cell_skewness(ComputationalCell::Ptr const & c1, ComputationalCell::Ptr const & c2, ComputationalFace::Ptr const & cface) {
+        /* Compute the distance of the line (centroid c1, centroid c2)
+         * on face cface from cface's midpoint.
+         * cface must be an interior face.
+         */
+        if (cface->getEntityType() == IGeometricEntity::BOUNDARY)
+            return 0;
+
+        Vertex c1_centroid = c1->centroid();
+        Vertex c2_centroid = c2->centroid();
+
+        // distance from face midpoint to the cell centroid
+        double dist = Math::dist(cell_centroid, cell_nbr_centroid);
+
+        /* The weight for the computational molecule is
+         * \gamma f_{area} / dist(N - P).
+         */
+        double weight = cface->area() / dist;
+
+
+        // compute face mid point
+        Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
+
+        // distance from face midpoint to the cell centroid
+        
+        
+        
+        double dist = Math::dist(ccell->centroid(), midpoint);
+
+    }
+
     bool
     flux_evaluator(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & ccell, ComputationalFace::Ptr const & cface)
     {

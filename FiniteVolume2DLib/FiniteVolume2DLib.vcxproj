@@ -27,6 +27,7 @@
     <ClInclude Include="Face.h" />
     <ClInclude Include="FaceConnectivity.h" />
     <ClInclude Include="FaceManager.h" />
+    <ClInclude Include="GeometricHelper.h" />
     <ClInclude Include="ICell.h" />
     <ClInclude Include="IFace.h" />
     <ClInclude Include="IGeometricEntity.h" />
@@ -37,6 +38,7 @@
     <ClInclude Include="IMeshReaderState.h" />
     <ClInclude Include="INode.h" />
     <ClInclude Include="internal\VertexOperators.h" />
+    <ClInclude Include="LineSegment.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshBuilder.h" />
@@ -65,10 +67,12 @@
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="FaceConnectivity.cpp" />
     <ClCompile Include="FaceManager.cpp" />
+    <ClCompile Include="GeometricHelper.cpp" />
     <ClCompile Include="internal\VertexOperators.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="LineSegment.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshBuilder.cpp" />
