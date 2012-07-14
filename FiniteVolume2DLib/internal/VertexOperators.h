@@ -12,6 +12,9 @@
 
 #include "DeclSpec.h"
 
+#include "Vector.h"
+
 
 Vertex DECL_SYMBOLS_2DLIB operator+(Vertex const & lhs, Vertex const & rhs);
+Vector DECL_SYMBOLS_2DLIB operator-(Vertex const & lhs, Vertex const & rhs);
 Vertex DECL_SYMBOLS_2DLIB operator/(Vertex const & in, double const value);

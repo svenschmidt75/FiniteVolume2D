@@ -1,5 +1,5 @@
 /*
- * Name  : LineSegment
+ * Name  : ParametrizedLineSegment
  * Path  : 
  * Use   : 
  * Author: Sven Schmidt
@@ -9,18 +9,22 @@
 
 #include "DeclSpec.h"
 
+#include "Vector.h"
 #include "Vertex.h"
 
 
 
-class LineSegment {
+class ParametrizedLineSegment {
 public:
-    explicit LineSegment(Vertex const & v0, Vertex const & v1);
+    explicit ParametrizedLineSegment(Vertex const & v0, Vertex const & v1);
 
     Vertex const & v0() const;
     Vertex const & v1() const;
+    Vertex         get(double t) const;
+
 
 private:
     Vertex v0_;
     Vertex v1_;
+    Vector dir_;
 };

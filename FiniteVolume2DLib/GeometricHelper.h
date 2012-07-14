@@ -9,7 +9,20 @@
 
 #include "DeclSpec.h"
 
+#include <boost/optional.hpp>
 
-class DECL_SYMBOLS_2D GeometricHelper {
+class Vertex;
+class LineSegment;
 
+
+class DECL_SYMBOLS_2DLIB GeometricHelper {
+public:
+    enum IntersectionType : unsigned int {
+        UNIQUE_INTERSECTION,
+        OVERLAP,
+        END
+    };
+
+public:
+    static boost::optional<Vertex> intersect(LineSegment const & ls1, LineSegment const & ls2);
 };

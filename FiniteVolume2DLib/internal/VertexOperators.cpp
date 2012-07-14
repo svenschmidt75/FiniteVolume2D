@@ -9,6 +9,11 @@ operator+(Vertex const & lhs, Vertex const & rhs) {
     return Vertex(lhs.x() + rhs.x(), lhs.y() + rhs.y());
 }
 
+Vector
+operator-(Vertex const & lhs, Vertex const & rhs) {
+    return Vector(rhs.x() - lhs.x(), rhs.y() - lhs.y());
+}
+
 Vertex
 operator/(Vertex const & in, double const value) {
     assert(value);
