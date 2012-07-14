@@ -155,7 +155,7 @@ namespace {
             if (ccell_ref != ccell)
                 flux_molecule = -flux_molecule;
 
-            cmolecule.addMolecule(flux_molecule);
+            cmolecule += flux_molecule;
         });
 
         // account for r.h.s.

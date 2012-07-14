@@ -29,6 +29,7 @@ public:
     FluxComputationalMolecule();
     explicit FluxComputationalMolecule(std::string const & name);
 
+
     void                                       setCell(std::shared_ptr<ComputationalCell> const & ccell);
     std::shared_ptr<ComputationalCell> const & getCell() const;
 

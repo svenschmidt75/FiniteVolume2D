@@ -51,7 +51,7 @@ TO-DO
 ----------------------------------------------------
 Own iterator:
 
-Insteam of Item, just wrap a REFERENCE in Item and
+Instead of Item, just wrap a REFERENCE in Item and
 have a "smaller" interface.
 
 This way, FluxEvaluator can have state?

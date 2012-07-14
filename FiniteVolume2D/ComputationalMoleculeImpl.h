@@ -30,6 +30,9 @@ class ComputationalVariableManager;
 
 
 class DECL_SYMBOLS_2D ComputationalMoleculeImpl : public IComputationalMolecule {
+
+    friend DECL_SYMBOLS_2D ComputationalMoleculeImpl & operator+=(ComputationalMoleculeImpl & lhs, ComputationalMoleculeImpl const & rhs);
+
 public:
     typedef std::unordered_map<ComputationalVariable::Id_t, double> ComputationalMolecule_t;
     typedef ComputationalMolecule_t::const_iterator                 Iterator_t;
@@ -65,12 +68,13 @@ protected:
     //                        from it
     explicit ComputationalMoleculeImpl(std::string const & name);
 
+
     bool addMolecule(ComputationalMoleculeImpl & in) const;
 
     void negate();
 
 private:
-    void                    printMolecule(ComputationalVariableManager const & cvar_mgr) const;
+    void printMolecule(ComputationalVariableManager const & cvar_mgr) const;
 
 private:
     std::string                                  name_;

@@ -400,7 +400,6 @@ ComputationalMeshSolverHelperTest::solutionInMeshTest() {
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong solution value", T7_T9, comp_molecule.getValue(), 1E-10);
 }
 
-
 void
 ComputationalMeshSolverHelperTest::checkFluxBalanceTest() {
     ComputationalMeshBuilder builder(mesh_, bc_);

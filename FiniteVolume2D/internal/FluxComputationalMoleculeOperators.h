@@ -11,5 +11,8 @@
 #include "../DeclSpec.h"
 
 #include "../FluxComputationalMolecule.h"
+#include "../ComputationalMoleculeImpl.h"
+
 
 DECL_SYMBOLS_2D FluxComputationalMolecule operator-(FluxComputationalMolecule const & in);
+DECL_SYMBOLS_2D ComputationalMoleculeImpl & operator+=(ComputationalMoleculeImpl & lhs, ComputationalMoleculeImpl const & rhs);

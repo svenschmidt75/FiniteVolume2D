@@ -118,6 +118,7 @@
       <PreprocessKeepComments Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessKeepComments>
     </ClCompile>
     <ClCompile Include="MeshConnectivityTest.cpp" />
+    <ClCompile Include="VersteegMalalasekeraMeshDistortedTest.cpp" />
     <ClCompile Include="VersteegMalalasekeraTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +133,7 @@
     <ClInclude Include="MeshBoundaryConditionReaderTest.h" />
     <ClInclude Include="MeshCheckerTest.h" />
     <ClInclude Include="MeshConnectivityTest.h" />
+    <ClInclude Include="VersteegMalalasekeraMeshDistortedTest.h" />
     <ClInclude Include="VersteegMalalasekeraTest.h" />
   </ItemGroup>
   <ItemGroup>
