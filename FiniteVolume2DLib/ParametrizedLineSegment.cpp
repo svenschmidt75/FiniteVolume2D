@@ -3,29 +3,39 @@
 #include "LineSegment.h"
 
 
-ParametrizedLineSegment::ParametrizedLineSegment(Vertex const & v0, Vertex const & v1)
+ParametrizedLineSegment::ParametrizedLineSegment(Vertex const & p0, Vertex const & p1)
     :
-    v0_(v0),
-    v1_(v1),
-    dir_(v1 - v0) {}
+    p0_(p0),
+    p1_(p1),
+    dir_(p1 - p0) {}
 
 ParametrizedLineSegment::ParametrizedLineSegment(LineSegment const & in)
     :
-    v0_(in.v0()),
-    v1_(in.v1()),
-    dir_(in.v1() - in.v0()) {}
+    p0_(in.p0()),
+    p1_(in.p1()),
+    dir_(in.p1() - in.p0()) {}
 
 Vertex const &
-ParametrizedLineSegment::v0() const {
-    return v0_;
+ParametrizedLineSegment::p0() const {
+    return p0_;
 }
 
 Vertex const &
-ParametrizedLineSegment::v1() const {
-    return v1_;
+ParametrizedLineSegment::p1() const {
+    return p1_;
+}
+
+Vector
+ParametrizedLineSegment::dir() const {
+    return dir_;
 }
 
 Vertex
 ParametrizedLineSegment::get(double t) const {
-    return v0_ + t * dir_;
+    return p0_ + t * dir_;
+}
+
+double
+ParametrizedLineSegment::length() const {
+    return dir_.norm();
 }

@@ -3,6 +3,8 @@
 #include "FiniteVolume2DLib/ASCIIMeshReader.h"
 #include "FiniteVolume2DLib/Math.h"
 #include "FiniteVolume2DLib/MeshChecker.h"
+#include "FiniteVolume2DLib/LineSegment.h"
+#include "FiniteVolume2DLib/GeometricHelper.h"
 
 #include "FiniteVolume2D/ComputationalMeshBuilder.h"
 #include "FiniteVolume2D/ComputationalMeshSolverHelper.h"
@@ -98,6 +100,20 @@ namespace {
 
         Vertex c1_centroid = c1->centroid();
         Vertex c2_centroid = c2->centroid();
+
+        /* Compute the intersection point between the line segment connecting
+         * the cell centroids and the face vertices.
+         */
+        LineSegment cell_centroid_ls(c1_centroid, c2_centroid);
+        LineSegment face_ls(cface->startNode().geometricEntity()->location(), cface->endNode().geometricEntity()->location());
+
+        boost::optional<Vertex> ip_opt = GeometricHelper::intersect(cell_centroid_ls, face_ls);
+
+
+
+
+
+
 
         // distance from face midpoint to the cell centroid
         double dist = Math::dist(cell_centroid, cell_nbr_centroid);

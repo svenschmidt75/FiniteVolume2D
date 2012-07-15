@@ -1,9 +1,9 @@
 /*
- * Name  : LineSegment
+ * Name  : Ray
  * Path  : 
  * Use   : 
  * Author: Sven Schmidt
- * Date  : 07/14/2012
+ * Date  : 07/15/2012
  */
 #pragma once
 
@@ -13,9 +13,9 @@
 
 
 
-class LineSegment {
+class Ray {
 public:
-    explicit LineSegment(Vertex const & p0, Vertex const & p1);
+    explicit Ray(Vertex const & p0, Vertex const & p1);
 
     Vertex const & p0() const;
     Vertex const & p1() const;

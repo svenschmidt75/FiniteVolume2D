@@ -17,16 +17,18 @@ class LineSegment;
 
 class ParametrizedLineSegment {
 public:
-    explicit ParametrizedLineSegment(Vertex const & v0, Vertex const & v1);
+    explicit ParametrizedLineSegment(Vertex const & p0, Vertex const & p1);
     explicit ParametrizedLineSegment(LineSegment const & in);
 
-    Vertex const & v0() const;
-    Vertex const & v1() const;
+    Vertex const & p0() const;
+    Vertex const & p1() const;
+    Vector         dir() const;
     Vertex         get(double t) const;
+    double         length() const;
 
 
 private:
-    Vertex v0_;
-    Vertex v1_;
+    Vertex p0_;
+    Vertex p1_;
     Vector dir_;
 };

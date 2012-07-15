@@ -1,17 +1,17 @@
 #include "LineSegment.h"
 
 
-LineSegment::LineSegment(Vertex const & v0, Vertex const & v1)
+LineSegment::LineSegment(Vertex const & p0, Vertex const & p1)
     :
-    v0_(v0),
-    v1_(v1) {}
+    p0_(p0),
+    p1_(p1) {}
 
 Vertex const &
-LineSegment::v0() const {
-    return v0_;
+LineSegment::p0() const {
+    return p0_;
 }
 
 Vertex const &
-LineSegment::v1() const {
-    return v1_;
+LineSegment::p1() const {
+    return p1_;
 }

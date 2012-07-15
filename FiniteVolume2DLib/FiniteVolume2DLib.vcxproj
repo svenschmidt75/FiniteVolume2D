@@ -46,6 +46,7 @@
     <ClInclude Include="MeshChecker.h" />
     <ClInclude Include="MeshConnectivity.h" />
     <ClInclude Include="ParametrizedLineSegment.h" />
+    <ClInclude Include="Ray.h" />
     <ClInclude Include="Thread.hpp" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vector.h" />
@@ -82,6 +83,7 @@
     <ClCompile Include="MeshChecker.cpp" />
     <ClCompile Include="MeshConnectivity.cpp" />
     <ClCompile Include="ParametrizedLineSegment.cpp" />
+    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Node.cpp" />
