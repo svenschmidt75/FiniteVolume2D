@@ -26,3 +26,6 @@ public:
 private:
     Vertex vertex_;
 };
+
+// common operator overloads for Vector
+#include "internal/VectorOperators.h"

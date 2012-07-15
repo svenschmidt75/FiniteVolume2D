@@ -12,11 +12,13 @@
 #include "Vector.h"
 #include "Vertex.h"
 
+class LineSegment;
 
 
 class ParametrizedLineSegment {
 public:
     explicit ParametrizedLineSegment(Vertex const & v0, Vertex const & v1);
+    explicit ParametrizedLineSegment(LineSegment const & in);
 
     Vertex const & v0() const;
     Vertex const & v1() const;

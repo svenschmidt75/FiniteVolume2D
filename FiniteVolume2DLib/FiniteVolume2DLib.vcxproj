@@ -37,6 +37,7 @@
     <ClInclude Include="IMeshReader.h" />
     <ClInclude Include="IMeshReaderState.h" />
     <ClInclude Include="INode.h" />
+    <ClInclude Include="internal\VectorOperators.h" />
     <ClInclude Include="internal\VertexOperators.h" />
     <ClInclude Include="LineSegment.h" />
     <ClInclude Include="Math.h" />
@@ -69,12 +70,13 @@
     <ClCompile Include="FaceConnectivity.cpp" />
     <ClCompile Include="FaceManager.cpp" />
     <ClCompile Include="GeometricHelper.cpp" />
-    <ClCompile Include="internal\VertexOperators.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="internal\VectorOperators.cpp" />
+    <ClCompile Include="internal\VertexOperators.cpp" />
     <ClCompile Include="LineSegment.cpp" />
-    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="Math.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
+      <PreprocessKeepComments Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessKeepComments>
+    </ClCompile>
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshBuilder.cpp" />
     <ClCompile Include="MeshChecker.cpp" />

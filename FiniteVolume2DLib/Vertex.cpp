@@ -26,5 +26,3 @@ double
 Vertex::undef() {
     return std::numeric_limits<double>::quiet_NaN();
 }
-
-#include "internal/VertexOperators.cpp"

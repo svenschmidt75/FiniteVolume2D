@@ -28,4 +28,5 @@ private:
     double y_;
 };
 
+// common operator overloads for Vertex
 #include "internal/VertexOperators.h"
