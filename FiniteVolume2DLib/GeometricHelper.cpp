@@ -6,6 +6,8 @@
 #include "ParametrizedLineSegment.h"
 #include "Math.h"
 
+#include <cassert>
+
 
 // disable "warning C4482: nonstandard extension used: enum 'GeometricHelper::IntersectionType' used in qualified name"
 #pragma warning(disable:4482)
@@ -16,7 +18,7 @@ namespace {
     typedef std::tuple<GeometricHelper::IntersectionType, Vertex, Vertex> SegmentIntersection_t;
 
     std::tuple<int, double, double>
-    findIntersectionInterval(double u0, double u1, double v0, double v1) {
+    find_intersection_interval(double u0, double u1, double v0, double v1) {
         /* Intersect two intervals.
          * This code is based on p. 245,
          * Geometric Tools for Computer Graphics,
@@ -60,13 +62,22 @@ namespace {
     }
 
     SegmentIntersection_t
-    intersectLineSegmentBase(LineSegment const & ls1, LineSegment const & ls2) {
+    intersect_line_segments_base(LineSegment const & ls1, LineSegment const & ls2) {
         /* Intersect two line segments.
          * This code is based on p. 244,
          * Geometric Tools for Computer Graphics,
          * Philip J. Schneider; David H. Eberly
          * 
-         * LineSegment: (p0, p1)
+         * ls1: P_{0} + \lambda \vec{d0}
+         * ls2: P_{1} + \mu     \vec{d1}
+         * 
+         * ls1 = ls2 => P_{0} - P_{1} = \mu \vec{d1} - \lambda \vec{d0}
+         * 
+         * lambda: cross with \vec{d1} =>
+         * (P_{0} - P_{1}) x \vec{d1} = - \lambda (\vec{d0} x \vec{d1}) = \lambda (\vec{d1} x \vec{d0}) 
+         * 
+         * mu: cross with \vec{d0} =>
+         * (P_{0} - P_{1}) x \vec{d0} = \mu (\vec{d1} x \vec{d0})
          */
         ParametrizedLineSegment pls1(ls1);
         ParametrizedLineSegment pls2(ls2);
@@ -80,6 +91,7 @@ namespace {
         double sqrLen1 = pls1.length();
         double sqrLen2 = pls2.length();
 
+        // relative test!
         if (sqrKross > eps * sqrLen1 * sqrLen2) {
             // line segments are not parallel
             double s = Math::cross(E, pls2.dir()) / kross;
@@ -93,7 +105,7 @@ namespace {
                 return std::make_tuple(GeometricHelper::EMPTY, Vertex(), Vertex());
 
             // both segments intersect
-            return std::make_tuple(GeometricHelper::UNIQUE_INTERSECTION, pls1.get(2), Vertex());
+            return std::make_tuple(GeometricHelper::UNIQUE_INTERSECTION, pls1.get(s), Vertex());
         }
 
         // both segments are parallel
@@ -108,6 +120,7 @@ namespace {
         
         // line segments overlap
 
+        // compute the two point marking the overlap region
         double s0 = Math::dot(pls1.dir(), E) / sqrLen1;
         double s1 = s0 + Math::dot(pls1.dir(), pls2.dir()) / sqrLen1;
         double smin = std::min(s0, s1);
@@ -115,19 +128,54 @@ namespace {
         double u0;
         double u1;
         int imax;
-        std::tie(imax, u0, u1) = findIntersectionInterval(0.0, 1.0, smin, smax);
+        std::tie(imax, u0, u1) = find_intersection_interval(0.0, 1.0, smin, smax);
 
         Vertex p0;
         Vertex p1;
 
+        assert(imax);
+
         if (imax--) {
             p0 = pls1.get(u0);
-
-        if (imax)
-            p1 = pls1.get(u1);
+            p1 = imax ? pls1.get(u1) : p0;
         }
 
         return std::make_tuple(GeometricHelper::OVERLAP, p0, p1);
+    }
+
+    
+    SegmentIntersection_t
+    intersect_line_segment_ray_base(LineSegment const & ls, Ray const & ray) {
+        /* Intersect one line segment with a ray.
+         * This code is based on p. 244,
+         * Geometric Tools for Computer Graphics,
+         * Philip J. Schneider; David H. Eberly
+         */
+        ParametrizedLineSegment pls(ls);
+
+        Vector E = ray.p0() - pls.p0();
+
+        static double eps = 1E-10;
+
+        double kross = Math::cross(pls.dir(), ray.dir());
+        double sqrKross = kross * kross;
+        double sqrLen1 = pls.length();
+        double sqrLen2 = ray.dir().norm();
+
+        if (sqrKross > eps * sqrLen1 * sqrLen2) {
+            // line segments are not parallel
+            double s = Math::cross(E, ray.dir()) / kross;
+            if (s < 0 || s > 1)
+                // intersection point is not on segment 1
+                return std::make_tuple(GeometricHelper::EMPTY, Vertex(), Vertex());
+
+            // both segments intersect
+            return std::make_tuple(GeometricHelper::UNIQUE_INTERSECTION, pls.get(s), Vertex());
+        }
+
+        // the line segment and the ray are parallel,
+        // hence they overlap
+        return std::make_tuple(GeometricHelper::OVERLAP, pls.p0(), pls.p1());
     }
 
 }
@@ -137,7 +185,7 @@ GeometricHelper::intersect(LineSegment const & ls1, LineSegment const & ls2) {
     Vertex intersection_point;
     GeometricHelper::IntersectionType type;
 
-    std::tie(type, intersection_point) = intersectLineSegmentBase(ls1, ls2);
+    std::tie(type, intersection_point) = intersect_line_segments_base(ls1, ls2);
 
     if (type == IntersectionType::UNIQUE_INTERSECTION)
         return boost::optional<Vertex>(intersection_point);
@@ -146,7 +194,14 @@ GeometricHelper::intersect(LineSegment const & ls1, LineSegment const & ls2) {
 
 boost::optional<Vertex>
 GeometricHelper::intersect(LineSegment const & ls, Ray const & ray) {
+    Vertex intersection_point;
+    GeometricHelper::IntersectionType type;
 
+    std::tie(type, intersection_point) = intersect_line_segment_ray_base(ls, ray);
+
+    if (type == IntersectionType::UNIQUE_INTERSECTION)
+        return boost::optional<Vertex>(intersection_point);
+    return boost::optional<Vertex>();
 }
 
 #pragma warning(default:4482)

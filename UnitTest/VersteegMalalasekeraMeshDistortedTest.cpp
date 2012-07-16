@@ -4,6 +4,7 @@
 #include "FiniteVolume2DLib/Math.h"
 #include "FiniteVolume2DLib/MeshChecker.h"
 #include "FiniteVolume2DLib/LineSegment.h"
+#include "FiniteVolume2DLib/Ray.h"
 #include "FiniteVolume2DLib/GeometricHelper.h"
 
 #include "FiniteVolume2D/ComputationalMeshBuilder.h"
@@ -104,35 +105,35 @@ namespace {
         /* Compute the intersection point between the line segment connecting
          * the cell centroids and the face vertices.
          */
-        LineSegment cell_centroid_ls(c1_centroid, c2_centroid);
+        Ray cell_centroid_ls(c1_centroid, c2_centroid);
         LineSegment face_ls(cface->startNode().geometricEntity()->location(), cface->endNode().geometricEntity()->location());
 
-        boost::optional<Vertex> ip_opt = GeometricHelper::intersect(cell_centroid_ls, face_ls);
+        boost::optional<Vertex> ip_opt = GeometricHelper::intersect(face_ls, cell_centroid_ls);
 
 
 
 
 
-
-
-        // distance from face midpoint to the cell centroid
-        double dist = Math::dist(cell_centroid, cell_nbr_centroid);
-
-        /* The weight for the computational molecule is
-         * \gamma f_{area} / dist(N - P).
-         */
-        double weight = cface->area() / dist;
-
-
-        // compute face mid point
-        Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
-
-        // distance from face midpoint to the cell centroid
-        
-        
-        
-        double dist = Math::dist(ccell->centroid(), midpoint);
-
+// 
+// 
+//         // distance from face midpoint to the cell centroid
+//         double dist = Math::dist(cell_centroid, cell_nbr_centroid);
+// 
+//         /* The weight for the computational molecule is
+//          * \gamma f_{area} / dist(N - P).
+//          */
+//         double weight = cface->area() / dist;
+// 
+// 
+//         // compute face mid point
+//         Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
+// 
+//         // distance from face midpoint to the cell centroid
+//         
+//         
+//         
+//         double dist = Math::dist(ccell->centroid(), midpoint);
+        return -1.0;
     }
 
     bool

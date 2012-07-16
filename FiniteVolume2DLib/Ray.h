@@ -10,17 +10,20 @@
 #include "DeclSpec.h"
 
 #include "Vertex.h"
+#include "ParametrizedLineSegment.h"
 
 
-
-class Ray {
+class DECL_SYMBOLS_2DLIB Ray {
 public:
     explicit Ray(Vertex const & p0, Vertex const & p1);
+    explicit Ray(LineSegment const & in);
+    explicit Ray(ParametrizedLineSegment const & in);
 
     Vertex const & p0() const;
     Vertex const & p1() const;
+    Vector         dir() const;
+    Vertex         get(double t) const;
 
 private:
-    Vertex p0_;
-    Vertex p1_;
+    ParametrizedLineSegment ray_;
 };

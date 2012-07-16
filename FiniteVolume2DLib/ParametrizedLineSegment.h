@@ -15,7 +15,7 @@
 class LineSegment;
 
 
-class ParametrizedLineSegment {
+class DECL_SYMBOLS_2DLIB ParametrizedLineSegment {
 public:
     explicit ParametrizedLineSegment(Vertex const & p0, Vertex const & p1);
     explicit ParametrizedLineSegment(LineSegment const & in);

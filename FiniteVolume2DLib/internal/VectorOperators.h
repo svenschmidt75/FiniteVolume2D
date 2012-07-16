@@ -20,3 +20,4 @@ Vertex DECL_SYMBOLS_2DLIB operator+(Vertex const & p, Vector const & v);
 
 Vector DECL_SYMBOLS_2DLIB operator*(double value, Vector const & v);
 Vector DECL_SYMBOLS_2DLIB operator*(Vector const & v, double value);
+Vector DECL_SYMBOLS_2DLIB operator/(Vector const & v, double value);

@@ -1,7 +1,13 @@
 #include "VectorOperators.h"
 
-#include "../Vector.h"
-#include "../Vertex.h"
+#include "..\Vector.h"
+#include "..\Vertex.h"
+#include "..\Util.h"
+
+#include <boost/format.hpp>
+
+#include <exception>
+#include <cassert>
 
 
 Vector
@@ -22,4 +28,18 @@ operator*(double value, Vector const & v) {
 Vector
 operator*(Vector const & v, double value) {
     return value * v;
+}
+
+Vector
+operator/(Vector const & v, double value) {
+    assert(value);
+    if (!value) {
+        boost::format format = boost::format("VectorOperators:: operator/(Vector const & v, double value): Division by zero!\n");
+        Util::error(format.str());
+
+        // have to throw because we only return by reference
+        throw std::exception(format.str().c_str());
+    }
+
+    return Vector(v.x() / value, v.y() / value);
 }

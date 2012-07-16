@@ -12,8 +12,7 @@
 #include "Vertex.h"
 
 
-
-class LineSegment {
+class DECL_SYMBOLS_2DLIB LineSegment {
 public:
     explicit LineSegment(Vertex const & p0, Vertex const & p1);
 

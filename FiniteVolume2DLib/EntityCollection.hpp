@@ -10,6 +10,7 @@
 #include "IGeometricEntity.h"
 
 #include <vector>
+#include <utility>
 
 #include <boost/optional.hpp>
 
@@ -31,6 +32,12 @@ public:
     typedef typename EntityCollection_t::size_type size_type;
 
 public:
+    EntityCollection() {}
+
+    // enable move semantics
+    EntityCollection(EntityCollection && in)
+        : data_(std::move(in.data_)) {}
+
     void insert(typename Entity::Ptr const & entity) {
         data_.push_back(entity);
     }
