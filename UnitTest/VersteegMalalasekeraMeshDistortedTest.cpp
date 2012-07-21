@@ -4,16 +4,20 @@
 #include "FiniteVolume2DLib/Math.h"
 #include "FiniteVolume2DLib/MeshChecker.h"
 #include "FiniteVolume2DLib/LineSegment.h"
-#include "FiniteVolume2DLib/Ray.h"
+#include "FiniteVolume2DLib/Line.h"
 #include "FiniteVolume2DLib/GeometricHelper.h"
+#include "FiniteVolume2DLib/Util.h"
 
 #include "FiniteVolume2D/ComputationalMeshBuilder.h"
 #include "FiniteVolume2D/ComputationalMeshSolverHelper.h"
 #include "FiniteVolume2D/IComputationalGridAccessor.h"
 
 #include <boost/filesystem.hpp>
+#include <boost/format.hpp>
 
 #include <algorithm>
+#include <exception>
+#include <cassert>
 
 namespace FS = boost::filesystem;
 
@@ -105,35 +109,41 @@ namespace {
         /* Compute the intersection point between the line segment connecting
          * the cell centroids and the face vertices.
          */
-        Ray cell_centroid_ls(c1_centroid, c2_centroid);
+        Line cell_centroid_ls(c1_centroid, c2_centroid);
         LineSegment face_ls(cface->startNode().geometricEntity()->location(), cface->endNode().geometricEntity()->location());
 
         boost::optional<Vertex> ip_opt = GeometricHelper::intersect(face_ls, cell_centroid_ls);
 
+        assert(bool(ip_opt));
+        if (!ip_opt) {
+            boost::format format = boost::format("cell_skewness: No intersection found between face centroids %1%, %2% and face %3%!\n")
+                % c1->geometricEntity()->meshId()
+                % c2->geometricEntity()->meshId()
+                % cface->geometricEntity()->meshId();
 
+            Util::error(format.str());
 
+            // have to throw because we only return by reference
+            throw std::out_of_range(format.str().c_str());
+        }
 
+        Vertex intersection_point = *ip_opt;
 
-// 
-// 
-//         // distance from face midpoint to the cell centroid
-//         double dist = Math::dist(cell_centroid, cell_nbr_centroid);
-// 
-//         /* The weight for the computational molecule is
-//          * \gamma f_{area} / dist(N - P).
-//          */
-//         double weight = cface->area() / dist;
-// 
-// 
-//         // compute face mid point
-//         Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
-// 
-//         // distance from face midpoint to the cell centroid
-//         
-//         
-//         
-//         double dist = Math::dist(ccell->centroid(), midpoint);
-        return -1.0;
+        // compute face mid point
+        Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
+
+        // compute distance of intersection point from face midpoint
+        double dst = Math::dist(midpoint, intersection_point);
+
+        // distance face vertex - face midpoint
+        double ref_dst = Math::dist(cface->startNode().geometricEntity()->location(), midpoint);
+
+        double rel_dst = dst / ref_dst;
+
+        std::cout << "Skewness cells " << c1->geometricEntity()->meshId() << ", " << c2->geometricEntity()->meshId()
+            << " and face " << cface->geometricEntity()->meshId() << ": " << rel_dst << std::endl;
+
+        return rel_dst;
     }
 
     bool
@@ -229,6 +239,10 @@ namespace {
         flux_molecule.add(*cvar, -weight);
         flux_molecule.add(*cvar_nbr, weight);
 
+
+        // compute the cell skewness
+        cell_skewness(ccell, cell_nbr, cface);
+
         return true;
     }
 
@@ -260,7 +274,6 @@ namespace {
     }
 
 }
-
 
 
 void

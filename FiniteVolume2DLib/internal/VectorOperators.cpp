@@ -12,7 +12,7 @@
 
 Vector
 operator-(Vertex const & lhs, Vertex const & rhs) {
-    return Vector(rhs.x() - lhs.x(), rhs.y() - lhs.y());
+    return Vector(lhs.x() - rhs.x(), lhs.y() - rhs.y());
 }
 
 Vertex

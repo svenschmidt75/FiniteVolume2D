@@ -17,6 +17,7 @@
 class Vertex;
 class LineSegment;
 class Ray;
+class Line;
 
 
 // disable "warning C4480: nonstandard extension used: specifying underlying type for enum 'GeometricHelper::IntersectionType'"
@@ -36,6 +37,7 @@ public:
 public:
     static boost::optional<Vertex> intersect(LineSegment const & ls1, LineSegment const & ls2);
     static boost::optional<Vertex> intersect(LineSegment const & ls, Ray const & ray);
+    static boost::optional<Vertex> intersect(LineSegment const & ls, Line const & line);
 };
 
 #pragma warning(default:4480)

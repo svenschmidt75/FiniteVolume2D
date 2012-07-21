@@ -39,6 +39,7 @@
     <ClInclude Include="INode.h" />
     <ClInclude Include="internal\VectorOperators.h" />
     <ClInclude Include="internal\VertexOperators.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="LineSegment.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
@@ -73,6 +74,7 @@
     <ClCompile Include="GeometricHelper.cpp" />
     <ClCompile Include="internal\VectorOperators.cpp" />
     <ClCompile Include="internal\VertexOperators.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="LineSegment.cpp" />
     <ClCompile Include="Math.cpp">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>

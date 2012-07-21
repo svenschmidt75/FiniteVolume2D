@@ -18,6 +18,8 @@
 #include "ComputationalVariableManagerTest.h"
 #include "MeshCheckerTest.h"
 #include "VersteegMalalasekeraTest.h"
+#include "VersteegMalalasekeraMeshDistortedTest.h"
+#include "GeometricHelperTest.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalMeshSolverHelperTest);
@@ -30,6 +32,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalVariableTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ComputationalVariableManagerTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(MeshCheckerTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(VersteegMalalasekeraTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(VersteegMalalasekeraMeshDistortedTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(GeometricHelperTest);
 
 
 int main(int /*argc*/, char ** /*argv*/) {

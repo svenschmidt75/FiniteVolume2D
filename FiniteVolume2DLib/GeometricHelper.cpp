@@ -4,6 +4,7 @@
 #include "LineSegment.h"
 #include "Ray.h"
 #include "ParametrizedLineSegment.h"
+#include "Line.h"
 #include "Math.h"
 
 #include <cassert>
@@ -114,13 +115,18 @@ namespace {
         kross = Math::cross(E, pls1.dir());
         sqrKross = kross * kross;
         if (sqrKross > eps * sqrLen1 * sqrLenE)
-            // segments are different
+            // segments are different (i.e. their lines are not colinear)
             return std::make_tuple(GeometricHelper::EMPTY_PARALLEL, Vertex(), Vertex());
 
         
         // line segments overlap
 
-        // compute the two point marking the overlap region
+        // compute the two points marking the overlap region
+
+        /* Note: Although we formally project E onto pls1.dir, we already
+         * know both are parallel. So we get the ratio here instead.
+         */
+
         double s0 = Math::dot(pls1.dir(), E) / sqrLen1;
         double s1 = s0 + Math::dot(pls1.dir(), pls2.dir()) / sqrLen1;
         double smin = std::min(s0, s1);
@@ -130,10 +136,12 @@ namespace {
         int imax;
         std::tie(imax, u0, u1) = find_intersection_interval(0.0, 1.0, smin, smax);
 
+        // no overlap but parallel
+        if (!imax)
+            return std::make_tuple(GeometricHelper::EMPTY_PARALLEL, Vertex(), Vertex());
+
         Vertex p0;
         Vertex p1;
-
-        assert(imax);
 
         if (imax--) {
             p0 = pls1.get(u0);
@@ -143,7 +151,6 @@ namespace {
         return std::make_tuple(GeometricHelper::OVERLAP, p0, p1);
     }
 
-    
     SegmentIntersection_t
     intersect_line_segment_ray_base(LineSegment const & ls, Ray const & ray) {
         /* Intersect one line segment with a ray.
@@ -169,13 +176,92 @@ namespace {
                 // intersection point is not on segment 1
                 return std::make_tuple(GeometricHelper::EMPTY, Vertex(), Vertex());
 
-            // both segments intersect
+            double t = Math::cross(E, pls.dir()) / kross;
+            if (t < 0)
+                // intersection point is not on ray
+                return std::make_tuple(GeometricHelper::EMPTY, Vertex(), Vertex());
+
+            // both segment and ray intersect
             return std::make_tuple(GeometricHelper::UNIQUE_INTERSECTION, pls.get(s), Vertex());
         }
 
-        // the line segment and the ray are parallel,
-        // hence they overlap
-        return std::make_tuple(GeometricHelper::OVERLAP, pls.p0(), pls.p1());
+        // both segment and ray are parallel
+
+        double sqrLenE = E.norm();
+        kross = Math::cross(E, pls.dir());
+        sqrKross = kross * kross;
+        if (sqrKross > eps * sqrLen1 * sqrLenE)
+            // segment and ray are different (i.e. their lines are not colinear)
+            return std::make_tuple(GeometricHelper::EMPTY_PARALLEL, Vertex(), Vertex());
+
+
+        // line segment and ray overlap
+
+        // compute the two points marking the overlap region
+        double s0 = Math::dot(pls.dir(), E) / sqrLen1;
+        double s1 = s0 + Math::dot(pls.dir(), ray.dir()) / sqrLen1;
+        double smin = std::min(s0, s1);
+        double smax = std::max(s0, s1);
+        double u0;
+        double u1;
+        int imax;
+        std::tie(imax, u0, u1) = find_intersection_interval(0.0, 1.0, smin, smax);
+
+        // no overlap but parallel
+        if (!imax)
+            return std::make_tuple(GeometricHelper::EMPTY_PARALLEL, Vertex(), Vertex());
+
+        Vertex p0;
+        Vertex p1;
+
+        if (imax--) {
+            p0 = pls.get(u0);
+            p1 = imax ? pls.get(u1) : p0;
+        }
+
+        return std::make_tuple(GeometricHelper::OVERLAP, p0, p1);
+    }
+    
+    SegmentIntersection_t
+    intersect_line_segment_ray_base(LineSegment const & ls, Line const & line) {
+        /* Intersect one line segment with a line.
+         * This code is based on p. 244,
+         * Geometric Tools for Computer Graphics,
+         * Philip J. Schneider; David H. Eberly
+         */
+        ParametrizedLineSegment pls(ls);
+
+        Vector E = line.p0() - pls.p0();
+
+        static double eps = 1E-10;
+
+        double kross = Math::cross(pls.dir(), line.dir());
+        double sqrKross = kross * kross;
+        double sqrLen1 = pls.length();
+        double sqrLen2 = line.dir().norm();
+
+        if (sqrKross > eps * sqrLen1 * sqrLen2) {
+            // line segments are not parallel
+            double s = Math::cross(E, line.dir()) / kross;
+            if (s < 0 || s > 1)
+                // intersection point is not on segment 1
+                return std::make_tuple(GeometricHelper::EMPTY, Vertex(), Vertex());
+
+            // both segment and line intersect
+            return std::make_tuple(GeometricHelper::UNIQUE_INTERSECTION, pls.get(s), Vertex());
+        }
+
+        // both segment and line are parallel
+
+        double sqrLenE = E.norm();
+        kross = Math::cross(E, pls.dir());
+        sqrKross = kross * kross;
+        if (sqrKross > eps * sqrLen1 * sqrLenE)
+            // segment and ray are different (i.e. their lines are not colinear)
+            return std::make_tuple(GeometricHelper::EMPTY_PARALLEL, Vertex(), Vertex());
+
+        // line segment and line overlap
+        return std::make_tuple(GeometricHelper::OVERLAP, ls.p0(), ls.p1());
     }
 
 }
@@ -198,6 +284,18 @@ GeometricHelper::intersect(LineSegment const & ls, Ray const & ray) {
     GeometricHelper::IntersectionType type;
 
     std::tie(type, intersection_point) = intersect_line_segment_ray_base(ls, ray);
+
+    if (type == IntersectionType::UNIQUE_INTERSECTION)
+        return boost::optional<Vertex>(intersection_point);
+    return boost::optional<Vertex>();
+}
+
+boost::optional<Vertex>
+GeometricHelper::intersect(LineSegment const & ls, Line const & line) {
+    Vertex intersection_point;
+    GeometricHelper::IntersectionType type;
+
+    std::tie(type, intersection_point) = intersect_line_segment_ray_base(ls, line);
 
     if (type == IntersectionType::UNIQUE_INTERSECTION)
         return boost::optional<Vertex>(intersection_point);

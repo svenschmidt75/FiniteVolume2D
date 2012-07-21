@@ -19,7 +19,7 @@ ParametrizedLineSegment::ParametrizedLineSegment(LineSegment const & in)
     :
     p0_(in.p0()),
     p1_(in.p1()),
-    dir_((in.p1() - in.p0()) / (in.p1() - in.p0()).norm()) {}
+    dir_(in.p1() - in.p0()) {}
 
 Vertex const &
 ParametrizedLineSegment::p0() const {
@@ -39,7 +39,7 @@ ParametrizedLineSegment::dir() const {
 Vertex
 ParametrizedLineSegment::get(double t) const {
     assert(t >= 0 && t <= 1);
-    if (t >= 0 && t <= 1) {
+    if (!(t >= 0 && t <= 1)) {
         boost::format format = boost::format("ParametrizedLineSegment::get: Parameter t out of bounds, %1%!\n") % t;
         Util::error(format.str());
 

@@ -13,6 +13,9 @@
 #include "ParametrizedLineSegment.h"
 
 
+class LineSegment;
+
+
 class DECL_SYMBOLS_2DLIB Ray {
 public:
     explicit Ray(Vertex const & p0, Vertex const & p1);
