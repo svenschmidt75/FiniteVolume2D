@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <exception>
 #include <cassert>
+#include <cmath>
 
 namespace FS = boost::filesystem;
 
@@ -49,7 +50,7 @@ VersteegMalalasekeraMeshDistortedTest::testMeshFileExists() {
 }
 
 namespace {
-  
+
     double
     checkFluxBalance(IComputationalMesh const & cmesh, std::string const & cvar_name) {
         /* Check that the inflow flux is the same as the outflow flux, i.e.
@@ -145,6 +146,68 @@ namespace {
 
         return rel_dst;
     }
+   
+    double
+    cell_aspect_ratio(ComputationalCell::Ptr const & c1, ComputationalCell::Ptr const & c2, ComputationalFace::Ptr const & cface) {
+        /* Compute the distance from the cell centroid of cell c1
+         * to the face mid point. Compare to the distance of both
+         * cell centroids. Ideally, the ratio is 1/2.
+         */
+        if (cface->getEntityType() == IGeometricEntity::BOUNDARY)
+            return 0;
+
+        Vertex c1_centroid = c1->centroid();
+        Vertex c2_centroid = c2->centroid();
+
+        // compute face mid point
+        Vertex midpoint = (cface->startNode().location() + cface->endNode().location()) / 2.0;
+
+        // compute distance of intersection point from face midpoint
+        double dst = Math::dist(c1_centroid, midpoint);
+
+        // distance cell centroids
+        double ref_dst = Math::dist(c1_centroid, c2_centroid);
+
+        double rel_dst = dst / ref_dst;
+
+        std::cout << "Aspect ratio of cell " << c1->geometricEntity()->meshId() << " with cell " << c2->geometricEntity()->meshId()
+            << " and face " << cface->geometricEntity()->meshId() << ": " << rel_dst << std::endl;
+
+        return rel_dst;
+    }
+
+    double
+    normal_deviation(ComputationalCell::Ptr const & c1, ComputationalCell::Ptr const & c2, ComputationalFace::Ptr const & cface) {
+        /* Compute the angle between the line segment
+         * cell centroid c1 and cell centroid c2 with
+         * the face normal.
+         * Ideally, the angle should be zero.
+         */
+        if (cface->getEntityType() == IGeometricEntity::BOUNDARY)
+            return 0;
+
+        Vertex c1_centroid = c1->centroid();
+        Vertex c2_centroid = c2->centroid();
+        Vector cell_centroid_vec = c2_centroid - c1_centroid;
+        double cell_centroid_vec_length = cell_centroid_vec.norm();
+
+        // face normal pointing to cell c2
+        Vector face_normal = cface->normal();
+        double face_normal_length = face_normal.norm();
+
+        double cos_theta = Math::dot(cell_centroid_vec, face_normal) / cell_centroid_vec_length / face_normal_length;
+
+        /* Note: arccos is unique for theta in (0, pi), hence
+         * all is fine as log as the projection of vector 1
+         * onto vector 2 has a positive component.
+         */
+        double theta = std::acos(cos_theta);
+
+        std::cout << "Normal deviation of cell " << c1->geometricEntity()->meshId() << " with cell " << c2->geometricEntity()->meshId()
+            << " and face " << cface->geometricEntity()->meshId() << ": " << theta << std::endl;
+
+        return theta;
+    }
 
     bool
     flux_evaluator(IComputationalGridAccessor const & cgrid, ComputationalCell::Ptr const & ccell, ComputationalFace::Ptr const & cface)
@@ -196,7 +259,9 @@ namespace {
 
                 // get comp. variable to solve for
                 ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
-                flux_molecule.add(*cvar, -cface->area() / dist);
+
+                // insert with opposite sign (convention)
+                flux_molecule.add(*cvar, cface->area() / dist);
             }
             else {
                 // Face b.c. given as von Neumann
@@ -236,12 +301,14 @@ namespace {
         ComputationalVariable::Ptr const & cvar = ccell->getComputationalVariable("Temperature");
         ComputationalVariable::Ptr const & cvar_nbr = cell_nbr->getComputationalVariable("Temperature");
 
-        flux_molecule.add(*cvar, -weight);
-        flux_molecule.add(*cvar_nbr, weight);
-
+        // insert with opposite sign (convention)
+        flux_molecule.add(*cvar,      weight);
+        flux_molecule.add(*cvar_nbr, -weight);
 
         // compute the cell skewness
         cell_skewness(ccell, cell_nbr, cface);
+        cell_aspect_ratio(ccell, cell_nbr, cface);
+        normal_deviation(ccell, cell_nbr, cface);
 
         return true;
     }
@@ -268,13 +335,12 @@ namespace {
 
         // account for r.h.s.
         SourceTerm & st = cmolecule.getSourceTerm();
-        st  += -2.0;
+        st  += 0.0;
 
         return true;
     }
 
 }
-
 
 void
 VersteegMalalasekeraMeshDistortedTest::checkFluxBalanceTest() {

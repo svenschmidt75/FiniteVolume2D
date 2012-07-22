@@ -188,7 +188,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
         std::for_each(nodes.begin(), nodes.end(), [&](Node::Ptr const & node) {
             ComputationalNode::Ptr const & cnode = mapper.getComputationalNode(node);
-            assert(cnode != std::nullptr_t());
+            assert(cnode != nullptr);
             cnodes.insert(cnode);
         });
 
@@ -214,7 +214,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
         std::for_each(nodes.begin(), nodes.end(), [&](Node::Ptr const & node) {
             ComputationalNode::Ptr const & cnode = mapper.getComputationalNode(node);
-            assert(cnode != std::nullptr_t());
+            assert(cnode != nullptr);
             cnodes.insert(cnode);
         });
 
@@ -249,7 +249,7 @@ ComputationalMeshBuilder::insertComputationalEntities(ComputationalMesh::Ptr & c
 
         std::for_each(faces.begin(), faces.end(), [&](Face::Ptr const & face) {
             ComputationalFace::Ptr const & cface = mapper.getComputationalFace(face);
-            assert(cface != std::nullptr_t());
+            assert(cface != nullptr);
             cfaces.insert(cface);
         });
 
