@@ -100,3 +100,22 @@ void
 ComputationalFace::addComputationalMolecule(std::string const & name) {
     cm_[name] = FluxComputationalMolecule(name);
 }
+
+void
+ComputationalFace::addUserDefValue(std::string const & id, boost::any const & value) {
+    user_def_var_[id] = value;
+}
+
+boost::any const &
+ComputationalFace::getUserDefValue(std::string const & id) {
+    auto it = user_def_var_.find(id);
+    if (it == user_def_var_.end()) {
+        boost::format format = boost::format("ComputationalFace::getUserDefValue: No user-defined variable with name %1% found \
+                                             in computational face %2%!\n") % id % meshId();
+        Util::error(format.str());
+
+        // have to throw because we only return by reference
+        throw std::exception(format.str().c_str());
+    }
+    return it->second;
+}

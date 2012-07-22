@@ -1,6 +1,9 @@
 # Mesh from Fig. 11.25, p. 330, of "Computational Fluid Dynamics"
 # of H K Versteeg and W Malalasekera
 
+# NOTE: Vertex B and F were changed compared to
+#       Versteeg_Malalasekera_11_25.mesh
+
 # Vertex data
 # Vertex
 # 1. vertex index
@@ -12,7 +15,7 @@ vertices
 0 1 -1 -2
 
 #B
-1 1 -0.5 -1
+1 1 -0.5 -0.5
 
 #C
 2 1 -1.5 -1
@@ -24,7 +27,7 @@ vertices
 4 1 0.5 -1
 
 #F
-5 1 1 -2
+5 1 1.25 -2
 
 #G
 6 1 1.5 -1

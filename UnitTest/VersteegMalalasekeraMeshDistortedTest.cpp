@@ -14,6 +14,7 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
+#include <boost/any.hpp>
 
 #include <algorithm>
 #include <exception>
@@ -144,6 +145,9 @@ namespace {
         std::cout << "Skewness cells " << c1->geometricEntity()->meshId() << ", " << c2->geometricEntity()->meshId()
             << " and face " << cface->geometricEntity()->meshId() << ": " << rel_dst << std::endl;
 
+        // insert value into face for later use
+        cface->addUserDefValue("CellSkewness", std::make_pair(c1->geometricEntity()->meshId(), rel_dst));
+
         return rel_dst;
     }
    
@@ -173,6 +177,9 @@ namespace {
         std::cout << "Aspect ratio of cell " << c1->geometricEntity()->meshId() << " with cell " << c2->geometricEntity()->meshId()
             << " and face " << cface->geometricEntity()->meshId() << ": " << rel_dst << std::endl;
 
+        // insert value into face for later use
+        cface->addUserDefValue("CellAspectRatio", std::make_pair(c1->geometricEntity()->meshId(), rel_dst));
+
         return rel_dst;
     }
 
@@ -200,11 +207,20 @@ namespace {
         /* Note: arccos is unique for theta in (0, pi), hence
          * all is fine as log as the projection of vector 1
          * onto vector 2 has a positive component.
+         * 
+         * Note that if the line segment connecting both cell centroids
+         * is NOT aligned with the coordinate axes, we will get a deviation
+         * from the face normal direction. This is typical for unstructured
+         * meshes, where this kind of numerical issues arise.
          */
         double theta = std::acos(cos_theta);
 
         std::cout << "Normal deviation of cell " << c1->geometricEntity()->meshId() << " with cell " << c2->geometricEntity()->meshId()
             << " and face " << cface->geometricEntity()->meshId() << ": " << theta << std::endl;
+
+
+        // insert value into face for later use
+        cface->addUserDefValue("NormalDeviation", std::make_pair(c1->geometricEntity()->meshId(), theta));
 
         return theta;
     }
@@ -340,6 +356,287 @@ namespace {
         return true;
     }
 
+}
+
+
+void
+VersteegMalalasekeraMeshDistortedTest::cellSkewnessTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::CPtr cmesh(builder.build());
+
+
+    ComputationalMeshSolverHelper helper(*cmesh);
+    CPPUNIT_ASSERT_MESSAGE("Could not solve for computational mesh", helper.solve());
+
+
+
+    auto internal_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
+
+
+
+    /*
+     * Check the cell skewness of internal face 11.
+     * Should be unchanged compared to the undistorted mesh.
+     */
+    auto it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 11ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 11 not found", it != internal_face_thread.end());
+    ComputationalFace::Ptr cface = *it;
+
+    // get user-defined variable CellSkewness
+    boost::any cell_skewness_any = cface->getUserDefValue("CellSkewness");
+
+    IGeometricEntity::Id_t cell_id;
+    double cs;
+
+    std::tie(cell_id, cs) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(cell_skewness_any);
+
+    // the cell skewness should be 0
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected cell aspect ratio", 0.0, cs, 1E-10);
+
+
+
+    /*
+     * Check the cell skewness of internal face 8.
+     * Compared to the undistorted mesh, the skewness
+     * has changed due to the change of vertex F.
+     */
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 8ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 8 not found", it != internal_face_thread.end());
+    cface = *it;
+
+    // get user-defined variable CellSkewness
+    cell_skewness_any = cface->getUserDefValue("CellSkewness");
+
+    std::tie(cell_id, cs) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(cell_skewness_any);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected normal deviation", 0.037037037037037202, cs, 1E-10);
+
+
+
+
+    /*
+     * Check the cell skewness of internal face 4.
+     * Compared to the undistorted mesh, the skewness
+     * has changed due to the change of vertex B.
+     */
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 4ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 4 not found", it != internal_face_thread.end());
+    cface = *it;
+
+    // get user-defined variable CellSkewness
+    cell_skewness_any = cface->getUserDefValue("CellSkewness");
+
+    std::tie(cell_id, cs) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(cell_skewness_any);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected normal deviation", 0.090909090909091092, cs, 1E-10);
+
+
+
+
+    /*
+     * Check the cell skewness of internal face 1.
+     * Although vertex B was changes, the line segment
+     * connecting cells 1 and 8 is coordinate aligned
+     * ans still goes through the face midpoint, hence
+     * no change compared to the undistorted mesh.
+     */
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 1ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 1 not found", it != internal_face_thread.end());
+    cface = *it;
+
+    // get user-defined variable CellSkewness
+    cell_skewness_any = cface->getUserDefValue("CellSkewness");
+
+    std::tie(cell_id, cs) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(cell_skewness_any);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected normal deviation", 0.0, cs, 1E-10);
+}
+
+void
+VersteegMalalasekeraMeshDistortedTest::cellAspectRatioTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::CPtr cmesh(builder.build());
+
+
+    ComputationalMeshSolverHelper helper(*cmesh);
+    CPPUNIT_ASSERT_MESSAGE("Could not solve for computational mesh", helper.solve());
+
+
+
+    auto internal_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
+
+
+
+    /*
+     * Check the cell aspect ratio of internal face 4.
+     * Because the mesh vertex B has been moved up,
+     * the distance from the cell centroid to the face
+     * midpoint is slightly larger compared to the
+     * undistorted mesh (0.5).
+     */
+    auto it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 4ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 4 not found", it != internal_face_thread.end());
+    ComputationalFace::Ptr cface = *it;
+
+    // get user-defined variable CellAspectRatio
+    boost::any cell_aspect_ratio_any = cface->getUserDefValue("CellAspectRatio");
+
+    IGeometricEntity::Id_t cell_id;
+    double car;
+
+    std::tie(cell_id, car) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(cell_aspect_ratio_any);
+
+    // The cell aspect ratio should be 0.5. This means the line segment
+    // connecting both cell centroids intersects the face half way.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected cell aspect ratio", 0.58834840541455224, car, 1E-10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell", 1ull, cell_id);
+
+
+
+    /*
+     * Check the cell aspect ratio of internal face 10.
+     * Although neither face vertex was altered, the mesh vertex F was
+     * changed which has an effect on cell centroid 4, hence the slight
+     * deviation from 0.5.
+     */
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 10ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 10 not found", it != internal_face_thread.end());
+    cface = *it;
+
+    // get user-defined variable CellAspectRatio
+    cell_aspect_ratio_any = cface->getUserDefValue("CellAspectRatio");
+
+    std::tie(cell_id, car) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(cell_aspect_ratio_any);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected normal deviation", 0.51140831195675873, car, 1E-10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell", 4ull, cell_id);
+}
+
+void
+VersteegMalalasekeraMeshDistortedTest::normalDeviationTest() {
+    ComputationalMeshBuilder builder(mesh_, bc_);
+
+    // Temperature as cell-centered variable, will be solved for
+    builder.addComputationalVariable("Temperature", flux_evaluator);
+    builder.addEvaluateCellMolecules(cell_evaluator);
+    ComputationalMesh::CPtr cmesh(builder.build());
+
+
+    ComputationalMeshSolverHelper helper(*cmesh);
+    CPPUNIT_ASSERT_MESSAGE("Could not solve for computational mesh", helper.solve());
+
+
+
+    auto internal_face_thread = cmesh->getFaceThread(IGeometricEntity::Entity_t::INTERIOR);
+
+
+
+    /*
+     * Check the normal deviation of internal face 0.
+     * Vertex B was moved up, hence the face normal
+     * of face 0 is quite a deviation from the
+     * line segment connecting cell centroids 1 and 2.
+     */
+    auto it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 0ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 0 not found", it != internal_face_thread.end());
+    ComputationalFace::Ptr cface = *it;
+
+    // get user-defined variable NormalDeviation
+    boost::any normal_deviation_any = cface->getUserDefValue("NormalDeviation");
+
+    IGeometricEntity::Id_t cell_id;
+    double nd;
+
+    std::tie(cell_id, nd) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(normal_deviation_any);
+
+    // the line (cell centroid cell_id, face midpoint) is not aligned with
+    // the coordinate axis, hence the normal deviation > 0.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected normal deviation", 0.26625204915092515, nd, 1E-10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell", 0ull, cell_id);
+
+
+
+    /*
+     * Check the normal deviation of internal face 1.
+     * Vertex B was moved up, hence the face normal
+     * of face 1 is quite a deviation from the
+     * line segment connecting cell centroids 1 and 8.
+     */
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 1ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 1 not found", it != internal_face_thread.end());
+    cface = *it;
+
+    // get user-defined variable NormalDeviation
+    normal_deviation_any = cface->getUserDefValue("NormalDeviation");
+
+    std::tie(cell_id, nd) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(normal_deviation_any);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected normal deviation", 0.46364760900080615, nd, 1E-10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell", 0ull, cell_id);
+
+
+
+    /*
+     * Check the normal deviation of internal face 8.
+     * Vertex F was moved to the right, hence the face normal
+     * of face 8 is quite a deviation from the
+     * line segment connecting cell centroids 4 and 5.
+     */
+    it = std::find_if(internal_face_thread.begin(), internal_face_thread.end(), [](ComputationalFace::Ptr const & cface) -> bool {
+        Face::Ptr const & face = cface->geometricEntity();
+        return face->meshId() == 8ull;
+    });
+
+    CPPUNIT_ASSERT_MESSAGE("Face 8 not found", it != internal_face_thread.end());
+    cface = *it;
+
+    // get user-defined variable NormalDeviation
+    normal_deviation_any = cface->getUserDefValue("NormalDeviation");
+
+    std::tie(cell_id, nd) = boost::any_cast<std::pair<IGeometricEntity::Id_t, double>>(normal_deviation_any);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected normal deviation", 0.055498505245717616, nd, 1E-10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell", 3ull, cell_id);
 }
 
 void

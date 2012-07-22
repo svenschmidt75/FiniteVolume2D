@@ -16,7 +16,11 @@
 #include "BoundaryCondition.h"
 #include "FluxComputationalMolecule.h"
 
+#include <boost/any.hpp>
+
 #include <memory>
+#include <map>
+#include <string>
 
 
 class FluxComputationalMolecule;
@@ -60,6 +64,9 @@ public:
     FluxComputationalMolecule &    getComputationalMolecule(std::string const & name);
     void                           addComputationalMolecule(std::string const & name);
 
+    void                           addUserDefValue(std::string const & id, boost::any const & value);
+    boost::any const &             getUserDefValue(std::string const & id);
+
 private:
     typedef std::map<std::string, FluxComputationalMolecule> FluxComputationalMoleculeManager_t;
 
@@ -73,6 +80,15 @@ private:
      * but does not have to.
      */
     FluxComputationalMoleculeManager_t  cm_;
+
+    /* Storage for user-defined variables using
+     * type-erasure.
+     * 
+     * This allows to compute the cell/face quality
+     * measures during flux evaluation and store them
+     * for later use (in a UnitTest for example.
+     */
+    std::map<std::string, boost::any>  user_def_var_;
 
     // boundary conditions, in case this is a boundary face
     BoundaryCondition::Ptr             bc_;
