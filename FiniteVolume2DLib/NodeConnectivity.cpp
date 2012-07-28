@@ -10,7 +10,7 @@ NodeConnectivity::insert(Face::Ptr const & face) {
     EntityCollection<Node> const & nodes = face->getNodes();
 
     for (size_type i = 0; i < nodes.size(); ++i) {
-        int next = (i + 1) % nodes.size();
+        size_type next = (i + 1) % nodes.size();
 
         Node::Ptr const & v0 = nodes.getEntity(i);
         Node::Ptr const & v1 = nodes.getEntity(next);

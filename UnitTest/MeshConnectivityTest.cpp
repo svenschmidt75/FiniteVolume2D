@@ -32,25 +32,25 @@ MeshConnectivityTest::testMeshFileExists() {
 void
 MeshConnectivityTest::testNumberOfVerices() {
     Thread<Node> const & bvertex_thread = mesh_->getNodeThread(IGeometricEntity::BOUNDARY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary vertices", 8u, bvertex_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary vertices", 8ull, bvertex_thread.size());
 
     Thread<Node> const & ivertex_thread = mesh_->getNodeThread(IGeometricEntity::INTERIOR);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal vertices", 1u, ivertex_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal vertices", 1ull, ivertex_thread.size());
 }
 
 void
 MeshConnectivityTest::testNumberOfFaces() {
     Thread<Face> const & bface_thread = mesh_->getFaceThread(IGeometricEntity::BOUNDARY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary faces", 8u, bface_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary faces", 8ull, bface_thread.size());
 
     Thread<Face> const & iface_thread = mesh_->getFaceThread(IGeometricEntity::INTERIOR);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal faces", 8u, iface_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of internal faces", 8ull, iface_thread.size());
 }
 
 void
 MeshConnectivityTest::testNumberOfCells() {
     Thread<Cell> const & cell_thread = mesh_->getCellThread();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8ull, cell_thread.size());
 }
 
 void
@@ -68,7 +68,7 @@ MeshConnectivityTest::testBoundaryVertexNeighbors() {
 
     EntityCollection<Node> const & vertex_nbr = *vertex_nbr_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 3u, vertex_nbr.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 3ull, vertex_nbr.size());
 
     // vertices 8, 5, 7
     CPPUNIT_ASSERT_MESSAGE("Vertex 5 expected", vertex_nbr.find(5));
@@ -91,7 +91,7 @@ MeshConnectivityTest::testInternalVertexNeighbors() {
 
     EntityCollection<Node> const & vertex_nbr = *vertex_nbr_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8u, vertex_nbr.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8ull, vertex_nbr.size());
 
     // all other vertices
     CPPUNIT_ASSERT_MESSAGE("Vertex 0 expected", vertex_nbr.find(0));
@@ -119,7 +119,7 @@ MeshConnectivityTest::testInternalVertexFaceNeighbors() {
 
     EntityCollection<Face> const & face_nbrs = *face_nbrs_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8u, face_nbrs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8ull, face_nbrs.size());
 
     // all faces attached to vertex 8
     CPPUNIT_ASSERT_MESSAGE("Face 0 expected", face_nbrs.find(0));
@@ -147,7 +147,7 @@ MeshConnectivityTest::testBoundaryVertexFaceNeighbors() {
 
     EntityCollection<Face> const & face_nbrs = *face_nbrs_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 3u, face_nbrs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 3ull, face_nbrs.size());
 
     // all faces attached to vertex 7
     CPPUNIT_ASSERT_MESSAGE("Face 10 expected", face_nbrs.find(10));
@@ -170,7 +170,7 @@ MeshConnectivityTest::testInternalVertexCellNeighbors() {
 
     EntityCollection<Cell> const & cell_nbrs = *cell_nbrs_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8u, cell_nbrs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 8ull, cell_nbrs.size());
 
     // all cells attached to vertex 8
     CPPUNIT_ASSERT_MESSAGE("Cell 0 expected", cell_nbrs.find(0));
@@ -199,7 +199,7 @@ MeshConnectivityTest::testBoundaryVertexCellNeighbors() {
 
     EntityCollection<Cell> const & cell_nbrs = *cell_nbrs_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 2u, cell_nbrs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertex neighbor size error", 2ull, cell_nbrs.size());
 
     // all cells attached to vertex 3
     CPPUNIT_ASSERT_MESSAGE("Cell 2 expected", cell_nbrs.find(2));
@@ -221,7 +221,7 @@ MeshConnectivityTest::testInteriorFaceGetAttachedCells() {
 
     EntityCollection<Cell> const & cells = *cells_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell neighbor size error", 2u, cells.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell neighbor size error", 2ull, cells.size());
 
     // all cells attached to face 2
     CPPUNIT_ASSERT_MESSAGE("Cell 3 expected", cells.find(3));
@@ -243,7 +243,7 @@ MeshConnectivityTest::testBoundaryFaceGetAttachedCells() {
 
     EntityCollection<Cell> const & cells = *cells_opt;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell neighbor size error", 1u, cells.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell neighbor size error", 1ull, cells.size());
 
     // cell attached to face 9
     CPPUNIT_ASSERT_MESSAGE("Cell 5 expected", cells.find(5));

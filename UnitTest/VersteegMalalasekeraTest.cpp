@@ -200,7 +200,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
 
     // check flux computation across boundary face
     FluxComputationalMolecule fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ComputationalCell::Ptr ccell = fm.getCell();
@@ -229,7 +229,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected no boundary conditions for internal face", BoundaryCondition::Ptr(), bc);
 
     fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ccell = fm.getCell();
@@ -268,7 +268,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell1Test() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected no boundary conditions for internal face", BoundaryCondition::Ptr(), bc);
 
     fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ccell = fm.getCell();
@@ -326,7 +326,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
     // since this boundary face has von Neumann b.c., the face flux is directly
     // given and hence only contributes to the source term
     FluxComputationalMolecule fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("No contribution expected to boundary face flux", 0u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No contribution expected to boundary face flux", 0ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ComputationalCell::Ptr ccell = fm.getCell();
@@ -351,7 +351,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected no boundary conditions for internal face", BoundaryCondition::Ptr(), bc);
 
     fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ccell = fm.getCell();
@@ -390,7 +390,7 @@ VersteegMalalasekeraTest::evaluateFluxesCell3Test() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected no boundary conditions for internal face", BoundaryCondition::Ptr(), bc);
 
     fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ccell = fm.getCell();
@@ -453,7 +453,7 @@ VersteegMalalasekeraTest::evaluateCell5ComputationalMoleculeTest() {
     CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell.get() != nullptr);
 
     ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3u, comp_molecule.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3ull, comp_molecule.size());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term", 1858.5210188381266, comp_molecule.getSourceTerm().value(), 1E-10);
 
@@ -523,7 +523,7 @@ VersteegMalalasekeraTest::evaluateCell2ComputationalMoleculeTest() {
     CPPUNIT_ASSERT_MESSAGE("Cell 2 not found", ccell.get() != nullptr);
 
     ComputationalMolecule comp_molecule = ccell->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 2", 3u, comp_molecule.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 2", 3ull, comp_molecule.size());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong source term", -2.0, comp_molecule.getSourceTerm().value(), 1E-10);
     
@@ -589,14 +589,14 @@ VersteegMalalasekeraTest::compMoleculeCell1AndCell5SimilarTest() {
     CPPUNIT_ASSERT_MESSAGE("Cell 1 not found", ccell_1.get() != nullptr);
 
     ComputationalMolecule comp_molecule_1 = ccell_1->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 1", 3u, comp_molecule_1.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 1", 3ull, comp_molecule_1.size());
 
 
     ComputationalCell::Ptr ccell_5 = getComputationalCell(cell_thread, 4ull);
     CPPUNIT_ASSERT_MESSAGE("Cell 5 not found", ccell_5.get() != nullptr);
 
     ComputationalMolecule comp_molecule_5 = ccell_5->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3u, comp_molecule_5.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3ull, comp_molecule_5.size());
 
 
     /* contribution of cell 2 to cell 1 == contribution of cell 4 to cell 5 */
@@ -678,14 +678,14 @@ VersteegMalalasekeraTest::compMoleculeCell6AndCell8SimilarTest() {
     CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell_6.get() != nullptr);
 
     ComputationalMolecule comp_molecule_6 = ccell_6->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 6", 3u, comp_molecule_6.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 6", 3ull, comp_molecule_6.size());
 
 
     ComputationalCell::Ptr ccell_8 = getComputationalCell(cell_thread, 7ull);
     CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell_8.get() != nullptr);
 
     ComputationalMolecule comp_molecule_8 = ccell_8->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3u, comp_molecule_8.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 5", 3ull, comp_molecule_8.size());
 
 
     /* contribution of cell 9 to cell 8 == contribution of cell 7 to cell 6 */
@@ -767,14 +767,14 @@ VersteegMalalasekeraTest::compMoleculeCell7AndCell9SimilarTest() {
     CPPUNIT_ASSERT_MESSAGE("Cell 7 not found", ccell_7.get() != nullptr);
 
     ComputationalMolecule comp_molecule_7 = ccell_7->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 7", 3u, comp_molecule_7.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 7", 3ull, comp_molecule_7.size());
 
 
     ComputationalCell::Ptr ccell_9 = getComputationalCell(cell_thread, 8ull);
     CPPUNIT_ASSERT_MESSAGE("Cell 9 not found", ccell_9.get() != nullptr);
 
     ComputationalMolecule comp_molecule_9 = ccell_9->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 9", 3u, comp_molecule_9.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 9", 3ull, comp_molecule_9.size());
 
     /* contribution of cell 9' to cell 9 == contribution of cell 7' to cell 7 */
     ComputationalCell::Ptr ccell = getComputationalCell(cell_thread, 17ull);
@@ -860,14 +860,14 @@ VersteegMalalasekeraTest::variousRelationsTest() {
         CPPUNIT_ASSERT_MESSAGE("Cell 6 not found", ccell_6.get() != nullptr);
 
         ComputationalMolecule comp_molecule_6 = ccell_6->getComputationalMolecule("Temperature");
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 6", 3u, comp_molecule_6.size());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 6", 3ull, comp_molecule_6.size());
 
 
         ComputationalCell::Ptr ccell_8 = getComputationalCell(cell_thread, 7ull);
         CPPUNIT_ASSERT_MESSAGE("Cell 8 not found", ccell_8.get() != nullptr);
 
         ComputationalMolecule comp_molecule_8 = ccell_8->getComputationalMolecule("Temperature");
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 8", 3u, comp_molecule_8.size());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 8", 3ull, comp_molecule_8.size());
 
 
         /* contribution of cell 6 on itself */
@@ -918,14 +918,14 @@ VersteegMalalasekeraTest::variousRelationsTest() {
         CPPUNIT_ASSERT_MESSAGE("Cell 2 not found", ccell_2.get() != nullptr);
 
         ComputationalMolecule comp_molecule_2 = ccell_2->getComputationalMolecule("Temperature");
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 2", 3u, comp_molecule_2.size());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 2", 3ull, comp_molecule_2.size());
 
 
         ComputationalCell::Ptr ccell_4 = getComputationalCell(cell_thread, 3ull);
         CPPUNIT_ASSERT_MESSAGE("Cell 4 not found", ccell_4.get() != nullptr);
 
         ComputationalMolecule comp_molecule_4 = ccell_4->getComputationalMolecule("Temperature");
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 4", 3u, comp_molecule_4.size());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 3 items in comp. molecule of cell 4", 3ull, comp_molecule_4.size());
 
 
 

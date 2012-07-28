@@ -142,5 +142,5 @@ ComputationalVariableManagerTest::iteratorTest() {
         cnt++;
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of elements", cvar_mgr.size(), cnt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of elements", var_map.size(), 3u);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of elements", var_map.size(), 3ull);
 }

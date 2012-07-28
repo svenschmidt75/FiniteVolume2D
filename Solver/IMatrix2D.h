@@ -9,6 +9,8 @@
 
 #include <vector>
 
+#include <boost/cstdint.hpp>
+
 
 class IMatrix2D {
 public:
@@ -19,11 +21,11 @@ public:
     ~IMatrix2D() {}
 
     // Public matrix interface
-    virtual int            getRows() const                     = 0;
-    virtual int            getCols() const                     = 0;
-    virtual double         operator()(unsigned int row, unsigned int col) const  = 0;
-    virtual double &       operator()(unsigned int row, unsigned int col)        = 0;
-    virtual void           solve(Vec const & b, Vec & x) const = 0;
+    virtual boost::uint64_t getRows() const                     = 0;
+    virtual boost::uint64_t getCols() const                     = 0;
+    virtual double          operator()(boost::uint64_t row, boost::uint64_t col) const  = 0;
+    virtual double &        operator()(boost::uint64_t row, boost::uint64_t col)        = 0;
+    virtual void            solve(Vec const & b, Vec & x) const = 0;
 
-    virtual void           print() const = 0;
+    virtual void            print() const = 0;
 };

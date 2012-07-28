@@ -17,6 +17,8 @@
 #include <map>
 #include <vector>
 
+#include <boost/cstdint.hpp>
+
 
 #pragma warning(disable:4251)
 #pragma warning(disable:4275)
@@ -27,33 +29,33 @@ class DECL_SYMBOLS CSparseMatrixImpl : public IMatrix2D {
     friend struct LinearSolver;
 
 public:
-    CSparseMatrixImpl(int ncols);
+    CSparseMatrixImpl(boost::uint64_t ncols);
 
     // FROM IMatrix2D
-    int            getRows() const;
-    int            getCols() const;
-    double         operator()(unsigned int row, unsigned int col) const;
-    double &       operator()(unsigned int row, unsigned int col);
-    void           solve(Vec const & b, Vec & x) const;
+    boost::uint64_t getRows() const;
+    boost::uint64_t getCols() const;
+    double          operator()(boost::uint64_t row, boost::uint64_t col) const;
+    double &        operator()(boost::uint64_t row, boost::uint64_t col);
+    void            solve(Vec const & b, Vec & x) const;
 
     // Local methods
     void finalize() const;
     void print() const;
 
 private:
-    typedef std::map<int, double> Col_t;
-    typedef std::map<int, Col_t> Row_t;
+    typedef std::map<boost::uint64_t, double> Col_t;
+    typedef std::map<boost::uint64_t, Col_t> Row_t;
 
 private:
     // Number of columns
-    unsigned int  ncols_;
+    boost::uint64_t ncols_;
 
     // row-major format
-    mutable Row_t data_;
+    mutable Row_t   data_;
 
     // Check whether the matrix has already been converted to the
     // compresses row storage format
-    mutable bool  finalized_;
+    mutable bool    finalized_;
 
     /* Compressed row storage format
      * 
@@ -64,9 +66,9 @@ private:
      * The number of rows can be determined from nelements_: 
      * nelements_.size() == #rows + 1
      */
-    mutable std::vector<double> elements_;
-    mutable std::vector<int>    columns_;
-    mutable std::vector<int>    nelements_;
+    mutable std::vector<double>          elements_;
+    mutable std::vector<boost::uint64_t> columns_;
+    mutable std::vector<boost::uint64_t> nelements_;
 };
 
 #pragma warning(default:4275)

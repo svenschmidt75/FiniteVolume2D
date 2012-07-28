@@ -95,7 +95,7 @@ ComputationalMesh::getCellIndex(ComputationalCell::Ptr const & ccell) const {
 }
 
 bool
-ComputationalMesh::setSolution(unsigned int cell_index, unsigned int cvar_index, double value) const {
+ComputationalMesh::setSolution(boost::uint64_t cell_index, boost::uint64_t cvar_index, double value) const {
     /* Insert a solution of the linear system into the ComputationalCell
      * for the ComputationaVariable cvar_index.
      */

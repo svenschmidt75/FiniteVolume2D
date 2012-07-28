@@ -38,15 +38,15 @@ ComputationalMeshSolverHelper::insertSolutionIntoCMesh(LinearSolver::RHS_t const
     auto it = x.begin();
     auto it_end = x.end();
     for (; it != it_end; ++it) {
-        unsigned int pos = std::distance(x.begin(), it);
+        boost::int64_t pos = std::distance(x.begin(), it);
 
         // corresponding ComputationalCell index
-        unsigned int cell_index = pos / nvars;
+        boost::uint64_t cell_index = pos / nvars;
 
         // corresponding ComputationalVariable index
         short base_index = short(pos % nvars);
 
-        unsigned int cvar_index = cvar_mapper_.findIndex(cell_index, base_index);
+        boost::uint64_t cvar_index = cvar_mapper_.findIndex(cell_index, base_index);
 
         cmesh_.setSolution(cell_index, cvar_index, *it);
     }
@@ -74,7 +74,7 @@ ComputationalMeshSolverHelper::solve() {
 }
 
 void
-ComputationalMeshSolverHelper::fillRow(unsigned int row, ComputationalMolecule const & cm, CSparseMatrixImpl & A, ComputationalVariableManager const & cvar_manager) {
+ComputationalMeshSolverHelper::fillRow(boost::uint64_t row, ComputationalMolecule const & cm, CSparseMatrixImpl & A, ComputationalVariableManager const & cvar_manager) {
     ComputationalMolecule::Iterator_t cm_it  = cm.begin();
     ComputationalMolecule::Iterator_t cm_end = cm.end();
 
@@ -90,12 +90,12 @@ ComputationalMeshSolverHelper::fillRow(unsigned int row, ComputationalMolecule c
 
 
         ComputationalCell::Ptr const & c = cvar->getCell();
-        unsigned int cell_index = cmesh_.getCellIndex(c);
+        boost::uint64_t cell_index = cmesh_.getCellIndex(c);
 
         cvar_mapper_.insert(cell_index, base_index, unsigned int(cvar_index));
 
 
-        unsigned int col = cell_index + base_index;
+        boost::uint64_t col = cell_index + base_index;
         A(row, col) = weight;
     }
 }
@@ -115,7 +115,7 @@ ComputationalMeshSolverHelper::setupMatrix() {
     ComputationalVariableManager const & cvar_manager = cmesh_.getComputationalVariableManager();
     ComputationalVariableManager::size_type nvars = cvar_manager.size();
 
-    unsigned int ncols = ncells * nvars;
+    boost::uint64_t ncols = ncells * nvars;
 
     rhs_.resize(ncols);
 
@@ -129,7 +129,7 @@ ComputationalMeshSolverHelper::setupMatrix() {
     for (Thread<ComputationalCell>::size_type cell_index = 0; cell_index < cell_thread.size(); ++cell_index) {
         ComputationalCell::Ptr const & ccell = cell_thread.getEntityAt(cell_index);
 
-        unsigned int base_row = cell_index;
+        boost::uint64_t base_row = cell_index;
 
 
         ComputationalVariableManager::Iterator_t it     = cvar_manager.begin();
@@ -140,7 +140,7 @@ ComputationalMeshSolverHelper::setupMatrix() {
             short cvar_index = cvar_manager.getBaseIndex(cvar_name);
 
             // row index in linear matrix
-            unsigned int row = base_row + cvar_index;
+            boost::uint64_t row = base_row + cvar_index;
 
 
             // get ComputationalMolecule for cell constituting an (independent) equation

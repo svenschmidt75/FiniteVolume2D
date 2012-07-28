@@ -30,8 +30,8 @@ ASCIIMeshReaderTest::testMeshFileExists() {
 
 void
 ASCIIMeshReaderTest::testNumberOfVertices() {
-    int expect = mock_builder_.nodes_.size();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 6, expect);
+    size_t expect = mock_builder_.nodes_.size();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 6ull, expect);
 }
 
 void
@@ -54,15 +54,15 @@ ASCIIMeshReaderTest::testVertex2() {
 
 void
 ASCIIMeshReaderTest::testNumberOfFaces() {
-    int expect = mock_builder_.faces_.size();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of faces", 4, expect);
+    size_t expect = mock_builder_.faces_.size();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of faces", 4ull, expect);
 }
 
 void
 ASCIIMeshReaderTest::testFace() {
     MockMeshBuilder::FaceStr const & face_str = mock_builder_.faces_[1];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 2u, face_str.node_ids_.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of vertices", 2ull, face_str.node_ids_.size());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected boundary face", IGeometricEntity::BOUNDARY, face_str.entity_type_);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(0), face_str.node_ids_[0]);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong face vertex id", static_cast<IGeometricEntity::Id_t>(2), face_str.node_ids_[1]);
@@ -70,15 +70,15 @@ ASCIIMeshReaderTest::testFace() {
 
 void
 ASCIIMeshReaderTest::testNumberOfCells() {
-    int expect = mock_builder_.cells_.size();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 1, expect);
+    size_t expect = mock_builder_.cells_.size();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 1ull, expect);
 }
 
 void
 ASCIIMeshReaderTest::testCell() {
     auto const & cell_ids = mock_builder_.cells_[0];
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of faces", 4u, cell_ids.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of faces", 4ull, cell_ids.size());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell face id", static_cast<IGeometricEntity::Id_t>(0), cell_ids[0]);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell face id", static_cast<IGeometricEntity::Id_t>(1), cell_ids[1]);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong cell face id", static_cast<IGeometricEntity::Id_t>(2), cell_ids[2]);

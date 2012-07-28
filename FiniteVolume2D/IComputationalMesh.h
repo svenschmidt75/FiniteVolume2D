@@ -13,6 +13,8 @@
 #include "FiniteVolume2DLib/IGeometricEntity.h"
 #include "FiniteVolume2DLib/Thread.hpp"
 
+#include <boost/cstdint.hpp>
+
 
 class ComputationalVariableManager;
 
@@ -25,5 +27,5 @@ public:
     virtual Thread<ComputationalFace> const &    getFaceThread(IGeometricEntity::Entity_t entity_type) const = 0;
     virtual ComputationalVariableManager const & getComputationalVariableManager() const = 0;
     virtual size_t                               getCellIndex(ComputationalCell::Ptr const & ccell) const = 0;
-    virtual bool                                 setSolution(unsigned int cell_index, unsigned int cvar_index, double value) const = 0;
+    virtual bool                                 setSolution(boost::uint64_t cell_index, boost::uint64_t cvar_index, double value) const = 0;
 };

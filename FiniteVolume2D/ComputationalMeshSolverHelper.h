@@ -18,6 +18,8 @@
 #include <memory>
 #include <vector>
 
+#include <boost/cstdint.hpp>
+
 
 class IComputationalMesh;
 class IMatrix2D;
@@ -41,9 +43,9 @@ private:
 
     class ComputationalVariableMapper {
     public:
-        typedef unsigned int CellIndex;
-        typedef unsigned int CVarIndex;
-        typedef short        BaseIndex;
+        typedef boost::uint64_t CellIndex;
+        typedef boost::uint64_t CVarIndex;
+        typedef short           BaseIndex;
 
     public:
         void insert(CellIndex cell_index, BaseIndex base_index, CVarIndex cvar_index) {
@@ -70,7 +72,7 @@ private:
     // setup matrix
     void              setupMatrix();
 
-    void              fillRow(unsigned int row, ComputationalMolecule const & cm, CSparseMatrixImpl & A, ComputationalVariableManager const & cvar_manager);
+    void              fillRow(boost::uint64_t row, ComputationalMolecule const & cm, CSparseMatrixImpl & A, ComputationalVariableManager const & cvar_manager);
 
     void              insertSolutionIntoCMesh(LinearSolver::RHS_t const & x);
 

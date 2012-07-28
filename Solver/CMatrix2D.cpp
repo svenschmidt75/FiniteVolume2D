@@ -6,9 +6,10 @@
 #include <iomanip>
 
 #include <boost/assert.hpp>
+#include <boost/cstdint.hpp>
 
 
-CMatrix2D::CMatrix2D(int rows, int cols) : rows_(rows), cols_(cols) {
+CMatrix2D::CMatrix2D(boost::uint64_t rows, boost::uint64_t cols) : rows_(rows), cols_(cols) {
     // Initialize with 0
     data_.resize(rows_ * cols_, 0);
 }
@@ -23,26 +24,26 @@ CMatrix2D::operator=(CMatrix2D const & in) {
     return *this;
 }
 
-int
+boost::uint64_t
 CMatrix2D::getRows() const {
     return rows_;
 }
 
-int
+boost::uint64_t
 CMatrix2D::getCols() const {
     return cols_;
 }
 
 namespace {
-    int row_major_offset(int row, int col, int const row_size) {
+    boost::uint64_t row_major_offset(boost::uint64_t row, boost::uint64_t col, boost::uint64_t const row_size) {
         return row * row_size + col;
     }
 
 }
 
 double
-CMatrix2D::operator()(unsigned int row, unsigned int col) const {
-    unsigned int index = row * cols_ + col;
+CMatrix2D::operator()(boost::uint64_t row, boost::uint64_t col) const {
+    boost::uint64_t index = row * cols_ + col;
     bool assert_cond = index >= 0 && index < rows_ * cols_;
     BOOST_ASSERT_MSG(assert_cond, "Index range error");
     if (!assert_cond)
@@ -51,8 +52,8 @@ CMatrix2D::operator()(unsigned int row, unsigned int col) const {
 }
 
 double&
-CMatrix2D::operator()(unsigned int row, unsigned int col) {
-    unsigned int index = row * cols_ + col;
+CMatrix2D::operator()(boost::uint64_t row, boost::uint64_t col) {
+    boost::uint64_t index = row * cols_ + col;
     bool assert_cond = index >= 0 && index < rows_ * cols_;
     BOOST_ASSERT_MSG(assert_cond, "Index range error");
     if (!assert_cond)
@@ -89,7 +90,7 @@ CMatrix2D::print() const {
 }
 
 CMatrix2D
-CMatrix2D::identity(int n) {
+CMatrix2D::identity(boost::uint64_t n) {
     CMatrix2D ident(n, n);
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j)

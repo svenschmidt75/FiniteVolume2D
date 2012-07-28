@@ -22,6 +22,7 @@
 #include <memory>
 #include <unordered_map>
 
+#include <boost/cstdint.hpp>
 #include <boost/noncopyable.hpp>
 
 
@@ -59,7 +60,7 @@ public:
 
     size_t                            getCellIndex(ComputationalCell::Ptr const & ccell) const;
 
-    bool                              setSolution(unsigned int cell_index, unsigned int cvar_index, double value) const;
+    bool                              setSolution(boost::uint64_t cell_index, boost::uint64_t cvar_index, double value) const;
 
     void                              solve() const;
 

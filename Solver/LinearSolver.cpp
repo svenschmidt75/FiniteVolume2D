@@ -6,7 +6,7 @@
 
 namespace {
     int findPivotIndex(CMatrix2D const & A, int index, std::vector<int> const & row_row_map) {
-        int max_row = A.getRows();
+        boost::uint64_t max_row = A.getRows();
 
         int pivot_index = -1;
         double pivot_value = std::numeric_limits<double>::min();
@@ -40,8 +40,8 @@ LinearSolver::GaussElim(CMatrix2D const & A, std::vector<double> const & f) {
     // be transformed into the inverse.
     // A x =  Id y is successively transformed into A^{-1} A x = A^{-1} Id f,
     // where ACopy = Id and A^{-1} = AInv.
-    int max_col = A.getCols();
-    int max_row = A.getRows();
+    boost::uint64_t max_col = A.getCols();
+    boost::uint64_t max_row = A.getRows();
     bool success = false;
     CMatrix2D ACopy(A);
     CMatrix2D AInv(CMatrix2D::identity(max_col));
@@ -150,7 +150,7 @@ LinearSolver::SOR(CMatrix2D const & A, IMatrix2D::Vec const & f, double omega) {
     bool check_diagonally_dominant = true;
 
     // Rows/cols
-    int dim = A.getCols();
+    boost::uint64_t dim = A.getCols();
 
     // check if the system is diagonally dominant
     if (check_diagonally_dominant) {
@@ -234,7 +234,8 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
     bool check_diagonally_dominant = false;
 
     // Number of rows
-    int nrows = A.nelements_.size() - 1;
+    typedef decltype(A.nelements_.size()) size_type;
+    size_type nrows = A.nelements_.size() - 1;
 
     // check if the system is diagonally dominant
     if (check_diagonally_dominant) {
@@ -243,8 +244,8 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
             bool has_diagonal_element = false;
 
             // Number of non-zero columns for this row
-            int ncol = A.nelements_[row + 1] - A.nelements_[row];
-            int offset = A.nelements_[row];
+            boost::uint64_t ncol = A.nelements_[row + 1] - A.nelements_[row];
+            boost::uint64_t offset = A.nelements_[row];
 
             double sum = 0;
 
@@ -282,14 +283,14 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
             double a_ii = 0;
 
             // Number of non-zero columns for this row
-            int ncol = A.nelements_[row + 1] - A.nelements_[row];
-            int offset = A.nelements_[row];
+            boost::uint64_t ncol = A.nelements_[row + 1] - A.nelements_[row];
+            boost::uint64_t offset = A.nelements_[row];
 
             double sigma = 0;
 
             // The elements col <= row-1 have already been computed
             for (int icol = 0; icol < ncol; ++icol) {
-                int col = A.columns_[offset + icol];
+                boost::uint64_t col = A.columns_[offset + icol];
                 double a_ij = A.elements_[offset + icol];
 
                 if (row == col) {

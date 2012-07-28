@@ -172,7 +172,7 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
     ComputationalMesh::CPtr const & cmesh = builder.build();
 
     Thread<ComputationalNode> const & interior_node_thread = cmesh->getNodeThread(IGeometricEntity::INTERIOR);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior nodes", 1u, interior_node_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior nodes", 1ull, interior_node_thread.size());
 
     Thread<ComputationalNode>::iterator::difference_type nbad = 0;
 
@@ -185,12 +185,12 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
         }
     });
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined node variables failed", 0, nbad);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined node variables failed", 0ll, nbad);
 
 
 
     Thread<ComputationalNode> const & boundary_node_thread = cmesh->getNodeThread(IGeometricEntity::BOUNDARY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary nodes", 8u, boundary_node_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary nodes", 8ull, boundary_node_thread.size());
 
     nbad = 0;
 
@@ -203,7 +203,7 @@ ComputationalMeshBuilderTest::addUserDefinedNodeVarsTest() {
         }
     });
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined node variables failed", 0, nbad);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined node variables failed", 0ll, nbad);
 }
 
 void
@@ -221,7 +221,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
     ComputationalMesh::CPtr cmesh = builder.build();
 
     Thread<ComputationalFace> const & interior_face_thread = cmesh->getFaceThread(IGeometricEntity::INTERIOR);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior faces", 8u, interior_face_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of interior faces", 8ull, interior_face_thread.size());
 
     Thread<ComputationalFace>::iterator::difference_type nbad = 0;
 
@@ -234,12 +234,12 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
         }
     });
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined face variables failed", 0, nbad);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined face variables failed", 0ll, nbad);
 
 
 
     Thread<ComputationalFace> const & boundary_face_thread = cmesh->getFaceThread(IGeometricEntity::BOUNDARY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary faces", 8u, boundary_face_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of boundary faces", 8ull, boundary_face_thread.size());
 
     nbad = 0;
 
@@ -252,7 +252,7 @@ ComputationalMeshBuilderTest::addUserDefinedFaceVarsTest() {
         }
     });
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined face variables failed", 0, nbad);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined face variables failed", 0ll, nbad);
 }
 
 void
@@ -270,7 +270,7 @@ ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
     ComputationalMesh::CPtr cmesh = builder.build();
 
     Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8ull, cell_thread.size());
 
     Thread<ComputationalCell>::iterator::difference_type nbad = 0;
 
@@ -283,7 +283,7 @@ ComputationalMeshBuilderTest::addUserDefinedCellVarsTest() {
         }
     });
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined cell variables failed", 0, nbad);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined cell variables failed", 0ll, nbad);
 }
 
 void
@@ -301,7 +301,7 @@ ComputationalMeshBuilderTest::addCellVarsTest() {
     ComputationalMesh::CPtr cmesh = builder.build();
 
     Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8ull, cell_thread.size());
 
     Thread<ComputationalCell>::iterator::difference_type ngood = 0;
 
@@ -317,7 +317,7 @@ ComputationalMeshBuilderTest::addCellVarsTest() {
         }
     });
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined cell variables failed", 2 * 8, ngood);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Adding user-defined cell variables failed", long long(2 * 8), ngood);
 }
 
 namespace {
@@ -451,7 +451,7 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
 
     // check flux computation across boundary faces
     FluxComputationalMolecule fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ComputationalCell::Ptr ccell = fm.getCell();
@@ -482,7 +482,7 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
 
     // check flux computation across boundary faces
     fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("One contribution expected to boundary face flux", 1ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ccell = fm.getCell();
@@ -516,7 +516,7 @@ ComputationalMeshBuilderTest::evaluateFluxesTest() {
 
     // check flux computation across boundary faces
     fm = cface->getComputationalMolecule("Temperature");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2u, fm.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Two contributions expected to interior face flux", 2ull, fm.size());
 
     // check that the face flux was computed with the correct cell
     ccell = fm.getCell();
@@ -549,7 +549,7 @@ ComputationalMeshBuilderTest::cellIndexTest() {
     ComputationalMesh::CPtr cmesh = builder.build();
 
     Thread<ComputationalCell> const & cell_thread = cmesh->getCellThread();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8u, cell_thread.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of cells", 8ull, cell_thread.size());
 
 
     for (size_t i = 0; i < cell_thread.size(); ++i) {

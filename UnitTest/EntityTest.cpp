@@ -32,7 +32,7 @@ EntityTest::testInternalGetFaceVertices() {
 
     // get attached vertices to 14th face
     EntityCollection<Node> const & vertices = f->getNodes();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2u, vertices.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2ull, vertices.size());
 
     // all vertices attached to face 14
     CPPUNIT_ASSERT_MESSAGE("Vertex 8 expected", vertices.find(8));
@@ -48,7 +48,7 @@ EntityTest::testBoundaryGetFaceVertices() {
 
     // get attached vertices to 4th face
     EntityCollection<Node> const & vertices = f->getNodes();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2u, vertices.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Face vertex size error", 2ull, vertices.size());
 
     // all vertices attached to face 4
     CPPUNIT_ASSERT_MESSAGE("Vertex 0 expected", vertices.find(0));
@@ -63,7 +63,7 @@ EntityTest::testGetCellFaces() {
 
     // get attached faces to 4th cell
     EntityCollection<Face> const & faces = c->getFaces();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell face size error", 3u, faces.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell face size error", 3ull, faces.size());
 
     // all faces attached to cell 4
     CPPUNIT_ASSERT_MESSAGE("Face 2 expected", faces.find(2));
@@ -79,7 +79,7 @@ EntityTest::testGetCellVertices() {
 
     // get attached vertices to 4th cell
     EntityCollection<Node> const & vertices = c->getNodes();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell vertex size error", 3u, vertices.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell vertex size error", 3ull, vertices.size());
 
     // all vertices attached to cell 4
     CPPUNIT_ASSERT_MESSAGE("Vertex 4 expected", vertices.find(4));

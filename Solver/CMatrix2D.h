@@ -13,31 +13,33 @@
 
 #include <vector>
 
+#include <boost/cstdint.hpp>
+
 
 class CMatrix2D : public IMatrix2D {
 public:
     // To be used as base class
-    CMatrix2D(int rows, int cols);
+    CMatrix2D(boost::uint64_t rows, boost::uint64_t cols);
     CMatrix2D(CMatrix2D const & in);
     CMatrix2D& operator=(CMatrix2D const & in);
 
     // FROM IMatrix2D
-    int            getRows() const;
-    int            getCols() const;
-    double         operator()(unsigned int row, unsigned int col) const;
-    double&        operator()(unsigned int row, unsigned int col);
-    void           solve(Vec const & b, Vec & x) const;
+    boost::uint64_t getRows() const;
+    boost::uint64_t getCols() const;
+    double          operator()(boost::uint64_t row, boost::uint64_t col) const;
+    double&         operator()(boost::uint64_t row, boost::uint64_t col);
+    void            solve(Vec const & b, Vec & x) const;
 
     // Local Methods
     void           print() const;
 
     // Static Methods
-    static CMatrix2D identity(int n);
+    static CMatrix2D identity(boost::uint64_t n);
 
 private:
     std::vector<double> data_;
 
     // Rows and cols
-    unsigned int rows_;
-    unsigned int cols_;
+    boost::uint64_t rows_;
+    boost::uint64_t cols_;
 };

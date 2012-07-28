@@ -93,6 +93,9 @@ namespace {
             }
         });
 
+        // account for r.h.s.
+        flux += -2.0 * cmesh.getCellThread().size();
+
         return flux;
     }
 
@@ -351,7 +354,7 @@ namespace {
 
         // account for r.h.s.
         SourceTerm & st = cmolecule.getSourceTerm();
-        st  += 0.0;
+        st  += -2.0;
 
         return true;
     }
