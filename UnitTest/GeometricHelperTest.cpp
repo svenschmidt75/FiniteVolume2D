@@ -12,7 +12,6 @@ GeometricHelperTest::setUp() {}
 void
 GeometricHelperTest::tearDown() {}
 
-
 void
 GeometricHelperTest::LineSegmentIntersectionTest() {
     {

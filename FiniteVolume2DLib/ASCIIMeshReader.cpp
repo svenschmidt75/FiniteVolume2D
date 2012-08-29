@@ -15,7 +15,6 @@
 #include <boost/iostreams/stream.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
-#include <boost/algorithm/string.hpp>
 
 #include <iostream>
 

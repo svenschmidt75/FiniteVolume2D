@@ -1,6 +1,6 @@
 #include "Vertex.h"
 
-#include <numeric>
+#include <limits>
 
 
 Vertex::Vertex() : x_(Vertex::undef()), y_(Vertex::undef()) {}

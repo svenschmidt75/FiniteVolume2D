@@ -271,7 +271,7 @@ GeometricHelper::intersect(LineSegment const & ls1, LineSegment const & ls2) {
     Vertex intersection_point;
     GeometricHelper::IntersectionType type;
 
-    std::tie(type, intersection_point) = intersect_line_segments_base(ls1, ls2);
+    std::tie(type, intersection_point, std::ignore) = intersect_line_segments_base(ls1, ls2);
 
     if (type == IntersectionType::UNIQUE_INTERSECTION)
         return boost::optional<Vertex>(intersection_point);
@@ -283,7 +283,7 @@ GeometricHelper::intersect(LineSegment const & ls, Ray const & ray) {
     Vertex intersection_point;
     GeometricHelper::IntersectionType type;
 
-    std::tie(type, intersection_point) = intersect_line_segment_ray_base(ls, ray);
+    std::tie(type, intersection_point, std::ignore) = intersect_line_segment_ray_base(ls, ray);
 
     if (type == IntersectionType::UNIQUE_INTERSECTION)
         return boost::optional<Vertex>(intersection_point);
@@ -295,7 +295,7 @@ GeometricHelper::intersect(LineSegment const & ls, Line const & line) {
     Vertex intersection_point;
     GeometricHelper::IntersectionType type;
 
-    std::tie(type, intersection_point) = intersect_line_segment_ray_base(ls, line);
+    std::tie(type, intersection_point, std::ignore) = intersect_line_segment_ray_base(ls, line);
 
     if (type == IntersectionType::UNIQUE_INTERSECTION)
         return boost::optional<Vertex>(intersection_point);
