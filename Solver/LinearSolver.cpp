@@ -2,7 +2,10 @@
 #include "CMatrix2D.h"
 #include "CSparseMatrixImpl.h"
 
+#include <cmath>
+
 #include <boost/assert.hpp>
+
 
 namespace {
     int findPivotIndex(CMatrix2D const & A, int index, std::vector<int> const & row_row_map) {
@@ -162,10 +165,10 @@ LinearSolver::SOR(CMatrix2D const & A, IMatrix2D::Vec const & f, double omega) {
                     continue;
 
                 // add the total value of the off-diagonal elements in row i
-                sum += fabs(A(i, j));
+                sum += std::fabs(A(i, j));
             }
 
-            if (sum > A(i, i))
+            if (sum > std::fabs(A(i, i)))
                 throw std::exception("LinearSolver::SOR: Matrix not diagonally dominant");
         }
     }
@@ -258,10 +261,10 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
 
                 // add the total value of the off-diagonal elements in row i
                 double a_ij = A.elements_[offset + icol];
-                sum += a_ij;
+                sum += std::fabs(a_ij);
             }
 
-            if (!has_diagonal_element || sum > a_ii)
+            if (!has_diagonal_element || sum > std::fabs(a_ii))
                 throw std::exception("LinearSolver::sparseSOR: Matrix not diagonally dominant");
         }
     }
