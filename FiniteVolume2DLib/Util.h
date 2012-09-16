@@ -15,5 +15,4 @@
 class DECL_SYMBOLS_2DLIB Util {
 public:
     static bool error(std::string const & msg);
-
 };

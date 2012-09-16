@@ -262,7 +262,7 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
             }
 
             if (!has_diagonal_element || sum > a_ii)
-                throw std::exception("LinearSolver::SOR: Matrix not diagonally dominant");
+                throw std::exception("LinearSolver::sparseSOR: Matrix not diagonally dominant");
         }
     }
 
@@ -303,7 +303,7 @@ LinearSolver::sparseSOR(CSparseMatrixImpl const & A, IMatrix2D::Vec const & f, d
             }
 
             if (!a_ii)
-                throw std::exception("LinearSolver::SOR: Matrix singular. Maybe too few independent equations?");
+                throw std::exception("LinearSolver::sparseSOR: Matrix singular. Maybe too few independent equations?");
 
             sigma = (f[row] - sigma) / a_ii;
 
